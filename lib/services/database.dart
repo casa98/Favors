@@ -79,10 +79,4 @@ class DatabaseService {
   Future deleteFavor(String favorId) {
     return favorsCollection.doc(favorId).delete();
   }
-
-  Future<bool> canAskForFavors() async {
-    var snapshot = await userCollection.doc(currentUser.uid).get();
-    int userScore = snapshot.data()[SCORE];
-    return userScore >= 2;
-  }
 }

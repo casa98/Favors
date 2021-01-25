@@ -36,6 +36,8 @@ dependencies:
   intl: ^0.16.1
   flutter_launcher_icons: ^0.8.1
 
+  rxdart: ^0.25.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

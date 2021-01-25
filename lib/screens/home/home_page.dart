@@ -1,9 +1,8 @@
 import 'package:do_favors/screens/add_favor/add_favor.dart';
+import 'package:do_favors/screens/home/home_bloc.dart';
 import 'package:do_favors/screens/home/unassigned_favors.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/screens/drawer/drawer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,11 +14,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  HomeBloc _homeBloc;
+
+  @override
+  void initState() {
+    _homeBloc = HomeBloc();
+    _homeBloc.canUserRequestFavors();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var firestoreRef = FirebaseFirestore.instance
-        .collection(USER)
-        .doc(FirebaseAuth.instance.currentUser.uid);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
@@ -29,21 +35,15 @@ class _HomePageState extends State<HomePage> {
         child: UnassignedFavors(),
       ),
       floatingActionButton: StreamBuilder(
-        stream: firestoreRef.snapshots(),
+        stream: _homeBloc.showFloatingButton,
+        initialData: false,
         builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Text('');
-            default:
-              var userScore = snapshot.data[SCORE];
-              return userScore >= 2
-                  ? FloatingActionButton(
-                      onPressed: () => _addFavorModalBottomSheet(context),
-                      tooltip: ASK_FOR_A_FAVOR,
-                      child: Icon(Icons.add),
-                    )
-                  : Text('');
-          }
+          return snapshot.data ? FloatingActionButton(
+              onPressed: () => _addFavorModalBottomSheet(context),
+              tooltip: ASK_FOR_A_FAVOR,
+              child: Icon(Icons.add),
+            )
+          : Text('');
         },
       ),
     );
