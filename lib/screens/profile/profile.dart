@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,8 +58,10 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO Show Dialog to choose Camera or Gallery
-                      _takePhoto(ImageSource.gallery);
+                      containerForSheet<String>(
+                        context: context,
+                        child: _galleryOrCamera(),
+                      );
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
@@ -150,5 +153,40 @@ class _ProfileState extends State<Profile> {
         print("NOT IMAGE SELECTED");
       }
     }
+  }
+
+  void containerForSheet<T>({BuildContext context, Widget child}) {
+    showCupertinoModalPopup<T>(
+      context: context,
+      builder: (BuildContext context) => child,
+    );
+  }
+
+  Widget _galleryOrCamera(){
+    return CupertinoActionSheet(
+      title: Text(CHOOSE_OPTION),
+      actions: [
+        CupertinoActionSheetAction(
+          onPressed: (){
+            Navigator.pop(context);
+            _takePhoto(ImageSource.camera);
+          },
+          child: Text(TAKE_A_PHOTO),
+        ),
+        CupertinoActionSheetAction(
+          onPressed: (){
+            Navigator.pop(context);
+            _takePhoto(ImageSource.gallery);
+          },
+          child: Text(CHOOSE_PHOTO),
+        ),
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        onPressed: (){
+          Navigator.pop(context);
+        },
+        child: Text(CANCEL),
+      ),
+    );
   }
 }

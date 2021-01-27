@@ -12,6 +12,10 @@ const String SCORE = 'score';
 const String EMAIL = 'email';
 const String CHANGE_PHOTO = 'CHANGE PHOTO';
 const String SIGN_OUT = 'SIGN OUT';
+const String TAKE_A_PHOTO = "Take a photo";
+const String CHOOSE_PHOTO = "Choose a photo";
+const String CANCEL = "Cancel";
+const String CHOOSE_OPTION = "Choose an option";
 
 /* FAVORS INFO */
 const String FAVOR_TITLE = 'favorTitle';
