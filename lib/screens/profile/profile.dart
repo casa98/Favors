@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/screens/profile/profile_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:do_favors/shared/constants.dart';
@@ -19,6 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   File _image;
   final picker = ImagePicker();
+  ProfileBloc _profileBloc = ProfileBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +51,12 @@ class _ProfileState extends State<Profile> {
               return Column(
                 children: [
                   SizedBox(height: 24.0),
+                  CachedNetworkImage(
+                    imageUrl: image,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  /*
                   CircleAvatar(
                     maxRadius: 80,
                     backgroundColor: Colors.grey[100],
@@ -55,6 +64,7 @@ class _ProfileState extends State<Profile> {
                       image,
                     ),
                   ),
+                 */
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
@@ -148,7 +158,7 @@ class _ProfileState extends State<Profile> {
       if(pickedFile != null){
         _image = File(pickedFile.path);
         print("IMAGE PATH: " + _image.toString());
-        //TODO Upload image to Firestore or another place
+        _profileBloc.uploadPicture(_image);
       }else{
         print("NOT IMAGE SELECTED");
       }
