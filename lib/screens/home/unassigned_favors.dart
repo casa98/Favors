@@ -33,7 +33,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
               if (element.data()[FAVOR_USER].toString() != currentUser.uid)
                 item.add(element.data());
             });
-            if (item.length == 0) return Text('No favors to, yet');
+            if (item.length == 0) return Text('No favors to do, yet');
             return ListView.separated(
               itemCount: item.length,
               separatorBuilder: (context, index) => Divider(height: 0.0),
@@ -50,13 +50,18 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                     Util().readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
                   ),
                   onTap: () {
-                    //print(item[index][FAVOR_TITLE]);
-                    FavorDetailsObject tappedFavor = FavorDetailsObject(
+                    // FIXME I'm saying timestamp == 0. Find the way to send only the needed fields
+                    Favor tappedFavor = Favor(
+                      '',
+                      '',
                       currentFavor[FAVOR_DESCRIPTION],
                       currentFavor[FAVOR_LOCATION],
                       currentFavor[FAVOR_TITLE],
                       currentFavor[FAVOR_KEY],
-                      currentFavor[FAVOR_USERNAME],
+                      0,
+                      0,
+                      '',
+                      currentFavor[FAVOR_USERNAME]
                     );
                     Navigator.pushNamed(
                       context,

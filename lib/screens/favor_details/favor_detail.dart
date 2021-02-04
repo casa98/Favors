@@ -13,6 +13,7 @@ class FavorDetail extends StatefulWidget {
 
 class _FavorDetailState extends State<FavorDetail> {
   bool _buttonVisible = true;
+  Favor _favor;
 
   void hideButton() {
     setState(() {
@@ -22,7 +23,7 @@ class _FavorDetailState extends State<FavorDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final FavorDetailsObject args = ModalRoute.of(context).settings.arguments;
+    Favor _favor = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
@@ -53,7 +54,7 @@ class _FavorDetailState extends State<FavorDetail> {
                     Text(REQUESTED_BY),
                     SizedBox(height: 8.0),
                     Text(
-                      args.username,
+                      _favor.username,
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
@@ -73,21 +74,21 @@ class _FavorDetailState extends State<FavorDetail> {
                   style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),
-                Text(args.favorTitle),
+                Text(_favor.favorTitle),
                 SizedBox(height: 16.0),
                 Text(
                   DETAILS_DESCRIPTION,
                   style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),
-                Text(args.favorDescription),
+                Text(_favor.favorDescription),
                 SizedBox(height: 16.0),
                 Text(
                   DETAILS_DELIVERY_PLACE,
                   style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),
-                Text(args.favorLocation),
+                Text(_favor.favorLocation),
               ],
             ),
           ),
@@ -100,7 +101,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   child: Builder(
                     builder: (context) => ElevatedButton(
                       onPressed: () {
-                        DatabaseService().markFavorAsAssigned(args.key);
+                        DatabaseService().markFavorAsAssigned(_favor.key);
                         hideButton();
                         Scaffold.of(context).showSnackBar(SnackBar(
                           content: Row(

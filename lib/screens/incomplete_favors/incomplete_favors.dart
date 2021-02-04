@@ -1,7 +1,6 @@
-import 'package:do_favors/shared/constants.dart';
+import 'package:do_favors/model/favor.dart';
+import 'package:do_favors/screens/incomplete_favors/incomplete_favors_bloc.dart';
 import 'package:do_favors/shared/util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class IncompleteFavors extends StatefulWidget {
@@ -13,12 +12,14 @@ class IncompleteFavors extends StatefulWidget {
 }
 
 class _IncompleteFavorsState extends State<IncompleteFavors> {
-  var firestoreRef = FirebaseFirestore.instance
-      .collection(FAVORS)
-      .where(FAVOR_STATUS, isEqualTo: 1)
-      .where(FAVOR_ASSIGNED_USER,
-          isEqualTo: FirebaseAuth.instance.currentUser.uid)
-      .orderBy(FAVOR_TIMESTAMP, descending: true);
+  IncompleteFavorsBloc _incompleteFavorsBloc;
+
+  @override
+  void initState() {
+    _incompleteFavorsBloc = IncompleteFavorsBloc();
+    _incompleteFavorsBloc.loadIncompleteFavors();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,8 +27,8 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
         title: Text(widget._title),
       ),
       body: Center(
-          child: StreamBuilder(
-        stream: firestoreRef.snapshots(),
+          child: StreamBuilder<List<Favor>>(
+        stream: _incompleteFavorsBloc.incompleteFavors,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -37,10 +38,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
             case ConnectionState.waiting:
               return Text('Loading...');
             default:
-              List item = [];
-              snapshot.data.docs.forEach((element) {
-                item.add(element.data());
-              });
+              List<Favor> item = snapshot.data;
               if (item.length == 0)
                 return Text('You don\'t have pending favors to complete');
               return ListView.separated(
@@ -50,13 +48,13 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                   var currentFavor = item[index];
                   return ListTile(
                     title: Text(
-                      currentFavor[FAVOR_TITLE],
+                      currentFavor.favorTitle,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    subtitle: Text(currentFavor[FAVOR_DESCRIPTION],
+                    subtitle: Text(currentFavor.favorDescription,
                         overflow: TextOverflow.ellipsis),
                     trailing: Text(
-                      Util().readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                      Util().readFavorTimestamp(currentFavor.timestamp),
                     ),
                     onTap: () {},
                   );
