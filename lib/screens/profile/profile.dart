@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -41,30 +42,29 @@ class _ProfileState extends State<Profile> {
               return Text('Loading...');
             default:
               var userDocument = snapshot.data;
-              bool hasImage = userDocument[IMAGE] == '' ? false : true;
-              String image = '';
-              if (hasImage)
-                image = userDocument[IMAGE];
-              else
-                image =
-                    'https://cdn.iconscout.com/icon/free/png-512/github-163-761603.png';
+              String image = userDocument[IMAGE];
               return Column(
                 children: [
                   SizedBox(height: 24.0),
-                  CachedNetworkImage(
-                    imageUrl: image,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                  /*
-                  CircleAvatar(
-                    maxRadius: 80,
-                    backgroundColor: Colors.grey[100],
-                    backgroundImage: NetworkImage(
-                      image,
+                  Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: CachedNetworkImage(
+                      height: 200,
+                      width: 200,
+                      fit: BoxFit.cover,
+                      imageUrl: image,
+                      placeholder: (context, url) => image != ''
+                          ? _circularProgressIndicator()
+                          : _profileImage(),
+                      errorWidget: (context, url, error) =>
+                          _profileImage(),
                     ),
                   ),
-                 */
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
@@ -146,6 +146,26 @@ class _ProfileState extends State<Profile> {
               );
           }
         },
+      ),
+    );
+  }
+
+  Widget _profileImage(){
+    return Container(
+      child: Center(
+        child: Image.asset(
+          'assets/no-photo.png',
+          width: 100,
+          height: 100,
+        ),
+      ),
+    );
+  }
+
+  Widget _circularProgressIndicator(){
+    return Center(
+      child: CircularProgressIndicator(
+        strokeWidth: 4.0,
       ),
     );
   }
