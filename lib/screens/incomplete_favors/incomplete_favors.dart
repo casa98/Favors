@@ -35,14 +35,22 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
 
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Text('Loading...');
+              return CircularProgressIndicator();
             default:
               List item = [];
               snapshot.data.docs.forEach((element) {
                 item.add(element.data());
               });
               if (item.length == 0)
-                return Text('You don\'t have pending favors to complete');
+              return Padding(
+                padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                child: Text(
+                  'You don\'t have pending favors to complete',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              );
               return ListView.separated(
                 itemCount: item.length,
                 separatorBuilder: (context, index) => Divider(height: 0.0),
