@@ -26,14 +26,23 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
 
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return Text('Loading...');
+            return CircularProgressIndicator();
           default:
             List item = [];
             snapshot.data.docs.forEach((element) {
               if (element.data()[FAVOR_USER].toString() != currentUser.uid)
                 item.add(element.data());
             });
-            if (item.length == 0) return Text('No favors to, yet');
+            if (item.length == 0)
+              return Padding(
+                padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                child: Text(
+                  'No favors to do, yet',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              );
             return ListView.separated(
               itemCount: item.length,
               separatorBuilder: (context, index) => Divider(height: 0.0),

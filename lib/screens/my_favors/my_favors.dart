@@ -28,99 +28,108 @@ class _MyFavorsState extends State<MyFavors> {
         appBar: AppBar(
           title: Text(widget._title),
         ),
-        body: StreamBuilder(
-          stream: firestoreRef.snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
+        body: Center(
+          child: StreamBuilder(
+            stream: firestoreRef.snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
 
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Text('Loading...');
-              default:
-                List item = [];
-                snapshot.data.docs.forEach((element) {
-                  item.add(element.data());
-                });
-                if (item.length == 0)
-                  return Text(
-                      'Favors you request, will appear here. Nothing for now');
-                return ListView.separated(
-                  itemCount: item.length,
-                  separatorBuilder: (context, index) => Divider(height: 0.0),
-                  itemBuilder: (context, index) {
-                    var currentFavor = item[index];
-                    if (currentFavor[FAVOR_STATUS] == -1)
-                      currentFavor[FAVOR_STATUS] = UNASSIGNED;
-                    else if (currentFavor[FAVOR_STATUS] == 1)
-                      currentFavor[FAVOR_STATUS] = ASSIGNED;
-                    else
-                      currentFavor[FAVOR_STATUS] = COMPLETED;
-
-                    return ListTile(
-                      title: Text(
-                        currentFavor[FAVOR_TITLE],
-                        overflow: TextOverflow.ellipsis,
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return CircularProgressIndicator();
+                default:
+                  List item = [];
+                  snapshot.data.docs.forEach((element) {
+                    item.add(element.data());
+                  });
+                  if (item.length == 0)
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                      child: Text(
+                        'You haven\'t requested any favors yet',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
                       ),
-                      subtitle: Row(
-                        children: [
-                          Text(STATUS),
-                          SizedBox(width: 10.0),
-                          Text(
-                            currentFavor[FAVOR_STATUS],
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      trailing: Text(
-                        Util()
-                            .readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
-                      ),
-                      onTap: () async {
-                        // showDialog returns a value, it's sent via pop()
-                        if (currentFavor[FAVOR_STATUS] == UNASSIGNED) {
-                          var data = await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return myFavorsDialog(
-                                    'Delete favor',
-                                    'Sure you want to delete this favor?',
-                                    true,
-                                    currentFavor[FAVOR_KEY],
-                                    null);
-                              });
-                          print(data);
-                          if (data == DELETE) {
-                            myFavorSnackbar(context,
-                                Icons.delete_forever_rounded, 'Favor deleted');
-                          }
-                        }
-                        if (currentFavor[FAVOR_STATUS] == ASSIGNED) {
-                          var data = await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return myFavorsDialog(
-                                    'Mark as completed',
-                                    'Has your peer completed this favor?',
-                                    false,
-                                    currentFavor[FAVOR_KEY],
-                                    currentFavor[FAVOR_ASSIGNED_USER]);
-                              });
-                          if (data == COMPLETE) {
-                            myFavorSnackbar(
-                                context,
-                                Icons.sentiment_satisfied_alt,
-                                'Favor marked as completed');
-                          }
-                        }
-                      },
                     );
-                  },
-                );
-              //
-            }
-          },
+                  return ListView.separated(
+                    itemCount: item.length,
+                    separatorBuilder: (context, index) => Divider(height: 0.0),
+                    itemBuilder: (context, index) {
+                      var currentFavor = item[index];
+                      if (currentFavor[FAVOR_STATUS] == -1)
+                        currentFavor[FAVOR_STATUS] = UNASSIGNED;
+                      else if (currentFavor[FAVOR_STATUS] == 1)
+                        currentFavor[FAVOR_STATUS] = ASSIGNED;
+                      else
+                        currentFavor[FAVOR_STATUS] = COMPLETED;
+
+                      return ListTile(
+                        title: Text(
+                          currentFavor[FAVOR_TITLE],
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Text(STATUS),
+                            SizedBox(width: 10.0),
+                            Text(
+                              currentFavor[FAVOR_STATUS],
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                        trailing: Text(
+                          Util()
+                              .readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                        ),
+                        onTap: () async {
+                          // showDialog returns a value, it's sent via pop()
+                          if (currentFavor[FAVOR_STATUS] == UNASSIGNED) {
+                            var data = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return myFavorsDialog(
+                                      'Delete favor',
+                                      'Sure you want to delete this favor?',
+                                      true,
+                                      currentFavor[FAVOR_KEY],
+                                      null);
+                                });
+                            print(data);
+                            if (data == DELETE) {
+                              myFavorSnackbar(context,
+                                  Icons.delete_forever_rounded, 'Favor deleted');
+                            }
+                          }
+                          if (currentFavor[FAVOR_STATUS] == ASSIGNED) {
+                            var data = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return myFavorsDialog(
+                                      'Mark as completed',
+                                      'Has your peer completed this favor?',
+                                      false,
+                                      currentFavor[FAVOR_KEY],
+                                      currentFavor[FAVOR_ASSIGNED_USER]);
+                                });
+                            if (data == COMPLETE) {
+                              myFavorSnackbar(
+                                  context,
+                                  Icons.sentiment_satisfied_alt,
+                                  'Favor marked as completed');
+                            }
+                          }
+                        },
+                      );
+                    },
+                  );
+                //
+              }
+            },
+          ),
         ));
   }
 
