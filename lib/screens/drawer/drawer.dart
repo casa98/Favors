@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,22 +53,33 @@ Widget _createHeader() {
           return UserAccountsDrawerHeader(
             accountName: Text(userDocument[USERNAME]),
             accountEmail: Text(userDocument[EMAIL]),
-            currentAccountPicture: CircleAvatar(
-                backgroundColor: defaultTargetPlatform == TargetPlatform.iOS
-                    ? Colors.blue
-                    : Colors.white,
-                child: userDocument[IMAGE] == ''
-                    ? Text(
-                        lettersForHeader(userDocument[USERNAME]),
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    : CircleAvatar(
-                        maxRadius: 40,
-                        backgroundImage: NetworkImage(userDocument[IMAGE]),
-                      )),
+            currentAccountPicture: userDocument[IMAGE] == ''
+                ? CircleAvatar(
+                    backgroundColor: defaultTargetPlatform == TargetPlatform.iOS
+                        ? Colors.blue
+                        : Colors.white,
+                    child: Text(
+                      lettersForHeader(userDocument[USERNAME]),
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : Container(
+              height: 200,
+              width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(100.0)),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: CachedNetworkImage(
+                height: 200,
+                width: 200,
+                fit: BoxFit.cover,
+                imageUrl: userDocument[IMAGE],
+              ),
+            ),
           );
       }
     },
