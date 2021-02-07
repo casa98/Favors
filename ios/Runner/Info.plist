@@ -45,5 +45,8 @@
     <string>permission to access photo gallery</string>
     <key>NSCameraUsageDescription</key>
     <string>permission to access camera</string>
+	<key>UIStatusBarHidden</key>
+	<true/>
+
 </dict>
 </plist>

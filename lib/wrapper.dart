@@ -35,7 +35,7 @@ class Wrapper extends StatelessWidget {
                 }
                 return Scaffold(
                   body: Center(
-                    child: Text('Connecting'),
+                    child: Scaffold(backgroundColor: Colors.blue,),
                   ),
                 );
               });
@@ -43,7 +43,7 @@ class Wrapper extends StatelessWidget {
         // Still connecting (loading)
         return Scaffold(
           body: Center(
-            child: Text('Connecting'),
+            child: Scaffold(backgroundColor: Colors.blue,),
           ),
         );
       },
