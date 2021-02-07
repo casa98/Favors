@@ -50,19 +50,25 @@ class _ProfileState extends State<Profile> {
                     height: 200,
                     width: 200,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: CachedNetworkImage(
-                      height: 200,
-                      width: 200,
-                      fit: BoxFit.cover,
-                      imageUrl: image,
-                      placeholder: (context, url) => image != ''
-                          ? _circularProgressIndicator()
-                          : _profileImage(),
-                      errorWidget: (context, url, error) =>
-                          _profileImage(),
+                    child: StreamBuilder<bool>(
+                        stream: _profileBloc.showLoadingIndicator,
+                        initialData: false,
+                      builder: (context, snapshot) {
+                        return !snapshot.data ? CachedNetworkImage(
+                          height: 200,
+                          width: 200,
+                          fit: BoxFit.cover,
+                          imageUrl: image,
+                          placeholder: (context, url) => image != ''
+                              ? _circularProgressIndicator()
+                              : _profileImage(),
+                          errorWidget: (context, url, error) =>
+                              _profileImage(),
+                        ) : Center(child: Text('Uploading...'),);
+                      }
                     ),
                   ),
                   SizedBox(height: 16.0),
