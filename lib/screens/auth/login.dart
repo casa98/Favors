@@ -2,6 +2,7 @@ import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
@@ -16,6 +17,7 @@ class _LoginState extends State<Login> {
   bool loading = false;
   String _email;
   String _password;
+  String _error = "";
   AuthService _auth = AuthService();
 
   @override
@@ -46,7 +48,16 @@ class _LoginState extends State<Login> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 30.0),
+                        SizedBox(height: 16.0),
+                        Text(
+                            _error,
+                          style: TextStyle(
+                            color: Colors.red[600],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
                         buildEmailFormField(),
                         SizedBox(height: 25.0),
                         buildPasswordFormField(),
@@ -132,8 +143,9 @@ class _LoginState extends State<Login> {
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           setState(() => loading = true);
-          await _auth.signInWithEmailAndPassword(_email, _password);
+          dynamic result = await _auth.signInWithEmailAndPassword(_email, _password);
           setState(() => loading = false);
+          _error = result.toString();
         }
       },
       child: Text('Login'),

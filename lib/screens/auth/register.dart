@@ -18,6 +18,7 @@ class _RegisterState extends State<Register> {
   String _email;
   String _password;
   String _confirmPassword;
+  String _error = "";
   AuthService _auth = AuthService();
 
   @override
@@ -48,7 +49,16 @@ class _RegisterState extends State<Register> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 30.0),
+                        SizedBox(height: 16.0),
+                        Text(
+                          _error,
+                          style: TextStyle(
+                            color: Colors.red[600],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
                         buildUsernameFormField(),
                         SizedBox(height: 20.0),
                         buildEmailFormField(),
@@ -164,6 +174,9 @@ class _RegisterState extends State<Register> {
           if (value.length < 6) {
             return 'Please enter a longer password (>5)';
           }
+          if(value != _password){
+            return "Passwords don\'t match";
+          }
         } else {
           return 'Please repeat your password';
         }
@@ -181,11 +194,12 @@ class _RegisterState extends State<Register> {
     return ElevatedButton(
       onPressed: () async {
         if (_formKey.currentState.validate()) {
-          setState(() => loading = true);
           if (_password == _confirmPassword) {
-            await _auth.createUserWithEmailAndPassword(
+            setState(() => loading = true);
+            dynamic result = await _auth.createUserWithEmailAndPassword(
                 _name, _email, _password);
             setState(() => loading = false);
+            _error = result.toString();
           }
         }
       },
