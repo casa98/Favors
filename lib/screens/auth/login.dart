@@ -19,6 +19,13 @@ class _LoginState extends State<Login> {
   AuthService _auth = AuthService();
 
   @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return loading
         ? Loading()
@@ -125,7 +132,7 @@ class _LoginState extends State<Login> {
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           setState(() => loading = true);
-          _auth.signInWithEmailAndPassword(_email, _password);
+          await _auth.signInWithEmailAndPassword(_email, _password);
           setState(() => loading = false);
         }
       },

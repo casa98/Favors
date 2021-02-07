@@ -21,6 +21,13 @@ class _RegisterState extends State<Register> {
   AuthService _auth = AuthService();
 
   @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return loading
         ? Loading()
