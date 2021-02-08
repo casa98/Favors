@@ -1,6 +1,6 @@
-import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/shared/strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -11,9 +11,8 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: passwd);
       return result.user;
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } catch (error) {
+      return _getError(error.code);
     }
   }
 
@@ -26,9 +25,8 @@ class AuthService {
       // Create a collection with info of the user registering right now
       await createUserCollection(user.uid, email, name);
       return user;
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } catch (error) {
+      return _getError(error.code);
     }
   }
 
@@ -42,5 +40,29 @@ class AuthService {
       SCORE: 2,
       EMAIL: email,
     });
+  }
+
+  String _getError(String errorCode) {
+    String errorMessage;
+    switch(errorCode){
+      case "user-not-found":
+        errorMessage = Strings.userNotFound;
+        break;
+      case "wrong-password":
+        errorMessage = Strings.wrongPassword;
+        break;
+      case "email-already-in-use":
+        errorMessage = Strings.emailAlreadyInUse;
+        break;
+      case "unknown":
+        errorMessage = Strings.unknownError;
+        break;
+      case "operation-not-allowed":
+        errorMessage = Strings.operationNotAllowed;
+        break;
+      default:
+        errorMessage = Strings.anotherError;
+    }
+    return errorMessage;
   }
 }

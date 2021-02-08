@@ -67,15 +67,11 @@ Widget _createHeader() {
                     ),
                   )
                 : Container(
-              height: 200,
-              width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(100.0)),
               ),
               clipBehavior: Clip.antiAlias,
               child: CachedNetworkImage(
-                height: 200,
-                width: 200,
                 fit: BoxFit.cover,
                 imageUrl: userDocument[IMAGE],
               ),

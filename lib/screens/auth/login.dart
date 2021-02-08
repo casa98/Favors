@@ -1,7 +1,9 @@
 import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
+import 'package:do_favors/shared/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
@@ -16,7 +18,15 @@ class _LoginState extends State<Login> {
   bool loading = false;
   String _email;
   String _password;
+  String _error = "";
   AuthService _auth = AuthService();
+
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +43,22 @@ class _LoginState extends State<Login> {
                       children: [
                         SizedBox(height: 30.0),
                         Text(
-                          'Sign In',
+                          Strings.signIn,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 30.0),
+                        SizedBox(height: 16.0),
+                        Text(
+                            _error,
+                          style: TextStyle(
+                            color: Colors.red[600],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
                         buildEmailFormField(),
                         SizedBox(height: 25.0),
                         buildPasswordFormField(),
@@ -49,14 +68,14 @@ class _LoginState extends State<Login> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Don’t have an account? "),
+                            Text(Strings.doNotHaveAnAccount),
                             GestureDetector(
                               onTap: () => widget.toggleView(),
                               child: Container(
                                 color: Colors.grey[50],
                                 padding: EdgeInsets.all(16.0),
                                 child: Text(
-                                  "Sign Up",
+                                  Strings.signUp,
                                   style: TextStyle(
                                     color: Colors.blue[700],
                                     fontSize: 15.0,
@@ -83,16 +102,16 @@ class _LoginState extends State<Login> {
       validator: (value) {
         if (value.isNotEmpty) {
           if (!EmailValidator.validate(value)) {
-            return 'Please enter a valid email';
+            return Strings.enterValidEmail;
           }
         } else {
-          return 'Please enter an email';
+          return Strings.enterAnEmail;
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
+        labelText: Strings.email,
+        hintText: Strings.enterYourEmail,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -105,16 +124,16 @@ class _LoginState extends State<Login> {
       validator: (value) {
         if (value.isNotEmpty) {
           if (value.length < 6) {
-            return 'Please enter a longer password (>5)';
+            return Strings.enterLongerPassword;
           }
         } else {
-          return 'Please enter a password';
+          return Strings.enterPassword;
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Password",
-        hintText: "Enter your password",
+        labelText: Strings.password,
+        hintText: Strings.enterYourPassword,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -125,11 +144,12 @@ class _LoginState extends State<Login> {
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           setState(() => loading = true);
-          _auth.signInWithEmailAndPassword(_email, _password);
+          dynamic result = await _auth.signInWithEmailAndPassword(_email, _password);
           setState(() => loading = false);
+          _error = result.toString();
         }
       },
-      child: Text('Login'),
+      child: Text(Strings.login),
     );
   }
 }
