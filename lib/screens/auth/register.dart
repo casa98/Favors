@@ -1,5 +1,6 @@
 import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
+import 'package:do_favors/shared/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -72,14 +73,14 @@ class _RegisterState extends State<Register> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Already have an account? "),
+                            Text(Strings.alreadyHaveAnAccount),
                             GestureDetector(
                               onTap: () => widget.toggleView(),
                               child: Container(
                                 color: Colors.grey[50],
                                 padding: EdgeInsets.all(16.0),
                                 child: Text(
-                                  "Sign In",
+                                  Strings.signIn,
                                   style: TextStyle(
                                     color: Colors.blue[700],
                                     fontSize: 15.0,
@@ -106,16 +107,16 @@ class _RegisterState extends State<Register> {
       validator: (value) {
         if (value.isNotEmpty) {
           if (value.length < 5) {
-            return 'Please enter a longer name (>4)';
+            return Strings.enterLongerName;
           }
         } else {
-          return 'Please enter a name';
+          return Strings.enterName;
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Name",
-        hintText: "Enter your name",
+        labelText: Strings.name,
+        hintText: Strings.enterYourName,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -128,16 +129,16 @@ class _RegisterState extends State<Register> {
       validator: (value) {
         if (value.isNotEmpty) {
           if (!EmailValidator.validate(value)) {
-            return 'Please enter a valid email';
+            return Strings.enterValidEmail;
           }
         } else {
-          return 'Please enter an email';
+          return Strings.enterAnEmail;
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
+        labelText: Strings.email,
+        hintText: Strings.enterYourEmail,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -150,16 +151,16 @@ class _RegisterState extends State<Register> {
       validator: (value) {
         if (value.isNotEmpty) {
           if (value.length < 6) {
-            return 'Please enter a longer password (>5)';
+            return Strings.enterLongerPassword;
           }
         } else {
-          return 'Please enter a password';
+          return Strings.enterPassword;
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Password",
-        hintText: "Enter your password",
+        labelText: Strings.password,
+        hintText: Strings.enterYourPassword,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -172,19 +173,19 @@ class _RegisterState extends State<Register> {
       validator: (value) {
         if (value.isNotEmpty) {
           if (value.length < 6) {
-            return 'Please enter a longer password (>5)';
+            return Strings.enterLongerPassword;
           }
           if(value != _password){
-            return "Passwords don\'t match";
+            return Strings.passwordsDoNotMatch;
           }
         } else {
-          return 'Please repeat your password';
+          return Strings.repeatPassword2;
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Repeat password",
-        hintText: "Confirm your password",
+        labelText: Strings.repeatPassword,
+        hintText: Strings.confirmYourPassword,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -203,7 +204,7 @@ class _RegisterState extends State<Register> {
           }
         }
       },
-      child: Text('Register'),
+      child: Text(Strings.register),
     );
   }
 }
