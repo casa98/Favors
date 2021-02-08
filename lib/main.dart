@@ -8,6 +8,7 @@ import 'package:do_favors/screens/favor_details/favor_detail.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,6 +19,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          }
+        ),
+      ),
       routes: {
         '/': (context) => Wrapper(),
         '/home': (context) => HomePage(UNASSIGNED_FAVORS),
