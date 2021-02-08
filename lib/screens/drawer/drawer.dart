@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/shared/util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ Widget _createHeader() {
                         ? Colors.blue
                         : Colors.white,
                     child: Text(
-                      lettersForHeader(userDocument[USERNAME]),
+                      Util().lettersForHeader(userDocument[USERNAME]),
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,
@@ -80,13 +81,6 @@ Widget _createHeader() {
       }
     },
   );
-}
-
-// If name == 'Maria Fernanda Garizabalo', returns 'M G'
-String lettersForHeader(String name) {
-  List<String> words = name.split(' ');
-  if (words.length > 1) return words[0][0] + words[words.length - 1][0];
-  return words[0][0];
 }
 
 Widget _createDrawerItem(

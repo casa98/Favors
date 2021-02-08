@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/shared/util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -47,10 +49,30 @@ class _StatisticsState extends State<Statistics> {
                     var userItem = item[index];
                     var score = userItem[SCORE].toString() + ' points';
                     return ListTile(
-                      leading: CircleAvatar(
-                        radius: 26,
-                        backgroundColor: Colors
-                            .primaries[Random().nextInt(Colors.accents.length)],
+                      leading: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: userItem[IMAGE] != ''
+                            ? CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: userItem[IMAGE],
+                              )
+                            : CircleAvatar(
+                                radius: 26,
+                                backgroundColor: Colors.primaries[
+                                    Random().nextInt(Colors.accents.length)],
+                                child: Text(
+                                  Util().lettersForHeader(userItem[USERNAME]),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
                       ),
                       title: Text(
                         userItem[USERNAME],
