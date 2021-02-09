@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -18,21 +19,20 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           _createHeader(),
           ListTile(
-            title: Text(HOME),
+            title: Text(Strings.homeTitle),
             onTap: () {
               Navigator.pop(context);
             },
             leading: Icon(Icons.home),
           ),
-          _createDrawerItem(context, PROFILE, '/profile', Icons.person),
+          _createDrawerItem(context, Strings.profileTitle, '/profile', Icons.person),
           Divider(),
-          _createDrawerItem(context, MY_FAVORS, '/myFavors', Icons.list),
+          _createDrawerItem(context, Strings.myFavorsTitle, '/myFavors', Icons.list),
           _createDrawerItem(
-              context, INCOMPLETE_FAVORS, '/incompleteFavors', Icons.grading),
-          //_createDrawerItem(context, ACTIVE_CHATS, '/activeChats', Icons.chat_outlined),
+              context, Strings.incompleteFavorsTitle, '/incompleteFavors', Icons.grading),
           Divider(),
           _createDrawerItem(
-              context, STATISTICS, '/statistics', Icons.bar_chart),
+              context, Strings.statisticsTitle, '/statistics', Icons.bar_chart),
         ],
       ),
     );

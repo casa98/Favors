@@ -47,18 +47,7 @@ const String DESCRIPTION_LABEL = 'Describe what you need';
 const String LOCATION_FAVOR = 'Delivery place';
 const String LOCATION_LABEL = 'Where will it be delivered';
 
-/* APP STRINGS */
-const String UNASSIGNED_FAVORS = 'Unassigned Favors';
-const String HOME = 'Home';
-const String PROFILE = 'Profile';
-const String MY_FAVORS = 'My Favors';
-const String INCOMPLETE_FAVORS = 'Incomplete Favors';
-const String ACTIVE_CHATS = 'Active Chats';
-const String STATISTICS = 'Statistics';
-
-const String FAVOR_DETAILS = 'Favor Details';
 const String REQUESTED_BY = 'Favor request by:';
-
 const String DETAILS_TITLE = 'Title';
 const String DETAILS_DESCRIPTION = 'Description';
 const String DETAILS_DELIVERY_PLACE = 'Delivery place';
