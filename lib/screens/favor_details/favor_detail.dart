@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class FavorDetail extends StatefulWidget {
   final String _title;
-  FavorDetail(this._title);
+  final FavorDetailsObject _favor;
+  FavorDetail(this._title, this._favor);
 
   @override
   _FavorDetailState createState() => _FavorDetailState();
@@ -22,7 +23,7 @@ class _FavorDetailState extends State<FavorDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final FavorDetailsObject args = ModalRoute.of(context).settings.arguments;
+    //final FavorDetailsObject args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
@@ -53,7 +54,7 @@ class _FavorDetailState extends State<FavorDetail> {
                     Text(REQUESTED_BY),
                     SizedBox(height: 8.0),
                     Text(
-                      args.username,
+                      widget._favor.username,
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
@@ -73,21 +74,21 @@ class _FavorDetailState extends State<FavorDetail> {
                   style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),
-                Text(args.favorTitle),
+                Text(widget._favor.favorTitle),
                 SizedBox(height: 16.0),
                 Text(
                   DETAILS_DESCRIPTION,
                   style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),
-                Text(args.favorDescription),
+                Text(widget._favor.favorDescription),
                 SizedBox(height: 16.0),
                 Text(
                   DETAILS_DELIVERY_PLACE,
                   style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 SizedBox(height: 8.0),
-                Text(args.favorLocation),
+                Text(widget._favor.favorLocation),
               ],
             ),
           ),
@@ -100,7 +101,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   child: Builder(
                     builder: (context) => ElevatedButton(
                       onPressed: () {
-                        DatabaseService().markFavorAsAssigned(args.key);
+                        DatabaseService().markFavorAsAssigned(widget._favor.key);
                         hideButton();
                         Scaffold.of(context).showSnackBar(SnackBar(
                           content: Row(

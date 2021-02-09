@@ -1,5 +1,6 @@
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/shared/constants.dart';
+import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,6 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                     Util().readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
                   ),
                   onTap: () {
-                    //print(item[index][FAVOR_TITLE]);
                     FavorDetailsObject tappedFavor = FavorDetailsObject(
                       currentFavor[FAVOR_DESCRIPTION],
                       currentFavor[FAVOR_LOCATION],
@@ -69,7 +69,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                     );
                     Navigator.pushNamed(
                       context,
-                      '/favorDetails',
+                      Strings.favorDetailsRoute,
                       arguments: tappedFavor,
                     );
                   },
