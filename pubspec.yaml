@@ -41,6 +41,7 @@ dependencies:
   firebase_storage:
   permission_handler: 5.0.1+1
   cached_network_image:
+  provider:
 
 dev_dependencies:
   flutter_native_splash: ^0.2.9

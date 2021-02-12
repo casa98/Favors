@@ -9,6 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import '../../app_state_notifier.dart';
 
 class Profile extends StatefulWidget {
   final String _title;
@@ -122,6 +125,13 @@ class _ProfileState extends State<Profile> {
                         style: TextStyle(fontSize: 16.0),
                       ),
                     ],
+                  ),
+                  SizedBox(width: 10.0),
+                  Switch(
+                    value: Provider.of<AppStateNotifier>(context).isDarkMode,
+                    onChanged: (boolVal) {
+                      Provider.of<AppStateNotifier>(context, listen: false).updateTheme(boolVal);
+                    },
                   ),
                   SizedBox(height: 20.0),
                   Expanded(
