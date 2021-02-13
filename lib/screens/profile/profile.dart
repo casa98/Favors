@@ -35,6 +35,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
+        centerTitle: true,
       ),
       body: StreamBuilder(
         stream: firestoreRef.snapshots(),
@@ -42,7 +43,7 @@ class _ProfileState extends State<Profile> {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Text('Loading...');
+              return Text('');
             default:
               var userDocument = snapshot.data;
               String image = userDocument[IMAGE];
@@ -83,8 +84,14 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                     child: Container(
+
                       padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-                      child: Text(CHANGE_PHOTO),
+                      child: Text(
+                          CHANGE_PHOTO,
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      ),
                     ),
                   ),
                   Divider(
@@ -96,7 +103,6 @@ class _ProfileState extends State<Profile> {
                   Text(
                     userDocument[USERNAME],
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18.0,
                     ),
                   ),
@@ -104,7 +110,6 @@ class _ProfileState extends State<Profile> {
                   Text(
                     userDocument[EMAIL],
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18.0,
                     ),
                   ),
@@ -115,7 +120,6 @@ class _ProfileState extends State<Profile> {
                       Text(
                         'Score:',
                         style: TextStyle(
-                          color: Colors.black,
                           fontSize: 18.0,
                         ),
                       ),
@@ -127,13 +131,6 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                   SizedBox(width: 10.0),
-                  Switch(
-                    value: Provider.of<AppStateNotifier>(context).isDarkMode,
-                    onChanged: (boolVal) {
-                      Provider.of<AppStateNotifier>(context, listen: false).updateTheme(boolVal);
-                    },
-                  ),
-                  SizedBox(height: 20.0),
                   Expanded(
                     child: Align(
                       alignment: FractionalOffset.bottomCenter,

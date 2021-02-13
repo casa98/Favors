@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
+        centerTitle: true,
       ),
       drawer: AppDrawer(),
       body: Center(

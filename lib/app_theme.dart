@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -5,57 +6,53 @@ class AppTheme {
   AppTheme._();
 
   static final ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.teal,
-    appBarTheme: AppBarTheme(
-      color: Colors.teal,
-      iconTheme: IconThemeData(
-        color: Colors.white,
-      ),
+    pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }
     ),
-    colorScheme: ColorScheme.light(
-      primary: Colors.white,
-      onPrimary: Colors.white,
-      primaryVariant: Colors.white38,
-      secondary: Colors.red,
-    ),
-    cardTheme: CardTheme(
-      color: Colors.teal,
-    ),
-    iconTheme: IconThemeData(
-      color: Colors.white54,
-    ),
-    textTheme: TextTheme(
-      headline6: TextStyle(
-        color: Colors.white,
-        fontSize: 20.0,
-      ),
-      subtitle2: TextStyle(
-        color: Colors.white70,
-        fontSize: 18.0,
-      ),
-    ),
+
+    primaryColor:  Color(0xff151e32),
+    accentColor:  Color(0xff151e32),
+
   );
 
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.black,
+    pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }
+    ),
+
+    primaryColor:  Color(0xff151e32),
+    accentColor:  Color(0xff151e32),
+
     appBarTheme: AppBarTheme(
-      color: Colors.black,
+      color: Color(0xff151e32),
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
     ),
-    colorScheme: ColorScheme.light(
-      primary: Colors.black,
-      onPrimary: Colors.black,
-      primaryVariant: Colors.black,
-      secondary: Colors.red,
+
+    canvasColor: Color(0xff151e32),
+
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: Color(0xff151e32),
     ),
-    cardTheme: CardTheme(
-      color: Colors.black,
+
+    dialogTheme: DialogTheme(
+      backgroundColor: Color(0xff151e32),
     ),
-    iconTheme: IconThemeData(
-      color: Colors.white54,
+
+    colorScheme: ColorScheme.dark(
+      primary: Color(0xff3685fa),
+      onPrimary: Color(0xff3685fa),
+      primaryVariant: Colors.blue[300],
+      secondary: Color(0xff3685fa),
     ),
+
     textTheme: TextTheme(
       headline6: TextStyle(
         color: Colors.white,

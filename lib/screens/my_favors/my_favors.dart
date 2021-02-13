@@ -27,6 +27,7 @@ class _MyFavorsState extends State<MyFavors> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget._title),
+          centerTitle: true,
         ),
         body: Center(
           child: StreamBuilder(
@@ -77,7 +78,6 @@ class _MyFavorsState extends State<MyFavors> {
                             SizedBox(width: 10.0),
                             Text(
                               currentFavor[FAVOR_STATUS],
-                              style: TextStyle(color: Colors.black),
                             ),
                           ],
                         ),

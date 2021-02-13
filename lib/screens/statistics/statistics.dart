@@ -25,6 +25,7 @@ class _StatisticsState extends State<Statistics> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget._title),
+          centerTitle: true,
         ),
         body: StreamBuilder(
           stream: firestoreRef.snapshots(),

@@ -72,7 +72,7 @@ class _LoginState extends State<Login> {
                             GestureDetector(
                               onTap: () => widget.toggleView(),
                               child: Container(
-                                color: Colors.grey[50],
+                                color: Colors.white,
                                 padding: EdgeInsets.all(16.0),
                                 child: Text(
                                   Strings.signUp,
@@ -149,7 +149,15 @@ class _LoginState extends State<Login> {
           _error = result.toString();
         }
       },
-      child: Text(Strings.login),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+        child: Text(
+          Strings.login,
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      ),
     );
   }
 }

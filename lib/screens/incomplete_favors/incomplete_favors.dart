@@ -24,6 +24,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
+        centerTitle: true,
       ),
       body: Center(
           child: StreamBuilder(

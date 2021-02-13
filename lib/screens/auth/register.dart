@@ -77,7 +77,7 @@ class _RegisterState extends State<Register> {
                             GestureDetector(
                               onTap: () => widget.toggleView(),
                               child: Container(
-                                color: Colors.grey[50],
+                                color: Colors.white,
                                 padding: EdgeInsets.all(16.0),
                                 child: Text(
                                   Strings.signIn,
@@ -204,7 +204,15 @@ class _RegisterState extends State<Register> {
           }
         }
       },
-      child: Text(Strings.register),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+        child: Text(
+          Strings.register,
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      ),
     );
   }
 }

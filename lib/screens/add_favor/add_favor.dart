@@ -32,7 +32,6 @@ class _AddFavorState extends State<AddFavor> {
                   ASK_FOR_A_FAVOR,
                   style: TextStyle(
                     fontSize: 20.0,
-                    color: Colors.blue[700],
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -52,8 +51,13 @@ class _AddFavorState extends State<AddFavor> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
-                  child: Text(REQUEST_FAVOR),
+                  padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+                  child: Text(
+                      REQUEST_FAVOR,
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 20.0),
