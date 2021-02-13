@@ -42,27 +42,37 @@ class _FavorDetailState extends State<FavorDetail> {
                 Text(
                   widget._favor.username,
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 16.0),
+                Divider(height: 32.0,),
                 Text(
                   DETAILS_TITLE,
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Text(widget._favor.favorTitle),
-                SizedBox(height: 16.0),
+                Divider(height: 32.0,),
                 Text(
                   DETAILS_DESCRIPTION,
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Text(widget._favor.favorDescription),
-                SizedBox(height: 16.0),
+                Divider(height: 32.0,),
                 Text(
                   DETAILS_DELIVERY_PLACE,
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Text(widget._favor.favorLocation),
@@ -76,6 +86,13 @@ class _FavorDetailState extends State<FavorDetail> {
                   padding: EdgeInsets.only(bottom: 16.0),
                   child: Builder(
                     builder: (context) => ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            return Theme.of(context).primaryColor;
+                          },
+                        ),
+                      ),
                       onPressed: () {
                         DatabaseService()
                             .markFavorAsAssigned(widget._favor.key);

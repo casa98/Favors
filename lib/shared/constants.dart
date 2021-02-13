@@ -47,7 +47,7 @@ const String DESCRIPTION_LABEL = 'Describe what you need';
 const String LOCATION_FAVOR = 'Delivery place';
 const String LOCATION_LABEL = 'Where will it be delivered';
 
-const String REQUESTED_BY = 'Favor request by:';
+const String REQUESTED_BY = 'Request by:';
 const String DETAILS_TITLE = 'Title';
 const String DETAILS_DESCRIPTION = 'Description';
 const String DETAILS_DELIVERY_PLACE = 'Delivery place';

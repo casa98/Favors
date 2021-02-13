@@ -43,6 +43,13 @@ class _AddFavorState extends State<AddFavor> {
               deliveryPlaceFormField(),
               SizedBox(height: 20.0),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      return Theme.of(context).primaryColor;
+                    },
+                  ),
+                ),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     DatabaseService()

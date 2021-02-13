@@ -15,6 +15,7 @@ class AppTheme {
 
     primaryColor:  Color(0xff151e32),
     accentColor:  Color(0xff151e32),
+    backgroundColor: Colors.grey[50],
 
   );
 
@@ -26,8 +27,10 @@ class AppTheme {
         }
     ),
 
-    primaryColor:  Color(0xff151e32),
+    primaryColor:  Colors.blueAccent[400],
     accentColor:  Color(0xff151e32),
+    backgroundColor: Color(0xff151e32),
+    brightness: Brightness.dark,
 
     appBarTheme: AppBarTheme(
       color: Color(0xff151e32),
@@ -48,8 +51,6 @@ class AppTheme {
 
     colorScheme: ColorScheme.dark(
       primary: Color(0xff3685fa),
-      onPrimary: Color(0xff3685fa),
-      primaryVariant: Colors.blue[300],
       secondary: Color(0xff3685fa),
     ),
 

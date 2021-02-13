@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../app_state_notifier.dart';
+import '../../theme/app_state_notifier.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -22,14 +22,7 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           _createHeader(),
           SwitchListTile(
-            title: Row(
-              children: [
-                SizedBox(width: 2.0),
-                Icon(Icons.nights_stay_sharp),
-                SizedBox(width: 30.0),
-                Text('Dark Mode'),
-              ],
-            ),
+            title: Text('Dark Mode'),
             value: Provider.of<AppStateNotifier>(context).isDarkMode,
             onChanged: (boolVal) {
               Provider.of<AppStateNotifier>(context, listen: false).updateTheme(boolVal);
@@ -70,6 +63,9 @@ Widget _createHeader() {
         default:
           var userDocument = snapshot.data;
           return UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+            ),
             accountName: Text(userDocument[USERNAME]),
             accountEmail: Text(userDocument[EMAIL]),
             currentAccountPicture: userDocument[IMAGE] == ''
@@ -80,6 +76,7 @@ Widget _createHeader() {
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,
+                        color: Theme.of(context).primaryColor
                       ),
                     ),
                   )

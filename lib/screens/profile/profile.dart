@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../../app_state_notifier.dart';
+import '../../theme/app_state_notifier.dart';
 
 class Profile extends StatefulWidget {
   final String _title;
@@ -77,6 +77,13 @@ class _ProfileState extends State<Profile> {
                   ),
                   SizedBox(height: 16.0),
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          return Theme.of(context).primaryColor;
+                        },
+                      ),
+                    ),
                     onPressed: () {
                       containerForSheet<String>(
                         context: context,

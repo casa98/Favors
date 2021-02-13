@@ -59,7 +59,7 @@ flutter_icons:
 # following page: https://dart.dev/tools/pub/pubspec
 
 flutter_native_splash:
-  color: 42a5f5
+  color: "#151e32"
   image: assets/icons/please.png
   android_gravity: center
   ios_content_mode: center

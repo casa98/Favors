@@ -35,6 +35,7 @@ class _LoginState extends State<Login> {
         : Scaffold(
             body: SafeArea(
               child: Container(
+                color: Theme.of(context).backgroundColor,
                 padding: EdgeInsets.all(24.0),
                 child: Form(
                   key: _formKey,
@@ -72,12 +73,12 @@ class _LoginState extends State<Login> {
                             GestureDetector(
                               onTap: () => widget.toggleView(),
                               child: Container(
-                                color: Colors.white,
+                                color: Theme.of(context).backgroundColor,
                                 padding: EdgeInsets.all(16.0),
                                 child: Text(
                                   Strings.signUp,
                                   style: TextStyle(
-                                    color: Colors.blue[700],
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -141,6 +142,13 @@ class _LoginState extends State<Login> {
 
   ElevatedButton submitButton() {
     return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            return Theme.of(context).primaryColor;
+          },
+        ),
+      ),
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           setState(() => loading = true);
