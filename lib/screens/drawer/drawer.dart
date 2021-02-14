@@ -8,6 +8,9 @@ import 'package:do_favors/shared/util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../theme/app_state_notifier.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -18,6 +21,14 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           _createHeader(),
+          SwitchListTile(
+            title: Text('Dark Mode'),
+            value: Provider.of<AppStateNotifier>(context).isDarkMode,
+            onChanged: (boolVal) {
+              Provider.of<AppStateNotifier>(context, listen: false).updateTheme(boolVal);
+            },
+          ),
+          Divider(),
           ListTile(
             title: Text(Strings.homeTitle),
             onTap: () {
@@ -48,22 +59,24 @@ Widget _createHeader() {
     builder: (context, snapshot) {
       switch (snapshot.connectionState) {
         case ConnectionState.waiting:
-          return Text('Loading...');
+          return Text('');
         default:
           var userDocument = snapshot.data;
           return UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+            ),
             accountName: Text(userDocument[USERNAME]),
             accountEmail: Text(userDocument[EMAIL]),
             currentAccountPicture: userDocument[IMAGE] == ''
                 ? CircleAvatar(
-                    backgroundColor: defaultTargetPlatform == TargetPlatform.iOS
-                        ? Colors.blue
-                        : Colors.white,
+                    backgroundColor: Colors.white,
                     child: Text(
                       Util().lettersForHeader(userDocument[USERNAME]),
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,
+                        color: Theme.of(context).primaryColor
                       ),
                     ),
                   )

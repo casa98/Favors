@@ -27,81 +27,75 @@ class _FavorDetailState extends State<FavorDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
+        centerTitle: true,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: Colors.blue[50],
-            height: 120.0,
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: CircleAvatar(
-                    maxRadius: 45,
-                    backgroundColor: Colors.blue[100],
-                    /*
-                    backgroundImage: NetworkImage(
-                      '',
-                    ),
-                    */
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(REQUESTED_BY),
-                    SizedBox(height: 8.0),
-                    Text(
-                      widget._favor.username,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Text(REQUESTED_BY),
+                SizedBox(height: 8.0),
+                Text(
+                  widget._favor.username,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Divider(height: 32.0,),
                 Text(
                   DETAILS_TITLE,
-                  style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Text(widget._favor.favorTitle),
-                SizedBox(height: 16.0),
+                Divider(height: 32.0,),
                 Text(
                   DETAILS_DESCRIPTION,
-                  style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Text(widget._favor.favorDescription),
-                SizedBox(height: 16.0),
+                Divider(height: 32.0,),
                 Text(
                   DETAILS_DELIVERY_PLACE,
-                  style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Text(widget._favor.favorLocation),
               ],
             ),
           ),
-          if (_buttonVisible)
-            Expanded(
+          _buttonVisible ? Expanded(
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 16.0),
                   child: Builder(
                     builder: (context) => ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            return Theme.of(context).primaryColor;
+                          },
+                        ),
+                      ),
                       onPressed: () {
-                        DatabaseService().markFavorAsAssigned(widget._favor.key);
+                        DatabaseService()
+                            .markFavorAsAssigned(widget._favor.key);
                         hideButton();
                         Scaffold.of(context).showSnackBar(SnackBar(
                           content: Row(
@@ -117,14 +111,20 @@ class _FavorDetailState extends State<FavorDetail> {
                         ));
                       },
                       child: Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 16.0),
-                        child: Text(DO_THIS_FAVOR),
+                        padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+                        child: Text(
+                            DO_THIS_FAVOR,
+                          style: TextStyle(
+                            color: Colors.white
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+            )
+          : Text(''),
         ],
       ),
     );

@@ -9,6 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import '../../theme/app_state_notifier.dart';
 
 class Profile extends StatefulWidget {
   final String _title;
@@ -21,17 +24,24 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File _image;
+  String asset;
   final picker = ImagePicker();
   ProfileBloc _profileBloc = ProfileBloc();
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    asset = theme.brightness == Brightness.light
+        ? 'assets/no-photo.png'
+        : 'assets/no-photo-dark.png';
+
     var firestoreRef = FirebaseFirestore.instance
         .collection(USER)
         .doc(FirebaseAuth.instance.currentUser.uid);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
+        centerTitle: true,
       ),
       body: StreamBuilder(
         stream: firestoreRef.snapshots(),
@@ -39,7 +49,7 @@ class _ProfileState extends State<Profile> {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Text('Loading...');
+              return Text('');
             default:
               var userDocument = snapshot.data;
               String image = userDocument[IMAGE];
@@ -73,6 +83,13 @@ class _ProfileState extends State<Profile> {
                   ),
                   SizedBox(height: 16.0),
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          return Theme.of(context).primaryColor;
+                        },
+                      ),
+                    ),
                     onPressed: () {
                       containerForSheet<String>(
                         context: context,
@@ -80,8 +97,14 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                     child: Container(
+
                       padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-                      child: Text(CHANGE_PHOTO),
+                      child: Text(
+                          CHANGE_PHOTO,
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      ),
                     ),
                   ),
                   Divider(
@@ -93,7 +116,6 @@ class _ProfileState extends State<Profile> {
                   Text(
                     userDocument[USERNAME],
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18.0,
                     ),
                   ),
@@ -101,7 +123,6 @@ class _ProfileState extends State<Profile> {
                   Text(
                     userDocument[EMAIL],
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18.0,
                     ),
                   ),
@@ -112,7 +133,6 @@ class _ProfileState extends State<Profile> {
                       Text(
                         'Score:',
                         style: TextStyle(
-                          color: Colors.black,
                           fontSize: 18.0,
                         ),
                       ),
@@ -123,7 +143,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(width: 10.0),
                   Expanded(
                     child: Align(
                       alignment: FractionalOffset.bottomCenter,
@@ -160,7 +180,7 @@ class _ProfileState extends State<Profile> {
     return Container(
       child: Center(
         child: Image.asset(
-          'assets/no-photo.png',
+          asset,
           width: 100,
           height: 100,
         ),

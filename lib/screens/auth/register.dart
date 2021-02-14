@@ -36,6 +36,7 @@ class _RegisterState extends State<Register> {
         : Scaffold(
             body: SafeArea(
               child: Container(
+                color: Theme.of(context).backgroundColor,
                 padding: EdgeInsets.all(24.0),
                 child: Form(
                   key: _formKey,
@@ -77,12 +78,12 @@ class _RegisterState extends State<Register> {
                             GestureDetector(
                               onTap: () => widget.toggleView(),
                               child: Container(
-                                color: Colors.grey[50],
+                                color: Theme.of(context).backgroundColor,
                                 padding: EdgeInsets.all(16.0),
                                 child: Text(
                                   Strings.signIn,
                                   style: TextStyle(
-                                    color: Colors.blue[700],
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -193,6 +194,13 @@ class _RegisterState extends State<Register> {
 
   ElevatedButton submitButton() {
     return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+            return Theme.of(context).primaryColor;
+          },
+        ),
+      ),
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           if (_password == _confirmPassword) {
@@ -204,7 +212,15 @@ class _RegisterState extends State<Register> {
           }
         }
       },
-      child: Text(Strings.register),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+        child: Text(
+          Strings.register,
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      ),
     );
   }
 }
