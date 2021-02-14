@@ -24,11 +24,17 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File _image;
+  String asset;
   final picker = ImagePicker();
   ProfileBloc _profileBloc = ProfileBloc();
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    asset = theme.brightness == Brightness.light
+        ? 'assets/no-photo.png'
+        : 'assets/no-photo-dark.png';
+
     var firestoreRef = FirebaseFirestore.instance
         .collection(USER)
         .doc(FirebaseAuth.instance.currentUser.uid);
@@ -174,7 +180,7 @@ class _ProfileState extends State<Profile> {
     return Container(
       child: Center(
         child: Image.asset(
-          'assets/no-photo.png',
+          asset,
           width: 100,
           height: 100,
         ),
