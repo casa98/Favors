@@ -23,15 +23,18 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-    return Consumer<AppStateNotifier>(builder: (context, appState, child) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        onGenerateRoute: AppRouter.buildRootRouteFactory(),
-        initialRoute: Strings.initialRoute,
-      );
-    });
+    return ChangeNotifierProvider(
+      create: (_) => AppStateNotifier(),
+      child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          onGenerateRoute: AppRouter.buildRootRouteFactory(),
+          initialRoute: Strings.initialRoute,
+        );
+      }),
+    );
   }
 }

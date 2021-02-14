@@ -45,6 +45,10 @@ class AppTheme {
       backgroundColor: Color(0xff151e32),
     ),
 
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      foregroundColor: Colors.white,
+    ),
+
     dialogTheme: DialogTheme(
       backgroundColor: Color(0xff151e32),
     ),
