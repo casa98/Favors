@@ -16,7 +16,11 @@ class AppTheme {
     primaryColor:  Color(0xff151e32),
     accentColor:  Color(0xff151e32),
     backgroundColor: Colors.grey[50],
+    secondaryHeaderColor: Colors.grey[200],
 
+    appBarTheme: AppBarTheme(
+      elevation: 0,
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -25,14 +29,17 @@ class AppTheme {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }
+
     ),
 
-    primaryColor:  Colors.blueAccent[400],
+    primaryColor:  Color(0xff5890c5),
     accentColor:  Color(0xff151e32),
     backgroundColor: Color(0xff151e32),
+    secondaryHeaderColor: Color(0xff32394c),
     brightness: Brightness.dark,
 
     appBarTheme: AppBarTheme(
+      elevation: 0,
       color: Color(0xff151e32),
       iconTheme: IconThemeData(
         color: Colors.white,
@@ -54,8 +61,8 @@ class AppTheme {
     ),
 
     colorScheme: ColorScheme.dark(
-      primary: Color(0xff3685fa),
-      secondary: Color(0xff3685fa),
+      primary: Color(0xff5890c5),
+      secondary: Color(0xff5890c5),
     ),
 
     textTheme: TextTheme(

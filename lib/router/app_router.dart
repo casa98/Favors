@@ -21,7 +21,7 @@ class AppRouter {
           return MaterialPageRoute(
               builder: (_) => HomePage(Strings.unassignedFavorsTitle));
         case Strings.favorDetailsRoute:
-          var favor = settings.arguments as FavorDetailsObject;
+          var favor = settings.arguments as Favor;
           return MaterialPageRoute(
               builder: (_) => FavorDetail(Strings.favorDetailsTitle, favor));
         case Strings.profileRoute:
