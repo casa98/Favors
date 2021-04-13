@@ -2,7 +2,6 @@ import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -129,7 +128,8 @@ class _RegisterState extends State<Register> {
       onChanged: (value) => _email = value,
       validator: (value) {
         if (value.isNotEmpty) {
-          if (!EmailValidator.validate(value)) {
+          // TODO Validate email
+          if (false) {
             return Strings.enterValidEmail;
           }
         } else {

@@ -60,12 +60,17 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                     Util().readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
                   ),
                   onTap: () {
-                    FavorDetailsObject tappedFavor = FavorDetailsObject(
+                    Favor tappedFavor = Favor(
+                      '',
+                      '',
                       currentFavor[FAVOR_DESCRIPTION],
                       currentFavor[FAVOR_LOCATION],
                       currentFavor[FAVOR_TITLE],
                       currentFavor[FAVOR_KEY],
-                      currentFavor[FAVOR_USERNAME],
+                      '',
+                      0,
+                      '',
+                      currentFavor[FAVOR_USERNAME]
                     );
                     Navigator.pushNamed(
                       context,

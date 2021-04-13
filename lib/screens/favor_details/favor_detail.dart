@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class FavorDetail extends StatefulWidget {
   final String _title;
-  final FavorDetailsObject _favor;
+  final Favor _favor;
   FavorDetail(this._title, this._favor);
 
   @override
@@ -55,7 +55,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                Text(widget._favor.favorTitle),
+                Text(widget._favor.title),
                 Divider(height: 32.0,),
                 Text(
                   DETAILS_DESCRIPTION,
@@ -65,7 +65,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                Text(widget._favor.favorDescription),
+                Text(widget._favor.description),
                 Divider(height: 32.0,),
                 Text(
                   DETAILS_DELIVERY_PLACE,
@@ -75,7 +75,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                Text(widget._favor.favorLocation),
+                Text(widget._favor.location),
               ],
             ),
           ),

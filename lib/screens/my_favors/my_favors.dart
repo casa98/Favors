@@ -1,3 +1,4 @@
+import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/shared/util.dart';
