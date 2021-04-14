@@ -6,13 +6,6 @@ class AppTheme {
   AppTheme._();
 
   static final ThemeData lightTheme = ThemeData(
-    pageTransitionsTheme: PageTransitionsTheme(
-        builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-        }
-    ),
-
     primaryColor:  Color(0xff151e32),
     accentColor:  Color(0xff151e32),
     backgroundColor: Colors.grey[50],
@@ -24,13 +17,6 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    pageTransitionsTheme: PageTransitionsTheme(
-        builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-        }
-
-    ),
 
     primaryColor:  Color(0xff5890c5),
     accentColor:  Color(0xff151e32),

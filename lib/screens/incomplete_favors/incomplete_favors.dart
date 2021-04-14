@@ -65,7 +65,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     subtitle: Text(currentFavor[FAVOR_DESCRIPTION],
                         overflow: TextOverflow.ellipsis),
                     trailing: Text(
-                      Util().readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                      Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
                     ),
                     onTap: () {},
                   );

@@ -57,7 +57,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                   subtitle: Text(currentFavor[FAVOR_DESCRIPTION],
                       overflow: TextOverflow.ellipsis),
                   trailing: Text(
-                    Util().readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                    Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
                   ),
                   onTap: () {
                     Favor tappedFavor = Favor(

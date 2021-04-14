@@ -72,7 +72,7 @@ Widget _createHeader() {
                 ? CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Text(
-                      Util().lettersForHeader(userDocument[USERNAME]),
+                      Util.lettersForHeader(userDocument[USERNAME]),
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,

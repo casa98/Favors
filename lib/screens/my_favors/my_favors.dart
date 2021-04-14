@@ -83,8 +83,7 @@ class _MyFavorsState extends State<MyFavors> {
                           ],
                         ),
                         trailing: Text(
-                          Util()
-                              .readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                          Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
                         ),
                         onTap: () async {
                           // showDialog returns a value, it's sent via pop()

@@ -1,6 +1,7 @@
 import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
 import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/shared/util.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -128,8 +129,7 @@ class _RegisterState extends State<Register> {
       onChanged: (value) => _email = value,
       validator: (value) {
         if (value.isNotEmpty) {
-          // TODO Validate email
-          if (false) {
+          if (!Util.isValidEmail(_email)) {
             return Strings.enterValidEmail;
           }
         } else {

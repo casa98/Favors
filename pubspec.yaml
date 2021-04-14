@@ -35,7 +35,6 @@ dependencies:
   intl: ^0.16.1
   flutter_launcher_icons: ^0.8.1
 
-  rxdart: ^0.25.0
   image_picker: ^0.6.7+21
   firebase_storage:
   permission_handler: 5.0.1+1

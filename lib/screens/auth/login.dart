@@ -1,6 +1,7 @@
 import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
 import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/shared/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -101,8 +102,7 @@ class _LoginState extends State<Login> {
       onChanged: (value) => _email = value,
       validator: (value) {
         if (value.isNotEmpty) {
-          // TODO Validate email
-          if (false) {
+          if (!Util.isValidEmail(_email)) {
             return Strings.enterValidEmail;
           }
         } else {

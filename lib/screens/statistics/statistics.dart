@@ -67,7 +67,7 @@ class _StatisticsState extends State<Statistics> {
                                 backgroundColor: Colors.primaries[
                                     Random().nextInt(Colors.accents.length)],
                                 child: Text(
-                                  Util().lettersForHeader(userItem[USERNAME]),
+                                  Util.lettersForHeader(userItem[USERNAME]),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,
