@@ -17,14 +17,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-    return ChangeNotifierProvider(
-      create: (_) => AppStateNotifier(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppStateNotifier()),
+      ],
       child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,

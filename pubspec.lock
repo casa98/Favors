@@ -203,19 +203,12 @@ packages:
     source: hosted
     version: "2.1.1"
   flutter_launcher_icons:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.1"
-  flutter_native_splash:
-    dependency: "direct dev"
-    description:
-      name: flutter_native_splash
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.9"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

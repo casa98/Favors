@@ -33,7 +33,6 @@ dependencies:
   cloud_firestore: ^0.14.3
   flutter_spinkit: ^4.1.2+1
   intl: ^0.16.1
-  flutter_launcher_icons: ^0.8.1
 
   image_picker: ^0.6.7+21
   firebase_storage:
@@ -43,7 +42,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
 
 dev_dependencies:
-  flutter_native_splash: ^0.2.9
+  flutter_launcher_icons: "^0.8.1"
 
   flutter_test:
     sdk: flutter
@@ -51,16 +50,11 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
+  adaptive_icon_background: "#ffffff"
   image_path: "assets/icons/please.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
-flutter_native_splash:
-  color: "#151e32"
-  image: assets/icons/please.png
-  android_gravity: center
-  ios_content_mode: center
 
 # The following section is specific to Flutter.
 flutter:
