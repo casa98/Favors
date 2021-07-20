@@ -8,12 +8,7 @@ import 'theme/app_state_notifier.dart';
 import 'shared/strings.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider<AppStateNotifier>(
-      create: (context) => AppStateNotifier(),
-      child: MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

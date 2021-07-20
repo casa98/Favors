@@ -20,10 +20,10 @@ class ProfileBloc{
   uploadPicture(File image) async{
     _showLoadingIndicatorSubject.sink.add(true);
     await _storage.ref()
-      .child("profile_pictures/${_currentUser.uid}.jpg")
+      .child("profile_pictures/${_currentUser!.uid}.jpg")
       .putFile(image).then((value) async{
         String downloadUrl = await value.ref.getDownloadURL();
-        _userCollection.doc(_currentUser.uid).update({
+        _userCollection.doc(_currentUser!.uid).update({
           IMAGE: downloadUrl.toString(),
         });
         _showLoadingIndicatorSubject.sink.add(false);

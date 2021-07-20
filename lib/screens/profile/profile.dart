@@ -23,8 +23,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  File _image;
-  String asset;
+  late File _image;
+  late String asset;
   final picker = ImagePicker();
   ProfileBloc _profileBloc = ProfileBloc();
 
@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
 
     var firestoreRef = FirebaseFirestore.instance
         .collection(USER)
-        .doc(FirebaseAuth.instance.currentUser.uid);
+        .doc(FirebaseAuth.instance.currentUser!.uid);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
@@ -45,7 +45,7 @@ class _ProfileState extends State<Profile> {
       ),
       body: StreamBuilder(
         stream: firestoreRef.snapshots(),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -66,7 +66,7 @@ class _ProfileState extends State<Profile> {
                     child: StreamBuilder<bool>(
                         stream: _profileBloc.showLoadingIndicator,
                         initialData: false,
-                      builder: (context, snapshot) {
+                      builder: (context, AsyncSnapshot snapshot) {
                         return !snapshot.data ? CachedNetworkImage(
                           height: 200,
                           width: 200,
@@ -211,7 +211,7 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  void containerForSheet<T>({BuildContext context, Widget child}) {
+  void containerForSheet<T>({required BuildContext context, required Widget child}) {
     showCupertinoModalPopup<T>(
       context: context,
       builder: (BuildContext context) => child,

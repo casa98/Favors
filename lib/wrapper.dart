@@ -24,9 +24,9 @@ class Wrapper extends StatelessWidget {
           return StreamBuilder(
               // Something like LiveData? I think so
               stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
+              builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {
-                  User user = snapshot.data;
+                  User? user = snapshot.data;
                   if (user == null) {
                     return Authenticate();
                   } else {

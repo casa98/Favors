@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  HomeBloc _homeBloc;
+  late HomeBloc _homeBloc;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         stream: _homeBloc.showFloatingButton,
         initialData: false,
         builder: (context, snapshot) {
-          return snapshot.data ? FloatingActionButton(
+          return snapshot.data != null ? FloatingActionButton(
               onPressed: () => _addFavorModalBottomSheet(context),
               tooltip: ASK_FOR_A_FAVOR,
               child: Icon(Icons.add),

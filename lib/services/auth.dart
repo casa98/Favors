@@ -12,21 +12,21 @@ class AuthService {
           email: email, password: passwd);
       return result.user;
     } catch (error) {
-      return _getError(error.code);
+      return _getError(error.toString());
     }
   }
 
   Future createUserWithEmailAndPassword(
       String name, String email, String passwd) async {
     try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
+      UserCredential? result = await _auth.createUserWithEmailAndPassword(
           email: email, password: passwd);
-      User user = result.user;
+      User? user = result.user;
       // Create a collection with info of the user registering right now
-      await createUserCollection(user.uid, email, name);
+      await createUserCollection(user!.uid, email, name);
       return user;
     } catch (error) {
-      return _getError(error.code);
+      return _getError(error.toString());
     }
   }
 

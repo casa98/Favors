@@ -10,7 +10,7 @@ class DatabaseService {
   final CollectionReference favorsCollection =
       FirebaseFirestore.instance.collection(FAVORS);
 
-  final User currentUser = FirebaseAuth.instance.currentUser;
+  final User? currentUser = FirebaseAuth.instance.currentUser;
 
   Future saveFavor(
     String title,
@@ -20,11 +20,11 @@ class DatabaseService {
     dynamic username;
     dynamic newUserScore;
     await userCollection
-        .doc(currentUser.uid)
+        .doc(currentUser!.uid)
         .get()
         .then<dynamic>((snapshot) async {
-      username = snapshot.data()[USERNAME];
-      newUserScore = snapshot.data()[SCORE] - 2;
+      username = snapshot[USERNAME];
+      newUserScore = snapshot[SCORE] - 2;
       var key = favorsCollection.doc().id;
       return await favorsCollection.doc(key).set({
         //FAVOR_ASSIGNED_USER: '',
@@ -35,12 +35,12 @@ class DatabaseService {
         FAVOR_TITLE: title,
         FAVOR_KEY: key,
         FAVOR_STATUS: -1, // Unassigned
-        FAVOR_USER: currentUser.uid,
+        FAVOR_USER: currentUser!.uid,
         FAVOR_USERNAME: username,
       }).then((value) {
         // Decrease by 2 the SCORE of the user who asked for the favor
         print(newUserScore);
-        userCollection.doc(currentUser.uid).update({
+        userCollection.doc(currentUser!.uid).update({
           SCORE: newUserScore,
         });
       });
@@ -50,13 +50,13 @@ class DatabaseService {
   Future markFavorAsAssigned(String favorId) async {
     dynamic username;
     await userCollection
-        .doc(currentUser.uid)
+        .doc(currentUser!.uid)
         .get()
         .then<dynamic>((snapshot) async {
-      username = snapshot.data()[USERNAME];
+      username = snapshot[USERNAME];
       return await favorsCollection.doc(favorId).update({
         FAVOR_STATUS: 1,
-        FAVOR_ASSIGNED_USER: currentUser.uid,
+        FAVOR_ASSIGNED_USER: currentUser!.uid,
         FAVOR_ASSIGNED_USERNAME: username,
       });
     });
@@ -68,7 +68,7 @@ class DatabaseService {
     }).then((value) {
       // Increase by 2 the SCORE of the user who made the favor
       userCollection.doc(userId).get().then((snapshot) {
-        var userNewScore = snapshot.data()[SCORE] + 2;
+        var userNewScore = snapshot[SCORE] + 2;
         userCollection.doc(userId).update({
           SCORE: userNewScore,
         });

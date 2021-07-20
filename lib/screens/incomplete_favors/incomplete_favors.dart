@@ -17,7 +17,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
       .collection(FAVORS)
       .where(FAVOR_STATUS, isEqualTo: 1)
       .where(FAVOR_ASSIGNED_USER,
-          isEqualTo: FirebaseAuth.instance.currentUser.uid)
+          isEqualTo: FirebaseAuth.instance.currentUser!.uid)
       .orderBy(FAVOR_TIMESTAMP, descending: true);
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
       body: Center(
           child: StreamBuilder(
         stream: firestoreRef.snapshots(),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           }
@@ -39,7 +39,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
               return CircularProgressIndicator();
             default:
               List item = [];
-              snapshot.data.docs.forEach((element) {
+              snapshot.data!.docs!.forEach((element) {
                 item.add(element.data());
               });
               if (item.length == 0)

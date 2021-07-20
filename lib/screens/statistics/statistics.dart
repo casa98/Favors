@@ -15,7 +15,7 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> {
-  final User currentUser = FirebaseAuth.instance.currentUser;
+  final User currentUser = FirebaseAuth.instance.currentUser!;
 
   var firestoreRef = FirebaseFirestore.instance
       .collection(USER)
@@ -29,7 +29,7 @@ class _StatisticsState extends State<Statistics> {
         ),
         body: StreamBuilder(
           stream: firestoreRef.snapshots(),
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }

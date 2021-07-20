@@ -53,15 +53,15 @@ class AppDrawer extends StatelessWidget {
 Widget _createHeader() {
   var firestoreRef = FirebaseFirestore.instance
       .collection(USER)
-      .doc(FirebaseAuth.instance.currentUser.uid);
+      .doc(FirebaseAuth.instance.currentUser!.uid);
   return StreamBuilder(
     stream: firestoreRef.snapshots(),
-    builder: (context, snapshot) {
+    builder: (context, AsyncSnapshot snapshot) {
       switch (snapshot.connectionState) {
         case ConnectionState.waiting:
           return Text('');
         default:
-          var userDocument = snapshot.data;
+          var userDocument = snapshot.data!;
           return UserAccountsDrawerHeader(
             decoration: BoxDecoration(
               color: Theme.of(context).accentColor,

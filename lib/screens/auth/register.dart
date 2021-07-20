@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
-  Register({this.toggleView});
+  Register({required this.toggleView});
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -15,10 +15,10 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  String _name;
-  String _email;
-  String _password;
-  String _confirmPassword;
+  String _name = "";
+  String _email ="";
+  String _password = "";
+  String _confirmPassword ="";
   String _error = "";
   AuthService _auth = AuthService();
 
@@ -106,7 +106,7 @@ class _RegisterState extends State<Register> {
       keyboardType: TextInputType.name,
       onChanged: (value) => _name = value,
       validator: (value) {
-        if (value.isNotEmpty) {
+        if (value!.isNotEmpty) {
           if (value.length < 5) {
             return Strings.enterLongerName;
           }
@@ -128,7 +128,7 @@ class _RegisterState extends State<Register> {
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) => _email = value,
       validator: (value) {
-        if (value.isNotEmpty) {
+        if (value!.isNotEmpty) {
           if (!Util.isValidEmail(_email)) {
             return Strings.enterValidEmail;
           }
@@ -150,7 +150,7 @@ class _RegisterState extends State<Register> {
       obscureText: true,
       onChanged: (value) => _password = value,
       validator: (value) {
-        if (value.isNotEmpty) {
+        if (value!.isNotEmpty) {
           if (value.length < 6) {
             return Strings.enterLongerPassword;
           }
@@ -172,7 +172,7 @@ class _RegisterState extends State<Register> {
       obscureText: true,
       onChanged: (value) => _confirmPassword = value,
       validator: (value) {
-        if (value.isNotEmpty) {
+        if (value!.isNotEmpty) {
           if (value.length < 6) {
             return Strings.enterLongerPassword;
           }
@@ -202,7 +202,7 @@ class _RegisterState extends State<Register> {
         ),
       ),
       onPressed: () async {
-        if (_formKey.currentState.validate()) {
+        if (_formKey.currentState!.validate()) {
           if (_password == _confirmPassword) {
             setState(() => loading = true);
             dynamic result = await _auth.createUserWithEmailAndPassword(

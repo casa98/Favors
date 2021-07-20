@@ -20,7 +20,7 @@ class MyFavors extends StatefulWidget {
 class _MyFavorsState extends State<MyFavors> {
   var firestoreRef = FirebaseFirestore.instance
       .collection(FAVORS)
-      .where(FAVOR_USER, isEqualTo: FirebaseAuth.instance.currentUser.uid)
+      .where(FAVOR_USER, isEqualTo: FirebaseAuth.instance.currentUser!.uid)
       .orderBy(FAVOR_TIMESTAMP, descending: true);
 
   @override
@@ -33,7 +33,7 @@ class _MyFavorsState extends State<MyFavors> {
         body: Center(
           child: StreamBuilder(
             stream: firestoreRef.snapshots(),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               }
@@ -96,7 +96,7 @@ class _MyFavorsState extends State<MyFavors> {
                                       'Sure you want to delete this favor?',
                                       true,
                                       currentFavor[FAVOR_KEY],
-                                      null);
+                                      'nonw');
                                 });
                             print(data);
                             if (data == DELETE) {

@@ -13,8 +13,8 @@ class HomeBloc {
   void canUserRequestFavors() {
     FirebaseFirestore.instance
         .collection(USER)
-        .doc(FirebaseAuth.instance.currentUser.uid).get().then((result) {
-          if(result.data()[SCORE] >= 2){
+        .doc(FirebaseAuth.instance.currentUser!.uid).get().then((result) {
+          if(result[SCORE] >= 2){
             _showFloatingButtonSubject.sink.add(true);
           }else{
             _showFloatingButtonSubject.sink.add(false);

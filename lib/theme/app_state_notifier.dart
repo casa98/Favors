@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppStateNotifier extends ChangeNotifier {
 
   static const key = "theme";
-  SharedPreferences _pref;
-  bool _isDarkMode;
+  late SharedPreferences _pref;
+  late bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
 
   AppStateNotifier(){
@@ -24,7 +24,7 @@ class AppStateNotifier extends ChangeNotifier {
   }
 
   _initPrefs() async {
-    if(_pref == null)
+    //if(_pref == null)
       _pref  = await SharedPreferences.getInstance();
   }
 

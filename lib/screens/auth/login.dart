@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
-  Login({this.toggleView});
+  Login({required this.toggleView});
 
   @override
   _LoginState createState() => _LoginState();
@@ -16,8 +16,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  String _email;
-  String _password;
+  String _email = "";
+  String _password = "";
   String _error = "";
   AuthService _auth = AuthService();
 
@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) => _email = value,
       validator: (value) {
-        if (value.isNotEmpty) {
+        if (value!.isNotEmpty) {
           if (!Util.isValidEmail(_email)) {
             return Strings.enterValidEmail;
           }
@@ -123,7 +123,7 @@ class _LoginState extends State<Login> {
       obscureText: true,
       onChanged: (value) => _password = value,
       validator: (value) {
-        if (value.isNotEmpty) {
+        if (value!.isNotEmpty) {
           if (value.length < 6) {
             return Strings.enterLongerPassword;
           }
@@ -150,7 +150,7 @@ class _LoginState extends State<Login> {
         ),
       ),
       onPressed: () async {
-        if (_formKey.currentState.validate()) {
+        if (_formKey.currentState!.validate()) {
           setState(() => loading = true);
           dynamic result = await _auth.signInWithEmailAndPassword(_email, _password);
           setState(() => loading = false);

@@ -16,13 +16,13 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
       .collection(FAVORS)
       .where(FAVOR_STATUS, isEqualTo: -1)
       .orderBy(FAVOR_TIMESTAMP, descending: true);
-  final User currentUser = FirebaseAuth.instance.currentUser;
+  final User currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: firestoreRef.snapshots(),
-      builder: (context, snapshot) {
+      builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
         switch (snapshot.connectionState) {
@@ -30,8 +30,8 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
             return CircularProgressIndicator();
           default:
             List item = [];
-            snapshot.data.docs.forEach((element) {
-              if (element.data()[FAVOR_USER].toString() != currentUser.uid)
+            snapshot.data!.docs.forEach((element) {
+              if (element[FAVOR_USER].toString() != currentUser.uid)
                 item.add(element.data());
             });
             if (item.length == 0)

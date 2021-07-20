@@ -10,9 +10,9 @@ class AddFavor extends StatefulWidget {
 class _AddFavorState extends State<AddFavor> {
   final _formKey = GlobalKey<FormState>();
 
-  String _title;
-  String _description;
-  String _location;
+  late String _title;
+  late String _description;
+  late String _location;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _AddFavorState extends State<AddFavor> {
                   ),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
+                  if (_formKey.currentState!.validate()) {
                     DatabaseService()
                         .saveFavor(_title, _description, _location);
                     Navigator.of(context).pop();
@@ -80,7 +80,7 @@ class _AddFavorState extends State<AddFavor> {
       keyboardType: TextInputType.text,
       onChanged: (value) => _title = value,
       validator: (value) {
-        return value.isEmpty ? ENTER_TITLE : null;
+        return value!.isEmpty ? ENTER_TITLE : null;
       },
       decoration: InputDecoration(
         filled: true,
@@ -101,7 +101,7 @@ class _AddFavorState extends State<AddFavor> {
       keyboardType: TextInputType.text,
       onChanged: (value) => _description = value,
       validator: (value) {
-        return value.isEmpty ? ENTER_DESCRIPTION : null;
+        return value!.isEmpty ? ENTER_DESCRIPTION : null;
       },
       decoration: InputDecoration(
         filled: true,
@@ -122,7 +122,7 @@ class _AddFavorState extends State<AddFavor> {
       keyboardType: TextInputType.text,
       onChanged: (value) => _location = value,
       validator: (value) {
-        return value.isEmpty ? ENTER_LOCATION : null;
+        return value!.isEmpty ? ENTER_LOCATION : null;
       },
       decoration: InputDecoration(
         filled: true,
