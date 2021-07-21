@@ -9,6 +9,7 @@ class Strings {
   static const String myFavorsRoute         = "/myFavors";
   static const String incompleteFavorsRoute = "/incompleteFavors";
   static const String statisticsRoute       = "/statistics";
+  static const String settingsRoute         = "/settings";
 
   // Titles
   static const unassignedFavorsTitle= "Unassigned Favors";
@@ -17,6 +18,7 @@ class Strings {
   static const myFavorsTitle        = "My Favors";
   static const incompleteFavorsTitle= "Incomplete Favors";
   static const statisticsTitle      = "Statistics";
+  static const settings             = "Settings";
   static const favorDetailsTitle    = "Favor Details";
 
   // Authentication

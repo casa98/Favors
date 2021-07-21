@@ -1,4 +1,5 @@
 import 'package:do_favors/model/favor.dart';
+import 'package:do_favors/screens/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -35,6 +36,9 @@ class AppRouter {
         case Strings.statisticsRoute:
           return CupertinoPageRoute(
               builder: (_) => Statistics(Strings.statisticsTitle));
+        case Strings.settingsRoute:
+          return CupertinoPageRoute(
+              builder: (_) => SettingsPage());
         default:
           return CupertinoPageRoute(
             builder: (_) => Scaffold(
