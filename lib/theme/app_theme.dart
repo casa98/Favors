@@ -9,6 +9,7 @@ class AppTheme {
     accentColor: Color(0xff151e32),
     backgroundColor: Colors.grey[50],
     secondaryHeaderColor: Colors.grey[200],
+    dialogBackgroundColor: Colors.grey[50],
 
     appBarTheme: AppBarTheme(
       centerTitle: true,
@@ -23,6 +24,7 @@ class AppTheme {
     backgroundColor: Color(0xff151e32),
     secondaryHeaderColor: Color(0xff32394c),
     brightness: Brightness.dark,
+    dialogBackgroundColor: Color(0xff151e32),
 
     appBarTheme: AppBarTheme(
       centerTitle: true,

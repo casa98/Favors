@@ -1,6 +1,6 @@
-import 'package:do_favors/widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 
+import 'package:do_favors/widgets/custom_scaffold.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
 import 'package:do_favors/services/database.dart';
@@ -56,6 +56,7 @@ class _AddFavorState extends State<AddFavor> {
               _textField(
                 hintText: Strings.hintTitle,
                 helperText: Strings.labelTitle,
+                labelTextError: Strings.labelTitleError,
                 textController: _titleController,
               ),
               SizedBox(height: 20.0),
@@ -63,6 +64,7 @@ class _AddFavorState extends State<AddFavor> {
               _textField(
                 hintText: Strings.hintDescription,
                 helperText: Strings.labelDescription,
+                labelTextError: Strings.labelDescriptionError,
                 textController: _descriptionController,
               ),
               SizedBox(height: 20.0),
@@ -70,6 +72,7 @@ class _AddFavorState extends State<AddFavor> {
               _textField(
                 hintText: Strings.hintLocation,
                 helperText: Strings.labelLocation,
+                labelTextError: Strings.labelLocationError,
                 textController: _locationController,
                 isLastField: true,
               ),
@@ -78,12 +81,7 @@ class _AddFavorState extends State<AddFavor> {
                 title: Strings.requestFavor,
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    //TODO: Add validators to fields before submitting
-                    print("Fields' values:");
-                    print(_titleController.text);
-                    print(_descriptionController.text);
-                    print(_locationController.text);
-                    DatabaseService().saveFavor(
+                      DatabaseService().saveFavor(
                       _titleController.text,
                       _descriptionController.text,
                       _locationController.text,
@@ -107,12 +105,20 @@ class _AddFavorState extends State<AddFavor> {
   TextFormField _textField({
     required String hintText,
     required String helperText,
+    required String labelTextError,
     required TextEditingController textController,
     bool isLastField = false,
   }){
     return TextFormField(
+      textCapitalization: TextCapitalization.sentences,
       keyboardType: TextInputType.text,
-      validator: (value){},
+      validator: (value){
+        if(value != null && value.trim().isEmpty){
+          return labelTextError;
+        }else{
+          return null;
+        }
+      },
       controller: textController,
       textInputAction: isLastField
         ? TextInputAction.done
@@ -123,7 +129,7 @@ class _AddFavorState extends State<AddFavor> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
-        fillColor: Theme.of(context).backgroundColor,
+        fillColor: Theme.of(context).dialogBackgroundColor,
         hintText: hintText,
         helperText: helperText,
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -131,69 +137,6 @@ class _AddFavorState extends State<AddFavor> {
     );
   }
 
-  /*
-  TextFormField titleFormField() {
-    return TextFormField(
-      keyboardType: TextInputType.text,
-      onChanged: (value) => _title = value,
-      validator: (value) {
-        return value!.isEmpty ? ENTER_TITLE : null;
-      },
-      decoration: InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        fillColor: Theme.of(context).backgroundColor,
-        hintText: TITLE_FAVOR,
-        helperText: TITLE_LABEL,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-      ),
-      textInputAction: TextInputAction.next,
-    );
-  }
-
-  TextFormField descriptionFormField() {
-    return TextFormField(
-      keyboardType: TextInputType.text,
-      onChanged: (value) => _description = value,
-      validator: (value) {
-        return value!.isEmpty ? ENTER_DESCRIPTION : null;
-      },
-      decoration: InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        fillColor: Theme.of(context).backgroundColor,
-        hintText: DESCRIPTION_FAVOR,
-        helperText: DESCRIPTION_LABEL,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-      ),
-      textInputAction: TextInputAction.next,
-    );
-  }
-
-  TextFormField deliveryPlaceFormField() {
-    return TextFormField(
-      keyboardType: TextInputType.text,
-      onChanged: (value) => _location = value,
-      validator: (value) {
-        return value!.isEmpty ? ENTER_LOCATION : null;
-      },
-      decoration: InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        fillColor: Theme.of(context).backgroundColor,
-        hintText: LOCATION_FAVOR,
-        helperText: LOCATION_LABEL,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-      ),
-    );
-  }
-  */
   @override
   void dispose() {
     _titleController.dispose();
