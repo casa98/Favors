@@ -1,10 +1,10 @@
-import 'package:do_favors/model/favor.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/shared/util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 const String COMPLETE = 'completed';
 const String DELETE = 'deleted';
@@ -49,10 +49,13 @@ class _MyFavorsState extends State<MyFavors> {
                   if (item.length == 0)
                     return Padding(
                       padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                      child: Text(
-                        'You haven\'t requested any favors yet',
-                        style: TextStyle(
-                          fontSize: 16.0,
+                      child: Center(
+                        child: Text(
+                          'You haven\'t requested any favors yet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
                         ),
                       ),
                     );
@@ -135,7 +138,7 @@ class _MyFavorsState extends State<MyFavors> {
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> myFavorSnackbar(
       BuildContext context, IconData icon, String text) {
-    return Scaffold.of(context).showSnackBar(SnackBar(
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
           children: [
             Icon(icon),
@@ -145,7 +148,8 @@ class _MyFavorsState extends State<MyFavors> {
             ),
           ],
         ),
-        duration: Duration(seconds: 2)));
+        duration: Duration(seconds: 2),
+      ));
   }
 
   AlertDialog myFavorsDialog(String title, String text, bool delete,
@@ -154,13 +158,13 @@ class _MyFavorsState extends State<MyFavors> {
       title: Text(title),
       content: Text(text),
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: Text('NO'),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             if (delete) {
               // Delete favor

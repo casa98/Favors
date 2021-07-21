@@ -1,50 +1,63 @@
-import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:do_favors/shared/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_favors/shared/strings.dart';
-import 'package:do_favors/shared/util.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
+import 'package:do_favors/shared/constants.dart';
+import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/shared/util.dart';
 import '../../theme/app_state_notifier.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          _createHeader(),
-          SwitchListTile(
-            title: Text('Dark Mode'),
-            value: Provider.of<AppStateNotifier>(context).isDarkMode,
-            onChanged: (boolVal) {
-              Provider.of<AppStateNotifier>(context, listen: false).updateTheme(boolVal);
-            },
-          ),
-          Divider(),
-          ListTile(
-            title: Text(Strings.homeTitle),
-            onTap: () {
-              Navigator.pop(context);
-            },
-            leading: Icon(Icons.home),
-          ),
-          _createDrawerItem(context, Strings.profileTitle, '/profile', Icons.person),
-          Divider(),
-          _createDrawerItem(context, Strings.myFavorsTitle, '/myFavors', Icons.list),
-          _createDrawerItem(
-              context, Strings.incompleteFavorsTitle, '/incompleteFavors', Icons.grading),
-          Divider(),
-          _createDrawerItem(
-              context, Strings.statisticsTitle, '/statistics', Icons.bar_chart),
-        ],
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Drawer(
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            _createHeader(),
+            Platform.isIOS
+                ? ListTile(
+                    title: Text('Dark Mode'),
+                    trailing: CupertinoSwitch(
+                      value: Provider.of<AppStateNotifier>(context).isDarkMode,
+                      onChanged: (value){
+                        Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
+                      },
+                    ),
+                  )
+                : SwitchListTile(
+                    title: Text('Dark Mode'),
+                    value: Provider.of<AppStateNotifier>(context).isDarkMode,
+                    onChanged: (value) {
+                      Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
+                    },
+                  ),
+            Divider(),
+            ListTile(
+              title: Text(Strings.homeTitle),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              leading: Icon(Icons.home),
+            ),
+            _createDrawerItem(context, Strings.profileTitle, '/profile', Icons.person),
+            Divider(),
+            _createDrawerItem(context, Strings.myFavorsTitle, '/myFavors', Icons.list),
+            _createDrawerItem(
+                context, Strings.incompleteFavorsTitle, '/incompleteFavors', Icons.grading),
+            Divider(),
+            _createDrawerItem(
+                context, Strings.statisticsTitle, '/statistics', Icons.bar_chart),
+          ],
+        ),
       ),
     );
   }
@@ -59,7 +72,10 @@ Widget _createHeader() {
     builder: (context, AsyncSnapshot snapshot) {
       switch (snapshot.connectionState) {
         case ConnectionState.waiting:
-          return Text('');
+          return UserAccountsDrawerHeader(
+            accountEmail: Text(''),
+            accountName: Text(''),
+          );
         default:
           var userDocument = snapshot.data!;
           return UserAccountsDrawerHeader(

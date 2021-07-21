@@ -1,6 +1,6 @@
 library constants;
 
-/* FIRESTORE COLLECTIONS PATH */
+/* Firestore Collections Path */
 const String USER = 'user';
 const String FAVORS = 'favors';
 
@@ -33,19 +33,6 @@ const String STATUS = 'STATUS:';
 const String ASSIGNED = 'ASSIGNED';
 const String UNASSIGNED = 'UNASSIGNED';
 const String COMPLETED = 'COMPLETED';
-
-/* [ADD FAVOR] STRINGS */
-const String ASK_FOR_A_FAVOR = 'Ask for a favor';
-const String REQUEST_FAVOR = 'REQUEST FAVOR';
-const String ENTER_TITLE = 'Please enter a title';
-const String ENTER_DESCRIPTION = 'Please enter a description';
-const String ENTER_LOCATION = 'Please enter a location';
-const String TITLE_FAVOR = 'Title of your favor';
-const String TITLE_LABEL = 'Be brief and concise';
-const String DESCRIPTION_FAVOR = 'Description of your favor';
-const String DESCRIPTION_LABEL = 'Describe what you need';
-const String LOCATION_FAVOR = 'Delivery place';
-const String LOCATION_LABEL = 'Where will it be delivered';
 
 const String REQUESTED_BY = 'Request by:';
 const String DETAILS_TITLE = 'Title';

@@ -1,7 +1,11 @@
+import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/widgets/action_button.dart';
+import 'package:do_favors/widgets/custom_scaffold.dart';
+import 'package:flutter/material.dart';
+
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
-import 'package:flutter/material.dart';
 
 class FavorDetail extends StatefulWidget {
   final String _title;
@@ -23,110 +27,79 @@ class _FavorDetailState extends State<FavorDetail> {
 
   @override
   Widget build(BuildContext context) {
-    //final FavorDetailsObject args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(REQUESTED_BY),
-                SizedBox(height: 8.0),
-                Text(
-                  widget._favor.username,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Divider(height: 32.0,),
-                Text(
-                  DETAILS_TITLE,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Text(widget._favor.title),
-                Divider(height: 32.0,),
-                Text(
-                  DETAILS_DESCRIPTION,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Text(widget._favor.description),
-                Divider(height: 32.0,),
-                Text(
-                  DETAILS_DELIVERY_PLACE,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Text(widget._favor.location),
-              ],
-            ),
-          ),
-          _buttonVisible ? Expanded(
-              child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
-                  child: Builder(
-                    builder: (context) => ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                            return Theme.of(context).primaryColor;
-                          },
-                        ),
-                      ),
-                      onPressed: () {
-                        DatabaseService()
-                            .markFavorAsAssigned(widget._favor.key);
-                        hideButton();
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Row(
-                            children: [
-                              Icon(Icons.thumb_up),
-                              SizedBox(width: 20.0),
-                              Expanded(
-                                child: Text('You\'re now making this favor'),
-                              ),
-                            ],
-                          ),
-                          duration: Duration(seconds: 2),
-                        ));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-                        child: Text(
-                            DO_THIS_FAVOR,
-                          style: TextStyle(
-                            color: Colors.white
-                          ),
-                        ),
-                      ),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(REQUESTED_BY),
+                  SizedBox(height: 8.0),
+                  Text(
+                    widget._favor.username,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
+                  Divider(height: 32.0,),
+                  Text(
+                    DETAILS_TITLE,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(widget._favor.title),
+                  Divider(height: 32.0,),
+                  Text(
+                    DETAILS_DESCRIPTION,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(widget._favor.description),
+                  Divider(height: 32.0,),
+                  Text(
+                    DETAILS_DELIVERY_PLACE,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(widget._favor.location),
+                  SizedBox(height: 64.0),
+                ],
               ),
-            )
-          : Text(''),
-        ],
+            ),
+          ],
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: _buttonVisible ? ActionButton(
+        title: Strings.doThisFavor,
+        onPressed: () {
+          DatabaseService().markFavorAsAssigned(widget._favor.key);
+          hideButton();
+          CustomScaffold.customScaffoldMessenger(
+            context: context,
+            text: 'You\'re now doing this favor',
+          );
+        },
+      ) : SizedBox(),
     );
   }
 }

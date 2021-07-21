@@ -1,38 +1,52 @@
-import 'package:do_favors/shared/constants.dart';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_favors/shared/strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:do_favors/shared/constants.dart';
+import 'package:do_favors/shared/strings.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future signInWithEmailAndPassword(String email, String passwd) async {
+  Future<User?> signInWithEmailAndPassword(String email, String passwd) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email, password: passwd);
+      final result = await _auth
+          .signInWithEmailAndPassword(email: email, password: passwd);
       return result.user;
     } catch (error) {
-      return _getError(error.toString());
+      if(error is FirebaseAuthException){
+        log(_getError(error.code));
+      }else{
+        log(error.toString());
+      }
+      return null;
     }
   }
 
-  Future createUserWithEmailAndPassword(
+  Future<User?> createUserWithEmailAndPassword(
       String name, String email, String passwd) async {
     try {
-      UserCredential? result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: passwd);
+      final result = await _auth
+          .createUserWithEmailAndPassword(email: email, password: passwd);
       User? user = result.user;
-      // Create a collection with info of the user registering right now
-      await createUserCollection(user!.uid, email, name);
+      if(user != null){
+        // Create a collection with info of the user registering right now
+        await createUserCollection(user.uid, email, name);
+      }
       return user;
     } catch (error) {
-      return _getError(error.toString());
+      if(error is FirebaseAuthException){
+        log(_getError(error.code));
+      }else{
+        log(error.toString());
+      }
+      return null;
     }
   }
 
   Future createUserCollection(String uid, String email, String name) async {
     final CollectionReference userCollection =
-    FirebaseFirestore.instance.collection(USER);
+        FirebaseFirestore.instance.collection(USER);
     return await userCollection.doc(uid).set({
       IMAGE: '',
       UID: uid,

@@ -1,9 +1,10 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_favors/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 import 'package:rxdart/rxdart.dart';
+
+import 'package:do_favors/shared/constants.dart';
 
 class ProfileBloc{
 

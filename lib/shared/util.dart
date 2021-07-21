@@ -2,9 +2,9 @@ import 'package:intl/intl.dart';
 
 class Util {
 
-  // Email:
+  // Email Regex
   static final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
+    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
   );
 
   /// Validate email
@@ -19,7 +19,7 @@ class Util {
     return formattedDate;
   }
 
-  // If name == 'Maria Fernanda Garizabalo', returns 'M G'
+  ///Returns first letter of first and last name ('M G' is returned from 'Mafe Garizábalo').
   static String lettersForHeader(String name) {
     try {
       List<String> words = name.trim().split(' ');

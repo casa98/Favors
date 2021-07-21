@@ -1,8 +1,9 @@
-import 'package:do_favors/shared/constants.dart';
-import 'package:do_favors/shared/util.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
+import 'package:do_favors/shared/util.dart';
+import 'package:do_favors/shared/constants.dart';
 
 class IncompleteFavors extends StatefulWidget {
   final String _title;
@@ -45,10 +46,13 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
               if (item.length == 0)
               return Padding(
                 padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                child: Text(
-                  'You don\'t have pending favors to complete',
-                  style: TextStyle(
-                    fontSize: 16.0,
+                child: Center(
+                  child: Text(
+                    'You don\'t have pending favors to complete',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
               );

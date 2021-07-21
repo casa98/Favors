@@ -1,10 +1,12 @@
-import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:do_favors/shared/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_favors/shared/util.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
+
+import 'package:do_favors/shared/constants.dart';
+import 'package:do_favors/shared/util.dart';
+
 
 class Statistics extends StatefulWidget {
   final String _title;

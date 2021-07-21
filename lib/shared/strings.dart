@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Strings {
 
@@ -32,8 +31,9 @@ class Strings {
   static const doNotHaveAnAccount   = "Don’t have an account?";
   static const signIn               = "Sign In";
   static const signUp               = "Sign Up";
-  static const login                = "LOGIN";
-  static const register             = "REGISTER";
+  static const logIn                = "Log In";
+  static const register             = "Register";
+  static const signOut              = "Sign Out";
   static const enterLongerName      = "Please enter at least 5 characters";
   static const enterName            = "Please enter a name";
   static const enterYourName        = "Enter your name";
@@ -50,4 +50,23 @@ class Strings {
   static const repeatPassword2      = "Please repeat your password";
   static const passwordsDoNotMatch  = "Passwords don\'t match";
   static const confirmYourPassword  = "Confirm your password";
+
+  // Profile
+  static const changePhoto          = "Change Photo";
+
+  // Ask for a Favor Dialog
+  static const requestFavor         = "Request Favor";
+  static const askForFavor          = "Ask for a Favor";
+  static const labelTitleError      = 'Please enter a title';
+  static const labelDescriptionError= 'Please enter a description';
+  static const labelLocationError   = 'Please enter a location';
+  static const hintTitle            = 'Title of your favor';
+  static const labelTitle           = 'Be brief and concise';
+  static const hintDescription      = 'Description of your favor';
+  static const labelDescription     = 'Describe what you need';
+  static const hintLocation         = 'Delivery place';
+  static const labelLocation        = 'Where will it be delivered';
+
+  // Favor Details
+  static const doThisFavor          = "Do This Favor";
 }

@@ -1,30 +1,31 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  //
+
   AppTheme._();
 
   static final ThemeData lightTheme = ThemeData(
-    primaryColor:  Color(0xff151e32),
-    accentColor:  Color(0xff151e32),
+    primaryColor: Color(0xff151e32),
+    accentColor: Color(0xff151e32),
     backgroundColor: Colors.grey[50],
     secondaryHeaderColor: Colors.grey[200],
 
     appBarTheme: AppBarTheme(
+      centerTitle: true,
       elevation: 0,
     ),
   );
 
   static final ThemeData darkTheme = ThemeData(
 
-    primaryColor:  Color(0xff5890c5),
-    accentColor:  Color(0xff151e32),
+    primaryColor: Color(0xff5890c5),
+    accentColor: Color(0xff5890c5),
     backgroundColor: Color(0xff151e32),
     secondaryHeaderColor: Color(0xff32394c),
     brightness: Brightness.dark,
 
     appBarTheme: AppBarTheme(
+      centerTitle: true,
       elevation: 0,
       color: Color(0xff151e32),
       iconTheme: IconThemeData(

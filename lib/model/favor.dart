@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:do_favors/shared/constants.dart';
 
 class Favor {

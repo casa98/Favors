@@ -1,6 +1,9 @@
-import 'package:do_favors/services/database.dart';
-import 'package:do_favors/shared/constants.dart';
+import 'package:do_favors/widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
+
+import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/widgets/action_button.dart';
+import 'package:do_favors/services/database.dart';
 
 class AddFavor extends StatefulWidget {
   @override
@@ -10,9 +13,16 @@ class AddFavor extends StatefulWidget {
 class _AddFavorState extends State<AddFavor> {
   final _formKey = GlobalKey<FormState>();
 
-  late String _title;
-  late String _description;
-  late String _location;
+  late double _screenWidth;
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _locationController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    _screenWidth = MediaQuery.of(context).size.width;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,52 +30,71 @@ class _AddFavorState extends State<AddFavor> {
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
+        margin: EdgeInsets.symmetric(
+          horizontal: _screenWidth * 0.05,
+          vertical: 0.0,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 28.0, 0.0, 24.0),
+                padding: EdgeInsets.only(
+                  top: 24.0,
+                  bottom: 24.0,
+                ),
                 child: Text(
-                  ASK_FOR_A_FAVOR,
+                  Strings.askForFavor,
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              titleFormField(),
+              //titleFormField(),
+              _textField(
+                hintText: Strings.hintTitle,
+                helperText: Strings.labelTitle,
+                textController: _titleController,
+              ),
               SizedBox(height: 20.0),
-              descriptionFormField(),
+              //descriptionFormField(),
+              _textField(
+                hintText: Strings.hintDescription,
+                helperText: Strings.labelDescription,
+                textController: _descriptionController,
+              ),
               SizedBox(height: 20.0),
-              deliveryPlaceFormField(),
+              //deliveryPlaceFormField(),
+              _textField(
+                hintText: Strings.hintLocation,
+                helperText: Strings.labelLocation,
+                textController: _locationController,
+                isLastField: true,
+              ),
               SizedBox(height: 20.0),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      return Theme.of(context).primaryColor;
-                    },
-                  ),
-                ),
+              ActionButton(
+                title: Strings.requestFavor,
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    DatabaseService()
-                        .saveFavor(_title, _description, _location);
+                    //TODO: Add validators to fields before submitting
+                    print("Fields' values:");
+                    print(_titleController.text);
+                    print(_descriptionController.text);
+                    print(_locationController.text);
+                    DatabaseService().saveFavor(
+                      _titleController.text,
+                      _descriptionController.text,
+                      _locationController.text,
+                    );
                     Navigator.of(context).pop();
+                    CustomScaffold.customScaffoldMessenger(
+                      context: context,
+                      text: 'Favor successfully requested',
+                    );
                   }
                 },
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-                  child: Text(
-                      REQUEST_FAVOR,
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
-                  ),
-                ),
               ),
               SizedBox(height: 20.0),
             ],
@@ -75,6 +104,34 @@ class _AddFavorState extends State<AddFavor> {
     );
   }
 
+  TextFormField _textField({
+    required String hintText,
+    required String helperText,
+    required TextEditingController textController,
+    bool isLastField = false,
+  }){
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      validator: (value){},
+      controller: textController,
+      textInputAction: isLastField
+        ? TextInputAction.done
+        : TextInputAction.next,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: InputDecoration(
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        fillColor: Theme.of(context).backgroundColor,
+        hintText: hintText,
+        helperText: helperText,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+    );
+  }
+
+  /*
   TextFormField titleFormField() {
     return TextFormField(
       keyboardType: TextInputType.text,
@@ -85,13 +142,13 @@ class _AddFavorState extends State<AddFavor> {
       decoration: InputDecoration(
         filled: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(12.0),
         ),
+        fillColor: Theme.of(context).backgroundColor,
         hintText: TITLE_FAVOR,
         helperText: TITLE_LABEL,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
-      maxLength: 50,
       textInputAction: TextInputAction.next,
     );
   }
@@ -106,13 +163,13 @@ class _AddFavorState extends State<AddFavor> {
       decoration: InputDecoration(
         filled: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(12.0),
         ),
+        fillColor: Theme.of(context).backgroundColor,
         hintText: DESCRIPTION_FAVOR,
         helperText: DESCRIPTION_LABEL,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
-      maxLength: 300,
       textInputAction: TextInputAction.next,
     );
   }
@@ -127,13 +184,21 @@ class _AddFavorState extends State<AddFavor> {
       decoration: InputDecoration(
         filled: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(12.0),
         ),
+        fillColor: Theme.of(context).backgroundColor,
         hintText: LOCATION_FAVOR,
         helperText: LOCATION_LABEL,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
-      maxLength: 50,
     );
+  }
+  */
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    super.dispose();
   }
 }

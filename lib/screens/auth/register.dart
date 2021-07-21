@@ -1,8 +1,14 @@
+import 'dart:developer';
+
+import 'package:do_favors/widgets/auth_submit_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'package:do_favors/services/auth.dart';
 import 'package:do_favors/shared/loading.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
-import 'package:flutter/material.dart';
+import 'package:do_favors/widgets/auth_labels.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -33,72 +39,68 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return loading
         ? Loading()
-        : Scaffold(
-            body: SafeArea(
-              child: Container(
-                color: Theme.of(context).backgroundColor,
-                padding: EdgeInsets.all(24.0),
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 30.0),
-                        Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          _error,
-                          style: TextStyle(
-                            color: Colors.red[600],
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        buildUsernameFormField(),
-                        SizedBox(height: 20.0),
-                        buildEmailFormField(),
-                        SizedBox(height: 20.0),
-                        buildPasswordFormField(),
-                        SizedBox(height: 20.0),
-                        buildConfirmPasswordFormField(),
-                        SizedBox(height: 20.0),
-                        submitButton(),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(Strings.alreadyHaveAnAccount),
-                            GestureDetector(
-                              onTap: () => widget.toggleView(),
-                              child: Container(
-                                color: Theme.of(context).backgroundColor,
-                                padding: EdgeInsets.all(16.0),
-                                child: Text(
-                                  Strings.signIn,
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+        : GestureDetector(
+            // Removes Focus by tap on empty space
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  Strings.signUp,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                backgroundColor: Theme.of(context).backgroundColor,
+              ),
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 30.0),
+                          Text(
+                            _error,
+                            style: TextStyle(
+                              color: Colors.red[600],
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(height: 16.0),
+                          buildUsernameFormField(),
+                          SizedBox(height: 20.0),
+                          buildEmailFormField(),
+                          SizedBox(height: 20.0),
+                          buildPasswordFormField(),
+                          SizedBox(height: 20.0),
+                          buildConfirmPasswordFormField(),
+                          SizedBox(height: 25.0),
+                          _submitButton(),
+                          SizedBox(height: 16.0),
+                          AuthLabels(
+                            label: Strings.alreadyHaveAnAccount,
+                            labelAction: Strings.signIn,
+                            onPressed: () => widget.toggleView(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          );
+        );
   }
 
   TextFormField buildUsernameFormField() {
@@ -192,35 +194,24 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  ElevatedButton submitButton() {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-            return Theme.of(context).primaryColor;
-          },
-        ),
-      ),
+  Widget _submitButton() {
+    return AuthSubmitButton(
+      title: Strings.register,
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
           if (_password == _confirmPassword) {
+            log(_email);
+            log(_password);
             setState(() => loading = true);
-            dynamic result = await _auth.createUserWithEmailAndPassword(
-                _name, _email, _password);
+            final result = await _auth
+                .createUserWithEmailAndPassword(_name, _email, _password);
             setState(() => loading = false);
-            _error = result.toString();
+            if(result != null){
+              log("UID: ${result.uid}");
+            }
           }
         }
       },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
-        child: Text(
-          Strings.register,
-          style: TextStyle(
-              color: Colors.white
-          ),
-        ),
-      ),
     );
   }
 }

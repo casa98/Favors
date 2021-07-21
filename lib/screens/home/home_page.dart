@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+
 import 'package:do_favors/screens/add_favor/add_favor.dart';
 import 'package:do_favors/screens/home/home_bloc.dart';
 import 'package:do_favors/screens/home/unassigned_favors.dart';
-import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/screens/drawer/drawer.dart';
-import 'package:flutter/material.dart';
+import 'package:do_favors/shared/strings.dart';
 
 class HomePage extends StatefulWidget {
   final String _title;
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           return snapshot.data != null ? FloatingActionButton(
               onPressed: () => _addFavorModalBottomSheet(context),
-              tooltip: ASK_FOR_A_FAVOR,
+              tooltip: Strings.askForFavor,
               child: Icon(Icons.add),
             )
           : Text('');

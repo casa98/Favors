@@ -1,9 +1,11 @@
-import 'package:do_favors/theme/app_theme.dart';
-import 'package:do_favors/router/app_router.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:do_favors/theme/app_theme.dart';
+import 'package:do_favors/router/app_router.dart';
 import 'theme/app_state_notifier.dart';
 import 'shared/strings.dart';
 
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AppStateNotifier()),
       ],
-      child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
+      child: Consumer<AppStateNotifier>(builder: (_, appState, __) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,

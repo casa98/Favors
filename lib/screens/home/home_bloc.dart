@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_favors/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'package:do_favors/shared/constants.dart';
 
 class HomeBloc {
 
