@@ -4,42 +4,71 @@ class AppTheme {
 
   AppTheme._();
 
+  static Map<int, Color> lightColor = {
+    50: Color.fromRGBO(15, 30, 32, .1),
+    100: Color.fromRGBO(15, 30, 32, .2),
+    200: Color.fromRGBO(15, 30, 32, .3),
+    300: Color.fromRGBO(15, 30, 32, .4),
+    400: Color.fromRGBO(15, 30, 32, .5),
+    500: Color.fromRGBO(15, 30, 32, .6),
+    600: Color.fromRGBO(15, 30, 32, .7),
+    700: Color.fromRGBO(15, 30, 32, .8),
+    800: Color.fromRGBO(15, 30, 32, .9),
+    900: Color.fromRGBO(15, 30, 32, 1),
+  };
+
+  static Map<int, Color> darkColor = {
+    50: Color.fromRGBO(88, 144, 197, .1),
+    100: Color.fromRGBO(88, 144, 197, .2),
+    200: Color.fromRGBO(88, 144, 197, .3),
+    300: Color.fromRGBO(88, 144, 197, .4),
+    400: Color.fromRGBO(88, 144, 197, .5),
+    500: Color.fromRGBO(88, 144, 197, .6),
+    600: Color.fromRGBO(88, 144, 197, .7),
+    700: Color.fromRGBO(88, 144, 197, .8),
+    800: Color.fromRGBO(88, 144, 197, .9),
+    900: Color.fromRGBO(88, 144, 197, 1),
+  };
+
   static final ThemeData lightTheme = ThemeData(
+    primarySwatch: MaterialColor(0xff153032, lightColor),
     primaryColor: Color(0xff151e32),
     accentColor: Color(0xff151e32),
     backgroundColor: Colors.grey[50],
     secondaryHeaderColor: Colors.grey[200],
     dialogBackgroundColor: Colors.grey[50],
+    splashColor: Colors.transparent,
 
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
+
+      // To make status bar icons light
+      brightness: Brightness.dark,
     ),
   );
 
   static final ThemeData darkTheme = ThemeData(
-
+    primarySwatch: MaterialColor(0xff5890c5, darkColor),
     primaryColor: Color(0xff5890c5),
     accentColor: Color(0xff5890c5),
     backgroundColor: Color(0xff151e32),
     secondaryHeaderColor: Color(0xff32394c),
     brightness: Brightness.dark,
     dialogBackgroundColor: Color(0xff151e32),
+    splashColor: Colors.transparent,
 
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
       color: Color(0xff151e32),
+      //color: Color(0x88293951),
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
     ),
 
     canvasColor: Color(0xff151e32),
-
-    bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: Color(0xff151e32),
-    ),
 
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       foregroundColor: Colors.white,

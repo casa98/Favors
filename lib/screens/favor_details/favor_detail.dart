@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
 import 'package:do_favors/widgets/custom_scaffold.dart';
-import 'package:flutter/material.dart';
-
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
@@ -51,7 +51,7 @@ class _FavorDetailState extends State<FavorDetail> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Divider(height: 32.0,),
+                  Divider(height: 32.0, thickness: 0.4),
                   Text(
                     DETAILS_TITLE,
                     style: TextStyle(
@@ -61,7 +61,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   ),
                   SizedBox(height: 8.0),
                   Text(widget._favor.title),
-                  Divider(height: 32.0,),
+                  Divider(height: 32.0, thickness: 0.4),
                   Text(
                     DETAILS_DESCRIPTION,
                     style: TextStyle(
@@ -71,7 +71,7 @@ class _FavorDetailState extends State<FavorDetail> {
                   ),
                   SizedBox(height: 8.0),
                   Text(widget._favor.description),
-                  Divider(height: 32.0,),
+                  Divider(height: 32.0, thickness: 0.4),
                   Text(
                     DETAILS_DELIVERY_PLACE,
                     style: TextStyle(

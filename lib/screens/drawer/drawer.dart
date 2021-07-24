@@ -54,8 +54,14 @@ Widget _createHeader() {
       switch (snapshot.connectionState) {
         case ConnectionState.waiting:
           return UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+            ),
             accountEmail: Text(''),
             accountName: Text(''),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
           );
         default:
           var userDocument = snapshot.data!;

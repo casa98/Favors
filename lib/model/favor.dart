@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:do_favors/shared/constants.dart';
 
 class Favor {
-  late String assignedUser;
-  late String assignedUsername;
+  late String? assignedUser;
+  late String? assignedUsername;
   late String description;
   late String location;
   late String title;
@@ -14,29 +12,29 @@ class Favor {
   late String user;
   late String username;
 
-  Favor(
+  Favor({
     this.assignedUser,
     this.assignedUsername,
-    this.description,
-    this.location,
-    this.title,
-    this.key,
-    this.status,
-    this.timestamp,
-    this.user,
-    this.username,
-  );
+    required this.description,
+    required this.location,
+    required this.title,
+    required this.key,
+    required this.status,
+    required this.timestamp,
+    required this.user,
+    required this.username,
+  });
 
-  Favor.fromDocumentSnapShot(DocumentSnapshot snapshot) {
-    assignedUser = snapshot[FAVOR_ASSIGNED_USER] ?? '';
-    assignedUsername = snapshot[FAVOR_ASSIGNED_USERNAME];
-    description = snapshot[FAVOR_DESCRIPTION];
-    location = snapshot[FAVOR_LOCATION];
-    title = snapshot[FAVOR_TITLE];
-    key = snapshot[FAVOR_KEY];
-    status = snapshot[FAVOR_STATUS].toString();
-    timestamp = snapshot[FAVOR_TIMESTAMP];
-    user = snapshot[FAVOR_USER];
-    username = snapshot[FAVOR_USERNAME];
+  Favor.fromDocumentSnapShot(Map<String, dynamic> doc) {
+    assignedUser = doc[FAVOR_ASSIGNED_USER];
+    assignedUsername = doc[FAVOR_ASSIGNED_USERNAME];
+    description = doc[FAVOR_DESCRIPTION];
+    location = doc[FAVOR_LOCATION];
+    title = doc[FAVOR_TITLE];
+    key = doc[FAVOR_KEY];
+    status = doc[FAVOR_STATUS].toString();
+    timestamp = doc[FAVOR_TIMESTAMP];
+    user = doc[FAVOR_USER];
+    username = doc[FAVOR_USERNAME];
   }
 }

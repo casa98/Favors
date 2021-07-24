@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:do_favors/screens/home/unassigned_favors_controller.dart';
 import 'package:do_favors/model/favor.dart';
-import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 
@@ -13,77 +11,66 @@ class UnassignedFavors extends StatefulWidget {
 }
 
 class _UnassignedFavorsState extends State<UnassignedFavors> {
-  var firestoreRef = FirebaseFirestore.instance
-      .collection(FAVORS)
-      .where(FAVOR_STATUS, isEqualTo: -1)
-      .orderBy(FAVOR_TIMESTAMP, descending: true);
-  final User currentUser = FirebaseAuth.instance.currentUser!;
+
+  final _unassignedFavors = UnassignedFavorsController();
+
+  @override
+  void initState() {
+    _unassignedFavors.fetchUnassignedFavors();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestoreRef.snapshots(),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-
-        switch (snapshot.connectionState) {
+    UnassignedFavorsController().fetchUnassignedFavors();
+    return StreamBuilder<List<Favor>>(
+      stream: _unassignedFavors.unassignedFavorsList,
+      builder: (context, snapshot){
+        if(snapshot.hasError) throw('Snapshot Error: ${snapshot.error}');
+        switch(snapshot.connectionState){
           case ConnectionState.waiting:
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           default:
-            List item = [];
-            snapshot.data!.docs.forEach((element) {
-              if (element[FAVOR_USER].toString() != currentUser.uid)
-                item.add(element.data());
-            });
-            if (item.length == 0)
-              return Padding(
-                padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+            final favors = snapshot.data ?? [];
+            if(favors.isEmpty){
+              return Center(
                 child: Text(
-                  'No favors to do, yet',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
+                  'No Favors to do, yet!',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               );
+            }
+
             return ListView.separated(
-              itemCount: item.length,
-              separatorBuilder: (context, index) => Divider(height: 0.0),
+              physics: BouncingScrollPhysics(),
+              itemCount: favors.length,
+              separatorBuilder: (context, index) => Divider(height: 0.0, thickness: 0.4),
               itemBuilder: (context, index) {
-                var currentFavor = item[index];
+                final favor = favors[index];
                 return ListTile(
                   title: Text(
-                    currentFavor[FAVOR_TITLE],
+                    favor.title,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  subtitle: Text(currentFavor[FAVOR_DESCRIPTION],
-                      overflow: TextOverflow.ellipsis),
-                  trailing: Text(
-                    Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                  subtitle: Text(favor.description,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  onTap: () {
-                    Favor tappedFavor = Favor(
-                      '',
-                      '',
-                      currentFavor[FAVOR_DESCRIPTION],
-                      currentFavor[FAVOR_LOCATION],
-                      currentFavor[FAVOR_TITLE],
-                      currentFavor[FAVOR_KEY],
-                      '',
-                      0,
-                      '',
-                      currentFavor[FAVOR_USERNAME]
-                    );
+                  trailing: Text(
+                    Util.readFavorTimestamp(favor.timestamp),
+                  ),
+                  onTap: (){
                     Navigator.pushNamed(
                       context,
                       Strings.favorDetailsRoute,
-                      arguments: tappedFavor,
+                      arguments: favor,
                     );
                   },
                 );
-              },
+              }
             );
         }
-      },
+      }
     );
   }
 }

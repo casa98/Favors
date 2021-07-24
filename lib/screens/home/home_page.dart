@@ -30,12 +30,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
-        centerTitle: true,
       ),
       drawer: AppDrawer(),
-      body: Center(
-        child: UnassignedFavors(),
-      ),
+      body: UnassignedFavors(),
       floatingActionButton: StreamBuilder(
         stream: _homeBloc.showFloatingButton,
         initialData: false,

@@ -4,14 +4,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:do_favors/shared/constants.dart';
 
 class DatabaseService {
-  // Collection Reference in the Firestore DB
-  final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection(USER);
 
-  final CollectionReference favorsCollection =
-      FirebaseFirestore.instance.collection(FAVORS);
+  late final userCollection;
+  late final favorsCollection;
+  late final User? currentUser;
+  static DatabaseService? _instance;
 
-  final User? currentUser = FirebaseAuth.instance.currentUser;
+  factory DatabaseService(){
+    if(_instance != null) return _instance!;
+    return DatabaseService._internal();
+  }
+
+  DatabaseService._internal(){
+    userCollection = FirebaseFirestore.instance.collection(USER);
+    favorsCollection = FirebaseFirestore.instance.collection(FAVORS);
+    currentUser = FirebaseAuth.instance.currentUser;
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUnassignedFavors() async{
+    return favorsCollection
+        .where(FAVOR_STATUS, isEqualTo: -1)
+        .orderBy(FAVOR_TIMESTAMP, descending: true).get();
+  }
 
   Future saveFavor(
     String title,
@@ -81,3 +95,18 @@ class DatabaseService {
     return favorsCollection.doc(favorId).delete();
   }
 }
+
+/*
+  // This seems to be faster, but it's not Singleton and I may be driving crazy
+  late final userCollection = FirebaseFirestore.instance.collection(USER);
+  late final favorsCollection = FirebaseFirestore.instance.collection(FAVORS);
+  late final User? currentUser = FirebaseAuth.instance.currentUser;
+  static DatabaseService? _instance;
+
+  factory DatabaseService(){
+    if(_instance != null) return _instance!;
+    return DatabaseService._internal();
+  }
+
+  DatabaseService._internal();
+*/
