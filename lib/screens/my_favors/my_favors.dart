@@ -59,75 +59,77 @@ class _MyFavorsState extends State<MyFavors> {
                         ),
                       ),
                     );
-                  return ListView.separated(
-                    itemCount: item.length,
-                    separatorBuilder: (context, index) => Divider(height: 0.0),
-                    itemBuilder: (context, index) {
-                      var currentFavor = item[index];
-                      if (currentFavor[FAVOR_STATUS] == -1)
-                        currentFavor[FAVOR_STATUS] = UNASSIGNED;
-                      else if (currentFavor[FAVOR_STATUS] == 1)
-                        currentFavor[FAVOR_STATUS] = ASSIGNED;
-                      else
-                        currentFavor[FAVOR_STATUS] = COMPLETED;
+                  return SafeArea(
+                    child: ListView.separated(
+                      itemCount: item.length,
+                      separatorBuilder: (context, index) => Divider(height: 0.0),
+                      itemBuilder: (context, index) {
+                        var currentFavor = item[index];
+                        if (currentFavor[FAVOR_STATUS] == -1)
+                          currentFavor[FAVOR_STATUS] = UNASSIGNED;
+                        else if (currentFavor[FAVOR_STATUS] == 1)
+                          currentFavor[FAVOR_STATUS] = ASSIGNED;
+                        else
+                          currentFavor[FAVOR_STATUS] = COMPLETED;
 
-                      return ListTile(
-                        title: Text(
-                          currentFavor[FAVOR_TITLE],
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Row(
-                          children: [
-                            Text(STATUS),
-                            SizedBox(width: 10.0),
-                            Text(
-                              currentFavor[FAVOR_STATUS],
-                            ),
-                          ],
-                        ),
-                        trailing: Text(
-                          Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
-                        ),
-                        onTap: () async {
-                          // showDialog returns a value, it's sent via pop()
-                          if (currentFavor[FAVOR_STATUS] == UNASSIGNED) {
-                            var data = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return myFavorsDialog(
-                                      'Delete favor',
-                                      'Sure you want to delete this favor?',
-                                      true,
-                                      currentFavor[FAVOR_KEY],
-                                      'nonw');
-                                });
-                            print(data);
-                            if (data == DELETE) {
-                              myFavorSnackbar(context,
-                                  Icons.delete_forever_rounded, 'Favor deleted');
+                        return ListTile(
+                          title: Text(
+                            currentFavor[FAVOR_TITLE],
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Text(STATUS),
+                              SizedBox(width: 10.0),
+                              Text(
+                                currentFavor[FAVOR_STATUS],
+                              ),
+                            ],
+                          ),
+                          trailing: Text(
+                            Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                          ),
+                          onTap: () async {
+                            // showDialog returns a value, it's sent via pop()
+                            if (currentFavor[FAVOR_STATUS] == UNASSIGNED) {
+                              var data = await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return myFavorsDialog(
+                                        'Delete favor',
+                                        'Sure you want to delete this favor?',
+                                        true,
+                                        currentFavor[FAVOR_KEY],
+                                        'nonw');
+                                  });
+                              print(data);
+                              if (data == DELETE) {
+                                myFavorSnackbar(context,
+                                    Icons.delete_forever_rounded, 'Favor deleted');
+                              }
                             }
-                          }
-                          if (currentFavor[FAVOR_STATUS] == ASSIGNED) {
-                            var data = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return myFavorsDialog(
-                                      'Mark as completed',
-                                      'Has your peer completed this favor?',
-                                      false,
-                                      currentFavor[FAVOR_KEY],
-                                      currentFavor[FAVOR_ASSIGNED_USER]);
-                                });
-                            if (data == COMPLETE) {
-                              myFavorSnackbar(
-                                  context,
-                                  Icons.sentiment_satisfied_alt,
-                                  'Favor marked as completed');
+                            if (currentFavor[FAVOR_STATUS] == ASSIGNED) {
+                              var data = await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return myFavorsDialog(
+                                        'Mark as completed',
+                                        'Has your peer completed this favor?',
+                                        false,
+                                        currentFavor[FAVOR_KEY],
+                                        currentFavor[FAVOR_ASSIGNED_USER]);
+                                  });
+                              if (data == COMPLETE) {
+                                myFavorSnackbar(
+                                    context,
+                                    Icons.sentiment_satisfied_alt,
+                                    'Favor marked as completed');
+                              }
                             }
-                          }
-                        },
-                      );
-                    },
+                          },
+                        );
+                      },
+                    ),
                   );
                 //
               }

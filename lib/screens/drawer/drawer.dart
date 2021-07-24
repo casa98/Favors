@@ -14,30 +14,35 @@ class AppDrawer extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       child: Drawer(
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            _createHeader(),
-            ListTile(
-              title: Text(Strings.homeTitle),
-              onTap: () {
-                Navigator.pop(context);
-              },
-              leading: Icon(Icons.home),
-            ),
-            _createDrawerItem(context, Strings.profileTitle, Strings.profileRoute, Icons.person),
-            Divider(),
-            _createDrawerItem(context, Strings.myFavorsTitle, Strings.myFavorsRoute, Icons.list),
-            _createDrawerItem(
-                context, Strings.incompleteFavorsTitle, Strings.incompleteFavorsRoute, Icons.grading),
-            _createDrawerItem(
-                context, Strings.statisticsTitle, Strings.statisticsRoute, Icons.bar_chart),
-            Divider(),
-            _createDrawerItem(
-                context, Strings.settings, Strings.settingsRoute, Icons.settings),
-          ],
+        child: SafeArea(
+          left: false,
+          right: false,
+          top: false,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              _createHeader(),
+              ListTile(
+                title: Text(Strings.homeTitle),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                leading: Icon(Icons.home),
+              ),
+              _createDrawerItem(context, Strings.profileTitle, Strings.profileRoute, Icons.person),
+              Divider(),
+              _createDrawerItem(context, Strings.myFavorsTitle, Strings.myFavorsRoute, Icons.list),
+              _createDrawerItem(
+                  context, Strings.incompleteFavorsTitle, Strings.incompleteFavorsRoute, Icons.grading),
+              _createDrawerItem(
+                  context, Strings.statisticsTitle, Strings.statisticsRoute, Icons.bar_chart),
+              Divider(),
+              _createDrawerItem(
+                  context, Strings.settings, Strings.settingsRoute, Icons.settings),
+            ],
+          ),
         ),
       ),
     );

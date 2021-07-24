@@ -19,30 +19,32 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text(Strings.settings),
       ),
       body: Container(
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Platform.isIOS
-                  ? ListTile(
-                title: Text('Dark Mode'),
-                trailing: CupertinoSwitch(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Platform.isIOS
+                    ? ListTile(
+                  title: Text('Dark Mode'),
+                  trailing: CupertinoSwitch(
+                    value: Provider.of<AppStateNotifier>(context).isDarkMode,
+                    onChanged: (value){
+                      Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
+                    },
+                  ),
+                )
+                    : SwitchListTile(
+                  title: Text('Dark Mode'),
                   value: Provider.of<AppStateNotifier>(context).isDarkMode,
-                  onChanged: (value){
+                  onChanged: (value) {
                     Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
                   },
                 ),
-              )
-                  : SwitchListTile(
-                title: Text('Dark Mode'),
-                value: Provider.of<AppStateNotifier>(context).isDarkMode,
-                onChanged: (value) {
-                  Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
-                },
-              ),
-              Divider(),
-            ],
+                Divider(height: 0.0),
+              ],
+            ),
           ),
         ),
       ),

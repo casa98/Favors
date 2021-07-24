@@ -50,99 +50,101 @@ class _ProfileState extends State<Profile> {
             default:
               var userDocument = snapshot.data;
               String image = userDocument[IMAGE];
-              return SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    SizedBox(height: 24.0),
-                    Container(
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+              return SafeArea(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 24.0),
+                      Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: StreamBuilder<bool>(
+                            stream: _profileBloc.showLoadingIndicator,
+                            initialData: false,
+                          builder: (context, AsyncSnapshot snapshot) {
+                            return !snapshot.data ? CachedNetworkImage(
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.cover,
+                              imageUrl: image,
+                              placeholder: (context, url) => image != ''
+                                  ? _circularProgressIndicator()
+                                  : _profileImage(),
+                              errorWidget: (context, url, error) =>
+                                  _profileImage(),
+                            ) : Center(child: Text('Uploading...'),);
+                          }
+                        ),
                       ),
-                      clipBehavior: Clip.antiAlias,
-                      child: StreamBuilder<bool>(
-                          stream: _profileBloc.showLoadingIndicator,
-                          initialData: false,
-                        builder: (context, AsyncSnapshot snapshot) {
-                          return !snapshot.data ? CachedNetworkImage(
-                            height: 200,
-                            width: 200,
-                            fit: BoxFit.cover,
-                            imageUrl: image,
-                            placeholder: (context, url) => image != ''
-                                ? _circularProgressIndicator()
-                                : _profileImage(),
-                            errorWidget: (context, url, error) =>
-                                _profileImage(),
-                          ) : Center(child: Text('Uploading...'),);
-                        }
+                      SizedBox(height: 16.0),
+                      ActionButton(
+                        title: Strings.changePhoto,
+                        onPressed: () {
+                          containerForSheet<String>(
+                            context: context,
+                            child: _galleryOrCamera(),
+                          );
+                        },
                       ),
-                    ),
-                    SizedBox(height: 16.0),
-                    ActionButton(
-                      title: Strings.changePhoto,
-                      onPressed: () {
-                        containerForSheet<String>(
-                          context: context,
-                          child: _galleryOrCamera(),
-                        );
-                      },
-                    ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 2.0,
-                      indent: 32.0,
-                      endIndent: 32.0,
-                    ),
-                    Text(
-                      userDocument[USERNAME],
-                      style: TextStyle(
-                        fontSize: 18.0,
+                      Divider(
+                        height: 32.0,
+                        thickness: 2.0,
+                        indent: 32.0,
+                        endIndent: 32.0,
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      userDocument[EMAIL],
-                      style: TextStyle(
-                        fontSize: 18.0,
+                      Text(
+                        userDocument[USERNAME],
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Score:',
+                      SizedBox(height: 10.0),
+                      Text(
+                        userDocument[EMAIL],
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Score:',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          SizedBox(width: 10.0),
+                          Text(
+                            userDocument[SCORE].toString() + ' points',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 30.0),
+                      CupertinoButton(
+                        color: Colors.redAccent,
+                        pressedOpacity: 0.8,
+                        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                        child: Text(
+                          Strings.signOut,
                           style: TextStyle(
-                            fontSize: 18.0,
+                            color: Colors.white,
                           ),
                         ),
-                        SizedBox(width: 10.0),
-                        Text(
-                          userDocument[SCORE].toString() + ' points',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.0),
-                    CupertinoButton(
-                      color: Colors.redAccent,
-                      pressedOpacity: 0.8,
-                      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                      child: Text(
-                        Strings.signOut,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        onPressed: () async {
+                          FirebaseAuth.instance.signOut();
+                          Navigator.pop(context);
+                        },
                       ),
-                      onPressed: () async {
-                        FirebaseAuth.instance.signOut();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
           }

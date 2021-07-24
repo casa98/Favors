@@ -26,76 +26,78 @@ class _AddFavorState extends State<AddFavor> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: _screenWidth * 0.05,
-          vertical: 0.0,
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 24.0,
-                  bottom: 24.0,
-                ),
-                child: Text(
-                  Strings.askForFavor,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: _screenWidth * 0.05,
+            vertical: 0.0,
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 24.0,
+                    bottom: 24.0,
+                  ),
+                  child: Text(
+                    Strings.askForFavor,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-              //titleFormField(),
-              _textField(
-                hintText: Strings.hintTitle,
-                helperText: Strings.labelTitle,
-                labelTextError: Strings.labelTitleError,
-                textController: _titleController,
-              ),
-              SizedBox(height: 20.0),
-              //descriptionFormField(),
-              _textField(
-                hintText: Strings.hintDescription,
-                helperText: Strings.labelDescription,
-                labelTextError: Strings.labelDescriptionError,
-                textController: _descriptionController,
-              ),
-              SizedBox(height: 20.0),
-              //deliveryPlaceFormField(),
-              _textField(
-                hintText: Strings.hintLocation,
-                helperText: Strings.labelLocation,
-                labelTextError: Strings.labelLocationError,
-                textController: _locationController,
-                isLastField: true,
-              ),
-              SizedBox(height: 20.0),
-              ActionButton(
-                title: Strings.requestFavor,
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                      DatabaseService().saveFavor(
-                      _titleController.text,
-                      _descriptionController.text,
-                      _locationController.text,
-                    );
-                    Navigator.of(context).pop();
-                    CustomScaffold.customScaffoldMessenger(
-                      context: context,
-                      text: 'Favor successfully requested',
-                    );
-                  }
-                },
-              ),
-              SizedBox(height: 20.0),
-            ],
+                //titleFormField(),
+                _textField(
+                  hintText: Strings.hintTitle,
+                  helperText: Strings.labelTitle,
+                  labelTextError: Strings.labelTitleError,
+                  textController: _titleController,
+                ),
+                SizedBox(height: 20.0),
+                //descriptionFormField(),
+                _textField(
+                  hintText: Strings.hintDescription,
+                  helperText: Strings.labelDescription,
+                  labelTextError: Strings.labelDescriptionError,
+                  textController: _descriptionController,
+                ),
+                SizedBox(height: 20.0),
+                //deliveryPlaceFormField(),
+                _textField(
+                  hintText: Strings.hintLocation,
+                  helperText: Strings.labelLocation,
+                  labelTextError: Strings.labelLocationError,
+                  textController: _locationController,
+                  isLastField: true,
+                ),
+                SizedBox(height: 20.0),
+                ActionButton(
+                  title: Strings.requestFavor,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                        DatabaseService().saveFavor(
+                        _titleController.text,
+                        _descriptionController.text,
+                        _locationController.text,
+                      );
+                      Navigator.of(context).pop();
+                      CustomScaffold.customScaffoldMessenger(
+                        context: context,
+                        text: 'Favor successfully requested',
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: 20.0),
+              ],
+            ),
           ),
         ),
       ),

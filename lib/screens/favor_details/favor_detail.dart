@@ -32,60 +32,62 @@ class _FavorDetailState extends State<FavorDetail> {
         title: Text(widget._title),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(REQUESTED_BY),
-                  SizedBox(height: 8.0),
-                  Text(
-                    widget._favor.username,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(REQUESTED_BY),
+                    SizedBox(height: 8.0),
+                    Text(
+                      widget._favor.username,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  Divider(height: 32.0, thickness: 0.4),
-                  Text(
-                    DETAILS_TITLE,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
+                    Divider(height: 32.0, thickness: 0.4),
+                    Text(
+                      DETAILS_TITLE,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(widget._favor.title),
-                  Divider(height: 32.0, thickness: 0.4),
-                  Text(
-                    DETAILS_DESCRIPTION,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
+                    SizedBox(height: 8.0),
+                    Text(widget._favor.title),
+                    Divider(height: 32.0, thickness: 0.4),
+                    Text(
+                      DETAILS_DESCRIPTION,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(widget._favor.description),
-                  Divider(height: 32.0, thickness: 0.4),
-                  Text(
-                    DETAILS_DELIVERY_PLACE,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
+                    SizedBox(height: 8.0),
+                    Text(widget._favor.description),
+                    Divider(height: 32.0, thickness: 0.4),
+                    Text(
+                      DETAILS_DELIVERY_PLACE,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(widget._favor.location),
-                  SizedBox(height: 64.0),
-                ],
+                    SizedBox(height: 8.0),
+                    Text(widget._favor.location),
+                    SizedBox(height: 64.0),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

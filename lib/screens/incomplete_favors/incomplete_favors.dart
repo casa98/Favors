@@ -56,24 +56,26 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                   ),
                 ),
               );
-              return ListView.separated(
-                itemCount: item.length,
-                separatorBuilder: (context, index) => Divider(height: 0.0),
-                itemBuilder: (context, index) {
-                  var currentFavor = item[index];
-                  return ListTile(
-                    title: Text(
-                      currentFavor[FAVOR_TITLE],
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(currentFavor[FAVOR_DESCRIPTION],
-                        overflow: TextOverflow.ellipsis),
-                    trailing: Text(
-                      Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
-                    ),
-                    onTap: () {},
-                  );
-                },
+              return SafeArea(
+                child: ListView.separated(
+                  itemCount: item.length,
+                  separatorBuilder: (context, index) => Divider(height: 0.0),
+                  itemBuilder: (context, index) {
+                    var currentFavor = item[index];
+                    return ListTile(
+                      title: Text(
+                        currentFavor[FAVOR_TITLE],
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(currentFavor[FAVOR_DESCRIPTION],
+                          overflow: TextOverflow.ellipsis),
+                      trailing: Text(
+                        Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                      ),
+                      onTap: () {},
+                    );
+                  },
+                ),
               );
             //
           }

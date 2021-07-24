@@ -32,7 +32,9 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget._title),
       ),
       drawer: AppDrawer(),
-      body: UnassignedFavors(),
+      body: SafeArea(
+        child: UnassignedFavors(),
+      ),
       floatingActionButton: StreamBuilder(
         stream: _homeBloc.showFloatingButton,
         initialData: false,

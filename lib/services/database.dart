@@ -5,9 +5,9 @@ import 'package:do_favors/shared/constants.dart';
 
 class DatabaseService {
 
-  late final userCollection;
-  late final favorsCollection;
-  late final User? currentUser;
+  final userCollection = FirebaseFirestore.instance.collection(USER);
+  final favorsCollection = FirebaseFirestore.instance.collection(FAVORS);
+  final User? currentUser = FirebaseAuth.instance.currentUser;
   static DatabaseService? _instance;
 
   factory DatabaseService(){
@@ -16,9 +16,11 @@ class DatabaseService {
   }
 
   DatabaseService._internal(){
+    /*
     userCollection = FirebaseFirestore.instance.collection(USER);
     favorsCollection = FirebaseFirestore.instance.collection(FAVORS);
     currentUser = FirebaseAuth.instance.currentUser;
+    */
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchUnassignedFavors() async{
