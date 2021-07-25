@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,9 +14,9 @@ class AuthService {
       return result.user;
     } catch (error) {
       if(error is FirebaseAuthException){
-        log(_getError(error.code));
+        print(_getError(error.code));
       }else{
-        log(error.toString());
+        print(error.toString());
       }
       return null;
     }
@@ -32,13 +31,15 @@ class AuthService {
       if(user != null){
         // Create a collection with info of the user registering right now
         await createUserCollection(user.uid, email, name);
+        // Set user name in User instance
+        await user.updateDisplayName(name);
       }
       return user;
     } catch (error) {
       if(error is FirebaseAuthException){
-        log(_getError(error.code));
+        print(_getError(error.code));
       }else{
-        log(error.toString());
+        print(error.toString());
       }
       return null;
     }

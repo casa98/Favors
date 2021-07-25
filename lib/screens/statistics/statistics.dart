@@ -47,6 +47,7 @@ class _StatisticsState extends State<Statistics> {
                 //
                 return SafeArea(
                   child: ListView.separated(
+                    physics: BouncingScrollPhysics(),
                     itemCount: item.length,
                     separatorBuilder: (context, index) => Divider(height: 0.0),
                     itemBuilder: (context, index) {

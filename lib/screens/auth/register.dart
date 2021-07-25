@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:do_favors/widgets/auth_submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,6 +6,7 @@ import 'package:do_favors/shared/loading.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 import 'package:do_favors/widgets/auth_labels.dart';
+import 'package:do_favors/widgets/auth_submit_button.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -25,7 +23,6 @@ class _RegisterState extends State<Register> {
   String _email ="";
   String _password = "";
   String _confirmPassword ="";
-  String _error = "";
   AuthService _auth = AuthService();
 
   @override
@@ -69,15 +66,6 @@ class _RegisterState extends State<Register> {
                       child: Column(
                         children: [
                           SizedBox(height: 30.0),
-                          Text(
-                            _error,
-                            style: TextStyle(
-                              color: Colors.red[600],
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          SizedBox(height: 16.0),
                           buildUsernameFormField(),
                           SizedBox(height: 20.0),
                           buildEmailFormField(),
@@ -106,6 +94,8 @@ class _RegisterState extends State<Register> {
   TextFormField buildUsernameFormField() {
     return TextFormField(
       keyboardType: TextInputType.name,
+      textInputAction: TextInputAction.next,
+      textCapitalization: TextCapitalization.words,
       onChanged: (value) => _name = value,
       validator: (value) {
         if (value!.isNotEmpty) {
@@ -128,6 +118,7 @@ class _RegisterState extends State<Register> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
       onChanged: (value) => _email = value,
       validator: (value) {
         if (value!.isNotEmpty) {
@@ -150,6 +141,7 @@ class _RegisterState extends State<Register> {
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
+      textInputAction: TextInputAction.next,
       onChanged: (value) => _password = value,
       validator: (value) {
         if (value!.isNotEmpty) {
@@ -200,15 +192,10 @@ class _RegisterState extends State<Register> {
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
           if (_password == _confirmPassword) {
-            log(_email);
-            log(_password);
             setState(() => loading = true);
             final result = await _auth
                 .createUserWithEmailAndPassword(_name, _email, _password);
             setState(() => loading = false);
-            if(result != null){
-              log("UID: ${result.uid}");
-            }
           }
         }
       },

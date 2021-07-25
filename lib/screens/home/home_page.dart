@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:do_favors/screens/add_favor/add_favor.dart';
-import 'package:do_favors/screens/home/home_bloc.dart';
 import 'package:do_favors/screens/home/unassigned_favors.dart';
+import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/screens/drawer/drawer.dart';
 import 'package:do_favors/shared/strings.dart';
 
@@ -15,18 +16,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  late HomeBloc _homeBloc;
-
-  @override
-  void initState() {
-    _homeBloc = HomeBloc();
-    _homeBloc.canUserRequestFavors();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final currentUser = context.read<UserProvider>().currentUser;
+    print(currentUser.name);
+    print(currentUser.email);
+    print(currentUser.score);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),
@@ -35,18 +30,13 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: UnassignedFavors(),
       ),
-      floatingActionButton: StreamBuilder(
-        stream: _homeBloc.showFloatingButton,
-        initialData: false,
-        builder: (context, snapshot) {
-          return snapshot.data != null ? FloatingActionButton(
-              onPressed: () => _addFavorModalBottomSheet(context),
-              tooltip: Strings.askForFavor,
-              child: Icon(Icons.add),
-            )
-          : Text('');
-        },
-      ),
+      floatingActionButton: currentUser.score >= 2
+          ? FloatingActionButton(
+            onPressed: () => _addFavorModalBottomSheet(context),
+            tooltip: Strings.askForFavor,
+            child: Icon(Icons.add),
+          )
+          : Container(),
     );
   }
 }

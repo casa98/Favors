@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/widgets/custom_scaffold.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
@@ -17,10 +19,12 @@ class _AddFavorState extends State<AddFavor> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
+  late UserProvider _userProvider;
 
   @override
   void didChangeDependencies() {
     _screenWidth = MediaQuery.of(context).size.width;
+    _userProvider = context.watch<UserProvider>();
     super.didChangeDependencies();
   }
 
@@ -82,11 +86,16 @@ class _AddFavorState extends State<AddFavor> {
                   title: Strings.requestFavor,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                        DatabaseService().saveFavor(
+                      // Decrease user score
+                      _userProvider
+                          .updateUserScore(_userProvider.currentUser.score-2);
+                      // Save Favor in DB
+                      DatabaseService().saveFavor(
                         _titleController.text,
                         _descriptionController.text,
                         _locationController.text,
                       );
+                      //TODO: Decrease score in DB
                       Navigator.of(context).pop();
                       CustomScaffold.customScaffoldMessenger(
                         context: context,

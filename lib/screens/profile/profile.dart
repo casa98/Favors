@@ -1,14 +1,16 @@
-import 'package:do_favors/shared/strings.dart';
-import 'package:do_favors/widgets/action_button.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
 
+import 'package:do_favors/model/user_model.dart';
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/widgets/action_button.dart';
 import 'package:do_favors/screens/profile/profile_bloc.dart';
 import 'package:do_favors/shared/constants.dart';
 
@@ -25,7 +27,17 @@ class _ProfileState extends State<Profile> {
   late File _image;
   late String asset;
   final picker = ImagePicker();
-  ProfileBloc _profileBloc = ProfileBloc();
+  late UserProvider _userProvider;
+  late UserModel _currentUser;
+  late ProfileBloc _profileBloc;
+
+  @override
+  void didChangeDependencies() {
+    _userProvider = context.read<UserProvider>();
+    _currentUser = _userProvider.currentUser;
+    _profileBloc = ProfileBloc(userProvider: _userProvider);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,121 +46,94 @@ class _ProfileState extends State<Profile> {
         ? 'assets/no-photo.png'
         : 'assets/no-photo-dark.png';
 
-    var firestoreRef = FirebaseFirestore.instance
-        .collection(USER)
-        .doc(FirebaseAuth.instance.currentUser!.uid);
+    String image = _currentUser.photoUrl;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title)),
-      body: StreamBuilder(
-        stream: firestoreRef.snapshots(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Text('');
-            default:
-              var userDocument = snapshot.data;
-              String image = userDocument[IMAGE];
-              return SafeArea(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 24.0),
-                      Container(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              SizedBox(height: 24.0),
+              Container(
+                height: 200,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: StreamBuilder<bool>(
+                    stream: _profileBloc.showLoadingIndicator,
+                    initialData: false,
+                    builder: (context, AsyncSnapshot snapshot) {
+                      return !snapshot.data ? CachedNetworkImage(
                         height: 200,
                         width: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: StreamBuilder<bool>(
-                            stream: _profileBloc.showLoadingIndicator,
-                            initialData: false,
-                          builder: (context, AsyncSnapshot snapshot) {
-                            return !snapshot.data ? CachedNetworkImage(
-                              height: 200,
-                              width: 200,
-                              fit: BoxFit.cover,
-                              imageUrl: image,
-                              placeholder: (context, url) => image != ''
-                                  ? _circularProgressIndicator()
-                                  : _profileImage(),
-                              errorWidget: (context, url, error) =>
-                                  _profileImage(),
-                            ) : Center(child: Text('Uploading...'),);
-                          }
-                        ),
-                      ),
-                      SizedBox(height: 16.0),
-                      ActionButton(
-                        title: Strings.changePhoto,
-                        onPressed: () {
-                          containerForSheet<String>(
-                            context: context,
-                            child: _galleryOrCamera(),
-                          );
-                        },
-                      ),
-                      Divider(
-                        height: 32.0,
-                        thickness: 2.0,
-                        indent: 32.0,
-                        endIndent: 32.0,
-                      ),
-                      Text(
-                        userDocument[USERNAME],
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        userDocument[EMAIL],
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Score:',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                            ),
-                          ),
-                          SizedBox(width: 10.0),
-                          Text(
-                            userDocument[SCORE].toString() + ' points',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30.0),
-                      CupertinoButton(
-                        color: Colors.redAccent,
-                        pressedOpacity: 0.8,
-                        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                        child: Text(
-                          Strings.signOut,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () async {
-                          FirebaseAuth.instance.signOut();
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
+                        fit: BoxFit.cover,
+                        imageUrl: image,
+                        placeholder: (context, url) => image != ''
+                            ? _circularProgressIndicator()
+                            : _profileImage(),
+                        errorWidget: (context, url, error) =>
+                            _profileImage(),
+                      ) : Center(child: Text('Uploading...'),);
+                    }
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ActionButton(
+                title: Strings.changePhoto,
+                onPressed: () {
+                  containerForSheet<String>(
+                    context: context,
+                    child: _galleryOrCamera(),
+                  );
+                },
+              ),
+              Divider(
+                height: 32.0,
+                thickness: 2.0,
+                indent: 32.0,
+                endIndent: 32.0,
+              ),
+              Text(
+                _currentUser.name,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                _currentUser.email,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                'Score: ${_currentUser.score} points',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(height: 30.0),
+              CupertinoButton(
+                color: Colors.redAccent,
+                pressedOpacity: 0.8,
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                child: Text(
+                  Strings.signOut,
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
-              );
-          }
-        },
+                onPressed: () async {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +22,6 @@ class _LoginState extends State<Login> {
   bool loading = false;
   String _email = "";
   String _password = "";
-  String _error = "";
   AuthService _auth = AuthService();
 
   @override
@@ -67,15 +65,6 @@ class _LoginState extends State<Login> {
                       child: Column(
                         children: [
                           SizedBox(height: 30.0),
-                          Text(
-                              _error,
-                            style: TextStyle(
-                              color: Colors.red[600],
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          SizedBox(height: 16.0),
                           buildEmailFormField(),
                           SizedBox(height: 25.0),
                           buildPasswordFormField(),
@@ -100,6 +89,7 @@ class _LoginState extends State<Login> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
       onChanged: (value) => _email = value,
       validator: (value) {
         if (value!.isNotEmpty) {
@@ -146,14 +136,9 @@ class _LoginState extends State<Login> {
       title: Strings.logIn,
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          log(_email);
-          log(_password);
           setState(() => loading = true);
           final result = await _auth.signInWithEmailAndPassword(_email, _password);
           setState(() => loading = false);
-          if(result != null){
-            log("UID: ${result.uid}");
-          }
         }
       },
     );

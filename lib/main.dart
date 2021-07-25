@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +11,11 @@ import 'package:do_favors/router/app_router.dart';
 import 'theme/app_state_notifier.dart';
 import 'shared/strings.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
@@ -22,6 +28,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppStateNotifier()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: Consumer<AppStateNotifier>(builder: (_, appState, __) {
         return MaterialApp(
