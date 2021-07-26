@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
-import 'package:do_favors/widgets/custom_scaffold.dart';
+import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
@@ -96,9 +96,10 @@ class _FavorDetailState extends State<FavorDetail> {
         onPressed: () {
           DatabaseService().markFavorAsAssigned(widget._favor.key);
           hideButton();
-          CustomScaffold.customScaffoldMessenger(
+          CustomSnackbar.customScaffoldMessenger(
             context: context,
             text: 'You\'re now doing this favor',
+            iconData: Icons.thumb_up,
           );
         },
       ) : SizedBox(),

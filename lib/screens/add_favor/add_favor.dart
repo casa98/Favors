@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:do_favors/provider/user_provider.dart';
-import 'package:do_favors/widgets/custom_scaffold.dart';
+import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
 import 'package:do_favors/services/database.dart';
@@ -95,11 +95,14 @@ class _AddFavorState extends State<AddFavor> {
                         _descriptionController.text,
                         _locationController.text,
                       );
-                      //TODO: Decrease score in DB
+                      DatabaseService().decreaseUserScore(
+                        _userProvider.currentUser.id,
+                      );
                       Navigator.of(context).pop();
-                      CustomScaffold.customScaffoldMessenger(
+                      CustomSnackbar.customScaffoldMessenger(
                         context: context,
                         text: 'Favor successfully requested',
+                        iconData: Icons.thumb_up,
                       );
                     }
                   },

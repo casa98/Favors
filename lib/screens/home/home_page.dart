@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final currentUser = context.read<UserProvider>().currentUser;
+    final currentUser = context.watch<UserProvider>().currentUser;
     print(currentUser.name);
     print(currentUser.email);
     print(currentUser.score);

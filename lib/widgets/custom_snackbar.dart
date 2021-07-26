@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 
-class CustomScaffold {
+class CustomSnackbar {
 
-  static customScaffoldMessenger({required BuildContext context, required String text}){
+  static customScaffoldMessenger({
+    required BuildContext context,
+    required String text,
+    required IconData iconData,
+  }){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Row(
         children: [
           Icon(
-            Icons.thumb_up,
+            iconData,
             color: Theme.of(context).backgroundColor,
           ),
           SizedBox(width: 20.0),

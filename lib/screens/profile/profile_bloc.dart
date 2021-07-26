@@ -29,11 +29,11 @@ class ProfileBloc{
       .child("profile_pictures/${_currentUser!.uid}.jpg")
       .putFile(image).then((value) async{
         final String downloadUrl = await value.ref.getDownloadURL();
-        await _currentUser!.updatePhotoURL(downloadUrl);
         _userCollection.doc(_currentUser!.uid).update({
           IMAGE: downloadUrl,
         });
-
+        // Update user photoUrl in provider too
+        userProvider!.updateUserPhotoUrl(downloadUrl);
         _showLoadingIndicator.sink.add(false);
     });
   }

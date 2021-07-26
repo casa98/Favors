@@ -38,18 +38,18 @@ class Wrapper extends StatelessWidget {
     );
   }
   _getUserInfo({required BuildContext context, required User user}) async {
-    final userScore = await FirebaseFirestore.instance
+    final userDB = await FirebaseFirestore.instance
         .collection(USER)
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    final int score = int.parse(userScore[SCORE].toString());
-    print('What goes to provider is: $score');
+    final int score = int.parse(userDB[SCORE].toString());
+    print('Score: $score');
     UserModel currentUser = UserModel(
       id: user.uid,
       email: user.email!,
       name: user.displayName ?? 'Welcome!',
       score: score,
-      photoUrl: '',
+      photoUrl: userDB[IMAGE] ?? '',
     );
     final userProvider = context.read<UserProvider>();
     userProvider.setUser(currentUser);

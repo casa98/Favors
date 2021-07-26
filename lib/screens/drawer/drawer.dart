@@ -69,7 +69,7 @@ class AppDrawer extends StatelessWidget {
       )
           : Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          borderRadius: BorderRadius.all(Radius.circular(50.0)),
         ),
         clipBehavior: Clip.antiAlias,
         child: CachedNetworkImage(

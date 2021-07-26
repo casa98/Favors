@@ -33,7 +33,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   void didChangeDependencies() {
-    _userProvider = context.read<UserProvider>();
+    _userProvider = context.watch<UserProvider>();
     _currentUser = _userProvider.currentUser;
     _profileBloc = ProfileBloc(userProvider: _userProvider);
     super.didChangeDependencies();
@@ -60,7 +60,7 @@ class _ProfileState extends State<Profile> {
                 height: 200,
                 width: 200,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: StreamBuilder<bool>(

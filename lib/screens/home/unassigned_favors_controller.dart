@@ -7,7 +7,7 @@ class UnassignedFavorsController {
   final _unassignedFavorsList = StreamController<List<Favor>>();
   Stream<List<Favor>> get unassignedFavorsList => _unassignedFavorsList.stream;
 
-  fetchUnassignedFavors() async{
+  fetchUnassignedFavors() async {
     final dbQuery = await DatabaseService().fetchUnassignedFavors();
 
     List<Favor> favors = dbQuery.docs.map((i) =>

@@ -24,4 +24,9 @@ class UserProvider with ChangeNotifier {
     this._currentUser.score = newScore;
     notifyListeners();
   }
+
+  updateUserPhotoUrl(String newPhoto){
+    this._currentUser.photoUrl = newPhoto;
+    notifyListeners();
+  }
 }

@@ -29,6 +29,14 @@ class DatabaseService {
         .orderBy(FAVOR_TIMESTAMP, descending: true).get();
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchIncompleteFavors() async{
+    return favorsCollection
+        .where(FAVOR_STATUS, isEqualTo: 1)
+        .where(FAVOR_ASSIGNED_USER,
+        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy(FAVOR_TIMESTAMP, descending: true).get();
+  }
+
   Future saveFavor(
     String title,
     String description,
@@ -89,6 +97,16 @@ class DatabaseService {
         userCollection.doc(userId).update({
           SCORE: userNewScore,
         });
+      });
+    });
+  }
+
+  Future decreaseUserScore(String userId){
+    //TODO: Decrease user sore in Firestore
+    return userCollection.doc(userId).get().then((snapshot) {
+      var userNewScore = snapshot[SCORE] - 2;
+      userCollection.doc(userId).update({
+        SCORE: userNewScore,
       });
     });
   }
