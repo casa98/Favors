@@ -19,9 +19,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final currentUser = context.watch<UserProvider>().currentUser;
-    print(currentUser.name);
-    print(currentUser.email);
-    print(currentUser.score);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget._title),

@@ -21,6 +21,12 @@ class Strings {
   static const settings             = "Settings";
   static const favorDetailsTitle    = "Favor Details";
 
+  // Favors
+  static const favorStatus = "Status: ";
+  static const favorAssigned = "Assigned";
+  static const favorUnassigned = "Unassigned";
+  static const favorCompleted = "Completed";
+
   // Authentication
   static const userNotFound         = "No user registered with this email";
   static const wrongPassword        = "Incorrect password";

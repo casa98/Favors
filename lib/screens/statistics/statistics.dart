@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math';
 
 import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/shared/util.dart';
-
 
 class Statistics extends StatefulWidget {
   final String _title;
@@ -17,8 +15,6 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> {
-  final User currentUser = FirebaseAuth.instance.currentUser!;
-
   var firestoreRef = FirebaseFirestore.instance
       .collection(USER)
       .orderBy(SCORE, descending: true);

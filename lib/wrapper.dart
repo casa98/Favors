@@ -43,7 +43,6 @@ class Wrapper extends StatelessWidget {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     final int score = int.parse(userDB[SCORE].toString());
-    print('Score: $score');
     UserModel currentUser = UserModel(
       id: user.uid,
       email: user.email!,

@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+
+import 'package:do_favors/model/favor.dart';
 
 class Util {
 
@@ -29,5 +32,12 @@ class Util {
     }catch(e){
       return "";
     }
+  }
+
+  /// Convert a Firestore Document Response into Favor objects
+  static List<Favor> fromDocumentToFavor(
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ){
+    return docs.map((e)=> Favor.fromDocumentSnapShot(e.data())).toList();
   }
 }

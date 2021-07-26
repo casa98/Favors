@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:do_favors/shared/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:do_favors/theme/app_state_notifier.dart';
+import 'package:do_favors/shared/strings.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

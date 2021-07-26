@@ -29,11 +29,6 @@ const String FAVOR_STATUS = 'status';
 const String FAVOR_USER = 'user';
 const String FAVOR_USERNAME = 'username';
 
-const String STATUS = 'STATUS:';
-const String ASSIGNED = 'ASSIGNED';
-const String UNASSIGNED = 'UNASSIGNED';
-const String COMPLETED = 'COMPLETED';
-
 const String REQUESTED_BY = 'Request by:';
 const String DETAILS_TITLE = 'Title';
 const String DETAILS_DESCRIPTION = 'Description';

@@ -1,13 +1,18 @@
 import 'dart:io';
-
-import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:do_favors/shared/strings.dart';
+import 'package:provider/provider.dart';
+import 'package:do_favors/model/favor.dart';
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:do_favors/screens/my_favors/my_favors_controller.dart';
+import 'package:do_favors/widgets/custom_snackbar.dart';
+import 'package:do_favors/widgets/no_items.dart';
+
 
 import 'package:do_favors/services/database.dart';
-import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/shared/util.dart';
 
 const String COMPLETE = 'completed';
@@ -22,10 +27,16 @@ class MyFavors extends StatefulWidget {
 }
 
 class _MyFavorsState extends State<MyFavors> {
-  var firestoreRef = FirebaseFirestore.instance
-      .collection(FAVORS)
-      .where(FAVOR_USER, isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-      .orderBy(FAVOR_TIMESTAMP, descending: true);
+
+  late final MyFavorsController _myFavorsController;
+
+  @override
+  void didChangeDependencies() {
+    _myFavorsController = MyFavorsController(
+      context.read<UserProvider>().currentUser,
+    );
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,79 +46,64 @@ class _MyFavorsState extends State<MyFavors> {
         centerTitle: true,
       ),
       body: Center(
-        child: StreamBuilder(
-          stream: firestoreRef.snapshots(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: _myFavorsController.fetchMyFavors(),
+          builder: (context, snapshot) {
 
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return CircularProgressIndicator();
               default:
-                List item = [];
-                snapshot.data.docs.forEach((element) {
-                  item.add(element.data());
-                });
-                if (item.length == 0)
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                    child: Center(
-                      child: Text(
-                        'You haven\'t requested any favors yet',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  );
+                if (snapshot.hasError)
+                  return Center(child: Text('Error: ${snapshot.error}'));
+
+                if(!snapshot.hasData)
+                  return NoItems(text: 'You haven\'t requested any favors yet');
+
+                List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
                 return SafeArea(
                   child: ListView.separated(
-                    itemCount: item.length,
+                    itemCount: favors.length,
                     separatorBuilder: (context, index) => Divider(height: 0.0),
                     itemBuilder: (context, index) {
-                      var currentFavor = item[index];
-                      if (currentFavor[FAVOR_STATUS] == -1)
-                        currentFavor[FAVOR_STATUS] = UNASSIGNED;
-                      else if (currentFavor[FAVOR_STATUS] == 1)
-                        currentFavor[FAVOR_STATUS] = ASSIGNED;
+                      var favor = favors[index];
+                      if (favor.status == '-1')
+                        favor.status = Strings.favorUnassigned;
+                      else if (favor.status == '1')
+                        favor.status = Strings.favorAssigned;
                       else
-                        currentFavor[FAVOR_STATUS] = COMPLETED;
+                        favor.status = Strings.favorCompleted;
 
                       return ListTile(
                         title: Text(
-                          currentFavor[FAVOR_TITLE],
+                          favor.title,
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Row(
                           children: [
-                            Text(STATUS),
-                            SizedBox(width: 10.0),
+                            Text(Strings.favorStatus),
                             Text(
-                              currentFavor[FAVOR_STATUS],
+                              favor.status,
                             ),
                           ],
                         ),
                         trailing: Text(
-                          Util.readFavorTimestamp(currentFavor[FAVOR_TIMESTAMP]),
+                          Util.readFavorTimestamp(favor.timestamp),
                         ),
                         onTap: () async {
                           // showDialog returns a value, it's sent via pop()
-                          if (currentFavor[FAVOR_STATUS] == UNASSIGNED) {
-                            var data = await showDialog(
+                          if (favor.status == Strings.favorUnassigned) {
+                            var choice = await showDialog(
                                 context: context,
                                 builder: (context) {
                                   return myFavorsDialog(
-                                      title: 'Delete favor',
+                                      title: 'Delete Favor',
                                       text: 'Sure you want to delete this favor?',
                                       delete: true,
-                                      favorId: currentFavor[FAVOR_KEY],
+                                      favorId: favor.key,
                                   );
                                 });
-                            print(data);
-                            if (data == DELETE) {
+                            if (choice == DELETE) {
                               CustomSnackbar.customScaffoldMessenger(
                                 context: context,
                                 text: 'Favor Deleted',
@@ -115,15 +111,15 @@ class _MyFavorsState extends State<MyFavors> {
                               );
                             }
                           }
-                          if (currentFavor[FAVOR_STATUS] == ASSIGNED) {
+                          if (favor.status == Strings.favorAssigned) {
                             var data = await showDialog(
                                 context: context,
                                 builder: (context) {
                                   return myFavorsDialog(
                                       title: 'Mark as completed',
-                                      text: 'Has your peer completed this favor?',
-                                      favorId: currentFavor[FAVOR_KEY],
-                                      assignedUser: currentFavor[FAVOR_ASSIGNED_USER],
+                                      text: 'Has ${favor.assignedUsername} completed this favor?',
+                                      favorId: favor.key,
+                                      assignedUser: favor.assignedUser,
                                   );
                                 });
                             if (data == COMPLETE) {
