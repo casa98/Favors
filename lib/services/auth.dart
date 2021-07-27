@@ -9,39 +9,29 @@ class AuthService {
 
   Future<User?> signInWithEmailAndPassword(String email, String passwd) async {
     try {
-      final result = await _auth
-          .signInWithEmailAndPassword(email: email, password: passwd);
+      final result = await _auth.signInWithEmailAndPassword(
+          email: email, password: passwd);
       return result.user;
-    } catch (error) {
-      if(error is FirebaseAuthException){
-        print(_getError(error.code));
-      }else{
-        print(error.toString());
-      }
-      return null;
+    } catch (exception) {
+      throw exception;
     }
   }
 
   Future<User?> createUserWithEmailAndPassword(
       String name, String email, String passwd) async {
     try {
-      final result = await _auth
-          .createUserWithEmailAndPassword(email: email, password: passwd);
+      final result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: passwd);
       User? user = result.user;
-      if(user != null){
+      if (user != null) {
         // Create a collection with info of the user registering right now
         await createUserCollection(user.uid, email, name);
         // Set user name in User instance
         await user.updateDisplayName(name);
       }
       return user;
-    } catch (error) {
-      if(error is FirebaseAuthException){
-        print(_getError(error.code));
-      }else{
-        print(error.toString());
-      }
-      return null;
+    } catch (exception) {
+      throw exception;
     }
   }
 
@@ -59,7 +49,7 @@ class AuthService {
 
   String _getError(String errorCode) {
     String errorMessage;
-    switch(errorCode){
+    switch (errorCode) {
       case "user-not-found":
         errorMessage = Strings.userNotFound;
         break;

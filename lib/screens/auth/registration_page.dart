@@ -1,94 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:do_favors/services/auth.dart';
-import 'package:do_favors/shared/loading.dart';
+import 'package:do_favors/screens/auth/registration_controller.dart';
+import 'package:do_favors/shared/dialogs_mixin.dart';
+import 'package:do_favors/shared/loading_indicator_mixin.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 import 'package:do_favors/widgets/auth_labels.dart';
 import 'package:do_favors/widgets/auth_submit_button.dart';
 
-class Register extends StatefulWidget {
+class RegistrationPage extends StatefulWidget {
   final Function toggleView;
-  Register({required this.toggleView});
+  RegistrationPage({required this.toggleView});
 
   @override
-  _RegisterState createState() => _RegisterState();
+  _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegistrationPageState extends State<RegistrationPage>
+    with LoadingIndicatorMixin, DialogsMixin {
   final _formKey = GlobalKey<FormState>();
-  bool loading = false;
   String _name = "";
-  String _email ="";
+  String _email = "";
   String _password = "";
-  String _confirmPassword ="";
-  AuthService _auth = AuthService();
+  String _confirmPassword = "";
+  late RegistrationController _registrationController;
 
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
 
+  void _listenController(BuildContext context) {
+    _registrationController.showLoadingIndicator.listen((showLoadingIndicator) {
+      if (showLoadingIndicator) {
+        showLoadingSpiner(context: context);
+      } else {
+        hideLoadingSpiner(context: context);
+      }
+    });
+
+    _registrationController.displayMessage.listen((message) {
+      authExceptionDialog(context, message);
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    _registrationController = RegistrationController();
+    _listenController(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? Loading()
-        : GestureDetector(
-            // Removes Focus by tap on empty space
-            onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
-            },
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  Strings.signUp,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                backgroundColor: Theme.of(context).backgroundColor,
+    return GestureDetector(
+      // Removes Focus by tap on empty space
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            Strings.signUp,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.05,
               ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.05,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    SizedBox(height: 30.0),
+                    buildUsernameFormField(),
+                    SizedBox(height: 20.0),
+                    buildEmailFormField(),
+                    SizedBox(height: 20.0),
+                    buildPasswordFormField(),
+                    SizedBox(height: 20.0),
+                    buildConfirmPasswordFormField(),
+                    SizedBox(height: 25.0),
+                    _submitButton(),
+                    SizedBox(height: 16.0),
+                    AuthLabels(
+                      label: Strings.alreadyHaveAnAccount,
+                      labelAction: Strings.signIn,
+                      onPressed: () => widget.toggleView(),
                     ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          SizedBox(height: 30.0),
-                          buildUsernameFormField(),
-                          SizedBox(height: 20.0),
-                          buildEmailFormField(),
-                          SizedBox(height: 20.0),
-                          buildPasswordFormField(),
-                          SizedBox(height: 20.0),
-                          buildConfirmPasswordFormField(),
-                          SizedBox(height: 25.0),
-                          _submitButton(),
-                          SizedBox(height: 16.0),
-                          AuthLabels(
-                            label: Strings.alreadyHaveAnAccount,
-                            labelAction: Strings.signIn,
-                            onPressed: () => widget.toggleView(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
               ),
             ),
-        );
+          ),
+        ),
+      ),
+    );
   }
 
   TextFormField buildUsernameFormField() {
@@ -170,7 +190,7 @@ class _RegisterState extends State<Register> {
           if (value.length < 6) {
             return Strings.enterLongerPassword;
           }
-          if(value != _password){
+          if (value != _password) {
             return Strings.passwordsDoNotMatch;
           }
         } else {
@@ -192,13 +212,20 @@ class _RegisterState extends State<Register> {
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
           if (_password == _confirmPassword) {
-            setState(() => loading = true);
-            final result = await _auth
-                .createUserWithEmailAndPassword(_name, _email, _password);
-            setState(() => loading = false);
+            _registrationController.register(
+              name: _name,
+              email: _email,
+              password: _password,
+            );
           }
         }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _registrationController.clear();
+    super.dispose();
   }
 }

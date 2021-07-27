@@ -54,6 +54,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
 
               return SafeArea(
                 child: ListView.separated(
+                  physics: BouncingScrollPhysics(),
                   itemCount: favors.length,
                   separatorBuilder: (context, index) => Divider(height: 0.0),
                   itemBuilder: (context, index) {

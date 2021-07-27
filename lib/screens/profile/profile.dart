@@ -123,10 +123,10 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 onPressed: () async {
-                  final currentUser = context.read<UserProvider>();
-                  currentUser.clearUser();
                   FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
+                  final currentUser = context.read<UserProvider>();
+                  currentUser.clearUser();
                 },
               ),
             ],

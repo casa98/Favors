@@ -32,6 +32,7 @@ class _AddFavorState extends State<AddFavor> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(

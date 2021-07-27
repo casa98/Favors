@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:do_favors/screens/auth/login.dart';
-import 'package:do_favors/screens/auth/register.dart';
+import 'package:do_favors/screens/auth/login_page.dart';
+import 'package:do_favors/screens/auth/registration_page.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -18,9 +18,9 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     if (showSignIn) {
-      return Login(toggleView: toggleView);
+      return LoginPage(toggleView: toggleView);
     } else {
-      return Register(toggleView: toggleView);
+      return RegistrationPage(toggleView: toggleView);
     }
   }
 }
