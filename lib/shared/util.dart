@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/model/user_model.dart';
 import 'package:intl/intl.dart';
 
 import 'package:do_favors/model/favor.dart';
@@ -39,5 +40,12 @@ class Util {
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
   ){
     return docs.map((e)=> Favor.fromDocumentSnapShot(e.data())).toList();
+  }
+
+  /// Convert a Firestore Document Response into User objects
+  static List<UserModel> fromDocumentToUser(
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> users,
+      ){
+    return users.map((e)=> UserModel.fromDocumentSnapShot(e.data())).toList();
   }
 }

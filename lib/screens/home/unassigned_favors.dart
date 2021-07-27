@@ -21,7 +21,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
   @override
   void didChangeDependencies() {
     _unassignedFavorsController = UnassignedFavorsController(
-      context.read<UserProvider>().currentUser,
+      context.read<UserProvider>(),
     );
     super.didChangeDependencies();
   }
@@ -38,13 +38,13 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
 
-            if(!snapshot.hasData)
+            List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
+            if(favors.isEmpty)
               return NoItems(text: 'No Favors to do, yet');
 
-            List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
             // Remove favors requested by currentUser
             favors.removeWhere((element)
-                => element.user == _unassignedFavorsController.currentUser.id);
+                => element.user == _unassignedFavorsController.userprovider.currentUser.id);
             return SafeArea(
               child: ListView.separated(
                 physics: BouncingScrollPhysics(),

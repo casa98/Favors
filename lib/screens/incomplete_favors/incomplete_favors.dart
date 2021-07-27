@@ -1,94 +1,93 @@
 import 'dart:io';
-
-import 'package:do_favors/services/database.dart';
-import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:do_favors/services/database.dart';
+import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/screens/incomplete_favors/incomplete_favors_controller.dart';
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/shared/util.dart';
+import 'package:do_favors/shared/strings.dart';
+import 'package:do_favors/widgets/no_items.dart';
 
 class IncompleteFavors extends StatefulWidget {
-  final String _title;
-  IncompleteFavors(this._title);
-
   @override
   _IncompleteFavorsState createState() => _IncompleteFavorsState();
 }
 
 class _IncompleteFavorsState extends State<IncompleteFavors> {
 
-  final _incompleteFavors = IncompleteFavorsController();
+  late final _incompleteFavorsController;
 
   @override
-  void initState() {
-    _incompleteFavors.fetchIncompleteFavors();
-    super.initState();
+  void didChangeDependencies() {
+    _incompleteFavorsController = IncompleteFavorsController(
+      context.read<UserProvider>(),
+    );
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._title),
+        title: Text(Strings.incompleteFavorsTitle),
         centerTitle: true,
       ),
-      body: Center(
-        child: StreamBuilder<List<Favor>>(
-          stream: _incompleteFavors.incompleteFavorsList,
-          builder: (context, snapshot){
-            if(snapshot.hasError) throw('Snapshot Error: ${snapshot.error}');
-            switch(snapshot.connectionState){
-              case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
-              default:
-                final favors = snapshot.data ?? [];
-                if(favors.isEmpty){
-                  return Center(
-                    child: Text(
-                      'You don\'t have pending favors to complete',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  );
-                }
-                return SafeArea(
-                  child: ListView.separated(
-                    itemCount: favors.length,
-                    separatorBuilder: (context, index) => Divider(height: 0.0),
-                    itemBuilder: (context, index) {
-                      var favor = favors[index];
-                      return ListTile(
-                        title: Text(
-                          favor.title,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(favor.description,
-                            overflow: TextOverflow.ellipsis),
-                        trailing: Text(
-                          Util.readFavorTimestamp(favor.timestamp),
-                        ),
-                        onTap: () async {
-                          await showDialog(
-                            context: context,
-                            builder: (_){
-                              return incompleteFavorDialog(
-                                title: 'Mark as completed',
-                                text: 'Have you completed this favor?',
-                                favorId: favor.key,
-                                assignedUser: favor.assignedUser!,
-                              );
-                            }
-                          );
-                        },
-                      );
-                    },
-                  ),
-                );
-            }
-          },
-      )),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: _incompleteFavorsController.fetchIncompleteFavors(),
+        builder: (context, snapshot){
+          switch(snapshot.connectionState){
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if(snapshot.hasError)
+                return Center(child: Text('Error: ${snapshot.error}'));
+
+              List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
+              print('Incomplete Favors length: ${favors.length}');
+              if(favors.isEmpty)
+                return NoItems(text: 'You don\'t have pending favors to complete');
+
+              return SafeArea(
+                child: ListView.separated(
+                  itemCount: favors.length,
+                  separatorBuilder: (context, index) => Divider(height: 0.0),
+                  itemBuilder: (context, index) {
+                    var favor = favors[index];
+                    return ListTile(
+                      title: Text(
+                        favor.title,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(favor.description,
+                          overflow: TextOverflow.ellipsis),
+                      trailing: Text(
+                        Util.readFavorTimestamp(favor.timestamp),
+                      ),
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (_){
+                            return incompleteFavorDialog(
+                              title: 'Mark as completed',
+                              text: 'Have you completed this favor?',
+                              favorId: favor.key,
+                              assignedUser: favor.assignedUser!,
+                            );
+                          }
+                        );
+                      },
+                    );
+                  },
+                ),
+              );
+          }
+        },
+      ),
     );
   }
 
@@ -134,6 +133,11 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     text: 'Favor marked as completed',
                     iconData: Icons.done,
                   );
+                  // Increase currentUser score
+                  final currentUserScore =
+                      _incompleteFavorsController.currentUser.score;
+                  _incompleteFavorsController.currentUser.score =
+                      currentUserScore + 2;
                 },
               ),
             ],
@@ -156,6 +160,11 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     text: 'Favor marked as completed',
                     iconData: Icons.done,
                   );
+                  // Increase currentUser score
+                  final currentUserScore = _incompleteFavorsController
+                      .userProvider.currentUser.score;
+                  _incompleteFavorsController
+                      .userProvider.updateUserScore(currentUserScore + 2);
                 },
                 child: Text('Yes'),
               ),

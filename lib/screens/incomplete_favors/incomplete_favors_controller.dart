@@ -1,17 +1,22 @@
-import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:do_favors/model/favor.dart';
-import 'package:do_favors/services/database.dart';
+import 'package:do_favors/model/user_model.dart';
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:do_favors/shared/constants.dart';
 
 class IncompleteFavorsController {
-  final _incompleteFavorsList = StreamController<List<Favor>>();
-  Stream<List<Favor>> get incompleteFavorsList => _incompleteFavorsList.stream;
 
-  fetchIncompleteFavors() async {
-    final dbQuery = await DatabaseService().fetchIncompleteFavors();
+  UserProvider _userProvider;
+  UserProvider get userProvider => _userProvider;
 
-    List<Favor> favors = dbQuery.docs.map((i) =>
-        Favor.fromDocumentSnapShot(i.data())).toList();
-    _incompleteFavorsList.add(favors);
+  IncompleteFavorsController(this._userProvider);
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> fetchIncompleteFavors(){
+    return FirebaseFirestore.instance.collection(FAVORS)
+        .where(FAVOR_STATUS, isEqualTo: 1)
+        .where(FAVOR_ASSIGNED_USER,
+        isEqualTo: _userProvider.currentUser.id)
+        .orderBy(FAVOR_TIMESTAMP, descending: true)
+        .snapshots();
   }
 }

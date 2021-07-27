@@ -20,6 +20,18 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  clearUser(){
+    //TODO: Think of a non-null better solution for it:
+    this._currentUser = UserModel(
+      id: '',
+      name: '',
+      email: '',
+      score: -1,
+      photoUrl: '',
+    );
+    notifyListeners();
+  }
+
   updateUserScore(int newScore){
     this._currentUser.score = newScore;
     notifyListeners();

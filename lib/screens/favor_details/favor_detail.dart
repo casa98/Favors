@@ -8,9 +8,8 @@ import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
 
 class FavorDetail extends StatefulWidget {
-  final String _title;
   final Favor _favor;
-  FavorDetail(this._title, this._favor);
+  FavorDetail(this._favor);
 
   @override
   _FavorDetailState createState() => _FavorDetailState();
@@ -29,7 +28,7 @@ class _FavorDetailState extends State<FavorDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._title),
+        title: Text(Strings.favorDetailsTitle),
         centerTitle: true,
       ),
       body: SafeArea(

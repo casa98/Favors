@@ -1,5 +1,3 @@
-import 'package:do_favors/model/favor.dart';
-import 'package:do_favors/screens/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,8 +7,10 @@ import '../screens/favor_details/favor_detail.dart';
 import '../screens/profile/profile.dart';
 import '../screens/my_favors/my_favors.dart';
 import '../screens/incomplete_favors/incomplete_favors.dart';
-import '../screens/statistics/statistics.dart';
-import 'package:do_favors/shared/strings.dart';
+import '../screens/leaderboard/leaderboard.dart';
+import '../screens/settings/settings.dart';
+import '../shared/strings.dart';
+import '../model/favor.dart';
 
 class AppRouter {
   static RouteFactory buildRootRouteFactory() {
@@ -20,22 +20,22 @@ class AppRouter {
           return CupertinoPageRoute(builder: (_) => Wrapper());
         case Strings.homeRoute:
           return CupertinoPageRoute(
-              builder: (_) => HomePage(Strings.unassignedFavorsTitle));
+              builder: (_) => HomePage());
         case Strings.favorDetailsRoute:
           var favor = settings.arguments as Favor;
           return CupertinoPageRoute(
-              builder: (_) => FavorDetail(Strings.favorDetailsTitle, favor));
+              builder: (_) => FavorDetail(favor));
         case Strings.profileRoute:
-          return CupertinoPageRoute(builder: (_) => Profile(Strings.profileTitle));
+          return CupertinoPageRoute(builder: (_) => Profile());
         case Strings.myFavorsRoute:
           return CupertinoPageRoute(
-              builder: (_) => MyFavors(Strings.myFavorsTitle));
+              builder: (_) => MyFavors());
         case Strings.incompleteFavorsRoute:
           return CupertinoPageRoute(
-              builder: (_) => IncompleteFavors(Strings.incompleteFavorsTitle));
+              builder: (_) => IncompleteFavors());
         case Strings.statisticsRoute:
           return CupertinoPageRoute(
-              builder: (_) => Statistics(Strings.statisticsTitle));
+              builder: (_) => Leaderboard());
         case Strings.settingsRoute:
           return CupertinoPageRoute(
               builder: (_) => SettingsPage());

@@ -7,34 +7,30 @@ import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/screens/drawer/drawer.dart';
 import 'package:do_favors/shared/strings.dart';
 
-class HomePage extends StatefulWidget {
-  final String _title;
-  HomePage(this._title);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final currentUser = context.watch<UserProvider>().currentUser;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._title),
+        title: Text(Strings.unassignedFavorsTitle),
       ),
       drawer: AppDrawer(),
       body: SafeArea(
         child: UnassignedFavors(),
       ),
-      floatingActionButton: currentUser.score >= 2
-          ? FloatingActionButton(
-            onPressed: () => _addFavorModalBottomSheet(context),
-            tooltip: Strings.askForFavor,
-            child: Icon(Icons.add),
-          )
-          : Container(),
+      floatingActionButton: _floatingButton(context),
     );
+  }
+
+  Widget _floatingButton(BuildContext context){
+    final userProvider = context.watch<UserProvider>();
+    if(userProvider.currentUser.score >= 2)
+      return FloatingActionButton(
+        onPressed: () => _addFavorModalBottomSheet(context),
+        tooltip: Strings.askForFavor,
+        child: Icon(Icons.add),
+      );
+    return Container();
   }
 }
 

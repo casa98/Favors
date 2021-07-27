@@ -26,7 +26,7 @@ class Wrapper extends StatelessWidget {
               context: context,
               user: user,
             );
-            return HomePage('Unassigned Favors');
+            return HomePage();
           }
         }
         return Scaffold(
@@ -52,5 +52,6 @@ class Wrapper extends StatelessWidget {
     );
     final userProvider = context.read<UserProvider>();
     userProvider.setUser(currentUser);
+    print('Provider UserInfo updated');
   }
 }

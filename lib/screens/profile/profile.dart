@@ -15,10 +15,6 @@ import 'package:do_favors/screens/profile/profile_bloc.dart';
 import 'package:do_favors/shared/constants.dart';
 
 class Profile extends StatefulWidget {
-  final String _title;
-
-  Profile(this._title);
-
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -49,7 +45,7 @@ class _ProfileState extends State<Profile> {
     String image = _currentUser.photoUrl;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._title)),
+        title: Text(Strings.profileTitle)),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -127,6 +123,8 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 onPressed: () async {
+                  final currentUser = context.read<UserProvider>();
+                  currentUser.clearUser();
                   FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
                 },

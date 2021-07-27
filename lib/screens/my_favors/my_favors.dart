@@ -19,9 +19,6 @@ const String COMPLETE = 'completed';
 const String DELETE = 'deleted';
 
 class MyFavors extends StatefulWidget {
-  final String _title;
-  MyFavors(this._title);
-
   @override
   _MyFavorsState createState() => _MyFavorsState();
 }
@@ -42,103 +39,100 @@ class _MyFavorsState extends State<MyFavors> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget._title),
+        title: Text(Strings.myFavorsTitle),
         centerTitle: true,
       ),
-      body: Center(
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: _myFavorsController.fetchMyFavors(),
-          builder: (context, snapshot) {
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: _myFavorsController.fetchMyFavors(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasError)
+                return Center(child: Text('Error: ${snapshot.error}'));
 
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return CircularProgressIndicator();
-              default:
-                if (snapshot.hasError)
-                  return Center(child: Text('Error: ${snapshot.error}'));
+              List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
+              if(favors.isEmpty)
+                return NoItems(text: 'You haven\'t requested any favors yet');
 
-                if(!snapshot.hasData)
-                  return NoItems(text: 'You haven\'t requested any favors yet');
+              return SafeArea(
+                child: ListView.separated(
+                  itemCount: favors.length,
+                  separatorBuilder: (context, index) => Divider(height: 0.0),
+                  itemBuilder: (context, index) {
+                    var favor = favors[index];
+                    if (favor.status == '-1')
+                      favor.status = Strings.favorUnassigned;
+                    else if (favor.status == '1')
+                      favor.status = Strings.favorAssigned;
+                    else
+                      favor.status = Strings.favorCompleted;
 
-                List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
-                return SafeArea(
-                  child: ListView.separated(
-                    itemCount: favors.length,
-                    separatorBuilder: (context, index) => Divider(height: 0.0),
-                    itemBuilder: (context, index) {
-                      var favor = favors[index];
-                      if (favor.status == '-1')
-                        favor.status = Strings.favorUnassigned;
-                      else if (favor.status == '1')
-                        favor.status = Strings.favorAssigned;
-                      else
-                        favor.status = Strings.favorCompleted;
-
-                      return ListTile(
-                        title: Text(
-                          favor.title,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Row(
-                          children: [
-                            Text(Strings.favorStatus),
-                            Text(
-                              favor.status,
-                            ),
-                          ],
-                        ),
-                        trailing: Text(
-                          Util.readFavorTimestamp(favor.timestamp),
-                        ),
-                        onTap: () async {
-                          // showDialog returns a value, it's sent via pop()
-                          if (favor.status == Strings.favorUnassigned) {
-                            var choice = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return myFavorsDialog(
-                                      title: 'Delete Favor',
-                                      text: 'Sure you want to delete this favor?',
-                                      delete: true,
-                                      favorId: favor.key,
-                                  );
-                                });
-                            if (choice == DELETE) {
-                              CustomSnackbar.customScaffoldMessenger(
-                                context: context,
-                                text: 'Favor Deleted',
-                                iconData: Icons.delete_forever_rounded,
-                              );
-                            }
+                    return ListTile(
+                      title: Text(
+                        favor.title,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Text(Strings.favorStatus),
+                          Text(
+                            favor.status,
+                          ),
+                        ],
+                      ),
+                      trailing: Text(
+                        Util.readFavorTimestamp(favor.timestamp),
+                      ),
+                      onTap: () async {
+                        // showDialog returns a value, it's sent via pop()
+                        if (favor.status == Strings.favorUnassigned) {
+                          var choice = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return myFavorsDialog(
+                                    title: 'Delete Favor',
+                                    text: 'Sure you want to delete this favor?',
+                                    delete: true,
+                                    favorId: favor.key,
+                                );
+                              });
+                          if (choice == DELETE) {
+                            CustomSnackbar.customScaffoldMessenger(
+                              context: context,
+                              text: 'Favor Deleted',
+                              iconData: Icons.delete_forever_rounded,
+                            );
                           }
-                          if (favor.status == Strings.favorAssigned) {
-                            var data = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return myFavorsDialog(
-                                      title: 'Mark as completed',
-                                      text: 'Has ${favor.assignedUsername} completed this favor?',
-                                      favorId: favor.key,
-                                      assignedUser: favor.assignedUser,
-                                  );
-                                });
-                            if (data == COMPLETE) {
-                              CustomSnackbar.customScaffoldMessenger(
-                                context: context,
-                                text: 'Favor marked as completed',
-                                iconData: Icons.done,
-                              );
-                            }
+                        }
+                        if (favor.status == Strings.favorAssigned) {
+                          var data = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return myFavorsDialog(
+                                    title: 'Mark as completed',
+                                    text: 'Has ${favor.assignedUsername} completed this favor?',
+                                    favorId: favor.key,
+                                    assignedUser: favor.assignedUser,
+                                );
+                              });
+                          if (data == COMPLETE) {
+                            CustomSnackbar.customScaffoldMessenger(
+                              context: context,
+                              text: 'Favor marked as completed',
+                              iconData: Icons.done,
+                            );
                           }
-                        },
-                      );
-                    },
-                  ),
-                );
-              //
-            }
-          },
-        ),
+                        }
+                      },
+                    );
+                  },
+                ),
+              );
+            //
+          }
+        },
       ),
     );
   }
