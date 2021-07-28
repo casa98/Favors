@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-
   AppTheme._();
 
   static Map<int, Color> lightColor = {
@@ -38,7 +37,6 @@ class AppTheme {
     secondaryHeaderColor: Colors.grey[200],
     dialogBackgroundColor: Colors.grey[50],
     splashColor: Colors.transparent,
-
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
@@ -57,7 +55,6 @@ class AppTheme {
     brightness: Brightness.dark,
     dialogBackgroundColor: Color(0xff151e32),
     splashColor: Colors.transparent,
-
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
@@ -67,22 +64,17 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-
     canvasColor: Color(0xff151e32),
-
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       foregroundColor: Colors.white,
     ),
-
     dialogTheme: DialogTheme(
       backgroundColor: Color(0xff151e32),
     ),
-
     colorScheme: ColorScheme.dark(
       primary: Color(0xff5890c5),
       secondary: Color(0xff5890c5),
     ),
-
     textTheme: TextTheme(
       headline6: TextStyle(
         color: Colors.white,

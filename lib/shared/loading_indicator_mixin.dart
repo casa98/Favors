@@ -7,7 +7,7 @@ abstract class LoadingIndicatorMixin {
   bool _displaying = false;
   Future<void>? _dismissedFuture;
 
-  void showLoadingSpiner({required BuildContext context}) {
+  void showLoadingSpinner({required BuildContext context}) {
     if (!_displaying) {
       _displaying = true;
       _dismissedFuture = showDialog<void>(
@@ -25,7 +25,7 @@ abstract class LoadingIndicatorMixin {
     }
   }
 
-  Future<void> hideLoadingSpiner({required BuildContext context}) async {
+  Future<void> hideLoadingSpinner({required BuildContext context}) async {
     if (_displaying) {
       Navigator.of(context).pop();
       Future.wait([_dismissedFuture!]).then((_) {

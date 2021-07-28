@@ -2,16 +2,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 import 'package:do_favors/shared/strings.dart';
-import 'package:provider/provider.dart';
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/screens/my_favors/my_favors_controller.dart';
 import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/widgets/no_items.dart';
-
-
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/util.dart';
 
@@ -108,7 +106,7 @@ class _MyFavorsState extends State<MyFavors> {
                           }
                         }
                         if (favor.status == Strings.favorAssigned) {
-                          var data = await showDialog(
+                          var choice = await showDialog(
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
@@ -118,7 +116,7 @@ class _MyFavorsState extends State<MyFavors> {
                                     assignedUser: favor.assignedUser,
                                 );
                               });
-                          if (data == COMPLETE) {
+                          if (choice == COMPLETE) {
                             CustomSnackbar.customScaffoldMessenger(
                               context: context,
                               text: 'Favor marked as completed',

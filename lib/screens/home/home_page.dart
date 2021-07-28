@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:do_favors/screens/add_favor/add_favor.dart';
+import 'package:do_favors/screens/add_favor/add_favor_page.dart';
 import 'package:do_favors/screens/home/unassigned_favors.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/screens/drawer/drawer.dart';

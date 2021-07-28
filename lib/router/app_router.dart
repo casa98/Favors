@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 
 import '../wrapper.dart';
 import '../screens/home/home_page.dart';
-import '../screens/favor_details/favor_detail.dart';
-import '../screens/profile/profile.dart';
-import '../screens/my_favors/my_favors.dart';
-import '../screens/incomplete_favors/incomplete_favors.dart';
-import '../screens/leaderboard/leaderboard.dart';
-import '../screens/settings/settings.dart';
+import '../screens/favor_details/favor_detail_page.dart';
+import '../screens/profile/profile_page.dart';
+import '../screens/my_favors/my_favors_page.dart';
+import '../screens/incomplete_favors/incomplete_favors_page.dart';
+import '../screens/leaderboard/leaderboard_page.dart';
+import '../screens/settings/settings_page.dart';
 import '../shared/strings.dart';
 import '../model/favor.dart';
 

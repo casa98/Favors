@@ -1,5 +1,7 @@
+import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import 'package:do_favors/shared/dialogs_mixin.dart';
 import 'package:do_favors/shared/loading_indicator_mixin.dart';
@@ -23,6 +25,7 @@ class _LoginPageState extends State<LoginPage>
   String _email = "";
   String _password = "";
   late LoginController _loginController;
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -33,9 +36,9 @@ class _LoginPageState extends State<LoginPage>
   void _listenController(BuildContext context) {
     _loginController.showLoadingIndicator.listen((showLoadingIndicator) {
       if (showLoadingIndicator) {
-        showLoadingSpiner(context: context);
+        showLoadingSpinner(context: context);
       } else {
-        hideLoadingSpiner(context: context);
+        hideLoadingSpinner(context: context);
       }
     });
 
@@ -70,31 +73,36 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
           backgroundColor: Theme.of(context).backgroundColor,
+          brightness: context.read<AppStateNotifier>().isDarkMode
+              ? Brightness.dark
+              : Brightness.light,
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.05,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    SizedBox(height: 30.0),
-                    buildEmailFormField(),
-                    SizedBox(height: 25.0),
-                    buildPasswordFormField(),
-                    SizedBox(height: 25.0),
-                    _submitButton(),
-                    SizedBox(height: 16.0),
-                    AuthLabels(
-                      label: Strings.doNotHaveAnAccount,
-                      labelAction: Strings.signUp,
-                      onPressed: () => widget.toggleView(),
-                    ),
-                  ],
+          child: Center(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 30.0),
+                      buildEmailFormField(),
+                      SizedBox(height: 25.0),
+                      buildPasswordFormField(),
+                      SizedBox(height: 25.0),
+                      _submitButton(),
+                      SizedBox(height: 16.0),
+                      AuthLabels(
+                        label: Strings.doNotHaveAnAccount,
+                        labelAction: Strings.signUp,
+                        onPressed: () => widget.toggleView(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

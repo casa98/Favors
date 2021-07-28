@@ -10,12 +10,11 @@ import 'package:do_favors/provider/user_provider.dart';
 import 'shared/constants.dart';
 
 class Wrapper extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, AsyncSnapshot snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           User? user = snapshot.data;
           if (user == null) {
@@ -30,13 +29,12 @@ class Wrapper extends StatelessWidget {
           }
         }
         return Scaffold(
-          body: Center(
-            child: Scaffold(backgroundColor: Color(0xff151e32)),
-          ),
+          body: Scaffold(backgroundColor: Color(0xff151e32)),
         );
       },
     );
   }
+
   _getUserInfo({required BuildContext context, required User user}) async {
     final userDB = await FirebaseFirestore.instance
         .collection(USER)

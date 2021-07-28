@@ -1,3 +1,4 @@
+import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -36,9 +37,9 @@ class _RegistrationPageState extends State<RegistrationPage>
   void _listenController(BuildContext context) {
     _registrationController.showLoadingIndicator.listen((showLoadingIndicator) {
       if (showLoadingIndicator) {
-        showLoadingSpiner(context: context);
+        showLoadingSpinner(context: context);
       } else {
-        hideLoadingSpiner(context: context);
+        hideLoadingSpinner(context: context);
       }
     });
 
@@ -75,33 +76,35 @@ class _RegistrationPageState extends State<RegistrationPage>
           backgroundColor: Theme.of(context).backgroundColor,
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.05,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    SizedBox(height: 30.0),
-                    buildUsernameFormField(),
-                    SizedBox(height: 20.0),
-                    buildEmailFormField(),
-                    SizedBox(height: 20.0),
-                    buildPasswordFormField(),
-                    SizedBox(height: 20.0),
-                    buildConfirmPasswordFormField(),
-                    SizedBox(height: 25.0),
-                    _submitButton(),
-                    SizedBox(height: 16.0),
-                    AuthLabels(
-                      label: Strings.alreadyHaveAnAccount,
-                      labelAction: Strings.signIn,
-                      onPressed: () => widget.toggleView(),
-                    ),
-                  ],
+          child: Center(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 30.0),
+                      buildUsernameFormField(),
+                      SizedBox(height: 20.0),
+                      buildEmailFormField(),
+                      SizedBox(height: 20.0),
+                      buildPasswordFormField(),
+                      SizedBox(height: 20.0),
+                      buildConfirmPasswordFormField(),
+                      SizedBox(height: 25.0),
+                      _submitButton(),
+                      SizedBox(height: 16.0),
+                      AuthLabels(
+                        label: Strings.alreadyHaveAnAccount,
+                        labelAction: Strings.signIn,
+                        onPressed: () => widget.toggleView(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

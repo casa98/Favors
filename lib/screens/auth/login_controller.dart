@@ -9,7 +9,7 @@ class LoginController {
   final _displayMessage = StreamController<String>();
   Stream<String> get displayMessage => _displayMessage.stream;
 
-  void login({email: String, password: String}) async {
+  void login({email: String, password: String}) {
     _showLoadingIndicator.add(true);
     AuthService().signInWithEmailAndPassword(email, password).then((value) {
       _showLoadingIndicator.add(false);
