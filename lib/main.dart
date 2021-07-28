@@ -1,11 +1,10 @@
-import 'dart:io';
-
-import 'package:do_favors/provider/user_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/theme/app_theme.dart';
 import 'package:do_favors/router/app_router.dart';
 import 'theme/app_state_notifier.dart';

@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:do_favors/model/user_model.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
@@ -23,15 +22,13 @@ class _ProfileState extends State<Profile> {
   late File _image;
   late String asset;
   final picker = ImagePicker();
-  late UserProvider _userProvider;
-  late UserModel _currentUser;
+  late UserProvider _currentUser;
   late ProfileBloc _profileBloc;
 
   @override
   void didChangeDependencies() {
-    _userProvider = context.watch<UserProvider>();
-    _currentUser = _userProvider.currentUser;
-    _profileBloc = ProfileBloc(userProvider: _userProvider);
+    _currentUser = context.read<UserProvider>();
+    _profileBloc = ProfileBloc(userProvider: _currentUser);
     super.didChangeDependencies();
   }
 
@@ -42,7 +39,7 @@ class _ProfileState extends State<Profile> {
         ? 'assets/no-photo.png'
         : 'assets/no-photo-dark.png';
 
-    String image = _currentUser.photoUrl;
+    String image = _currentUser.photoUrl ?? '';
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.profileTitle)),
@@ -94,14 +91,14 @@ class _ProfileState extends State<Profile> {
                 endIndent: 32.0,
               ),
               Text(
-                _currentUser.name,
+                _currentUser.name ?? '',
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
               ),
               SizedBox(height: 10.0),
               Text(
-                _currentUser.email,
+                _currentUser.email ?? '',
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
@@ -125,8 +122,6 @@ class _ProfileState extends State<Profile> {
                 onPressed: () async {
                   FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
-                  final currentUser = context.read<UserProvider>();
-                  currentUser.clearUser();
                 },
               ),
             ],
@@ -171,8 +166,8 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  void containerForSheet<T>({required BuildContext context, required Widget child}) {
-    showCupertinoModalPopup<T>(
+  void containerForSheet<String>({required BuildContext context, required Widget child}) {
+    showCupertinoModalPopup<String>(
       context: context,
       builder: (BuildContext context) => child,
     );

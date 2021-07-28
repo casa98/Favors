@@ -33,7 +33,7 @@ class ProfileBloc{
           IMAGE: downloadUrl,
         });
         // Update user photoUrl in provider too
-        userProvider!.updateUserPhotoUrl(downloadUrl);
+        //userProvider!.updateUserPhotoUrl(downloadUrl);
         _showLoadingIndicator.sink.add(false);
     });
   }

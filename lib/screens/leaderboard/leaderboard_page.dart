@@ -22,7 +22,7 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   void didChangeDependencies() {
     _leaderboardController = LeaderboardController(
-      context.read<UserProvider>().currentUser,
+      context.read<UserProvider>(),
     );
     super.didChangeDependencies();
   }
@@ -64,14 +64,14 @@ class _LeaderboardState extends State<Leaderboard> {
                           child: user.photoUrl != ''
                               ? CachedNetworkImage(
                                   fit: BoxFit.cover,
-                                  imageUrl: user.photoUrl,
+                                  imageUrl: user.photoUrl ?? '',
                                 )
                               : CircleAvatar(
                                   radius: 26,
                                   backgroundColor: Colors.primaries[
                                       Random().nextInt(Colors.accents.length)],
                                   child: Text(
-                                    Util.lettersForHeader(user.name),
+                                    Util.lettersForHeader(user.name ?? 'Name'),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
@@ -80,10 +80,10 @@ class _LeaderboardState extends State<Leaderboard> {
                                 ),
                         ),
                         title: Text(
-                          user.name,
+                          user.name ?? 'Name',
                           overflow: TextOverflow.ellipsis,
                         ),
-                        subtitle: Text(user.email),
+                        subtitle: Text(user.email ?? 'Email'),
                         trailing: Text(score),
                         onTap: () {},
                       );

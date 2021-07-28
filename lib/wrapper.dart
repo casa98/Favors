@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:do_favors/screens/auth/authenticate.dart';
 import 'package:do_favors/screens/home/home_page.dart';
-import 'package:do_favors/model/user_model.dart';
 import 'package:do_favors/provider/user_provider.dart';
-import 'shared/constants.dart';
 
 class Wrapper extends StatelessWidget {
   @override
@@ -21,10 +18,7 @@ class Wrapper extends StatelessWidget {
             return Authenticate();
           } else {
             // Get user info and keep it in Provider
-            _getUserInfo(
-              context: context,
-              user: user,
-            );
+            _getUserInfo(context: context, user: user);
             return HomePage();
           }
         }
@@ -36,20 +30,9 @@ class Wrapper extends StatelessWidget {
   }
 
   _getUserInfo({required BuildContext context, required User user}) async {
-    final userDB = await FirebaseFirestore.instance
-        .collection(USER)
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    final int score = int.parse(userDB[SCORE].toString());
-    UserModel currentUser = UserModel(
-      id: user.uid,
-      email: user.email!,
-      name: user.displayName ?? 'Welcome!',
-      score: score,
-      photoUrl: userDB[IMAGE] ?? '',
-    );
-    final userProvider = context.read<UserProvider>();
-    userProvider.setUser(currentUser);
-    print('Provider UserInfo updated');
+    final currentUser = context.read<UserProvider>();
+    currentUser.setId(user.uid);
+    currentUser.setName(user.displayName ?? 'Welcome!');
+    currentUser.setEmail(user.email!);
   }
 }

@@ -22,14 +22,11 @@ class MyFavors extends StatefulWidget {
 }
 
 class _MyFavorsState extends State<MyFavors> {
-
   late final MyFavorsController _myFavorsController;
 
   @override
   void didChangeDependencies() {
-    _myFavorsController = MyFavorsController(
-      context.read<UserProvider>().currentUser,
-    );
+    _myFavorsController = MyFavorsController(context.read<UserProvider>());
     super.didChangeDependencies();
   }
 
@@ -50,8 +47,9 @@ class _MyFavorsState extends State<MyFavors> {
               if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));
 
-              List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
-              if(favors.isEmpty)
+              List<Favor> favors =
+                  Util.fromDocumentToFavor(snapshot.data!.docs);
+              if (favors.isEmpty)
                 return NoItems(text: 'You haven\'t requested any favors yet');
 
               return SafeArea(
@@ -91,10 +89,10 @@ class _MyFavorsState extends State<MyFavors> {
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
-                                    title: 'Delete Favor',
-                                    text: 'Sure you want to delete this favor?',
-                                    delete: true,
-                                    favorId: favor.key,
+                                  title: 'Delete Favor',
+                                  text: 'Sure you want to delete this favor?',
+                                  delete: true,
+                                  favorId: favor.key,
                                 );
                               });
                           if (choice == DELETE) {
@@ -110,10 +108,11 @@ class _MyFavorsState extends State<MyFavors> {
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
-                                    title: 'Mark as completed',
-                                    text: 'Has ${favor.assignedUsername} completed this favor?',
-                                    favorId: favor.key,
-                                    assignedUser: favor.assignedUser,
+                                  title: 'Mark as completed',
+                                  text:
+                                      'Has ${favor.assignedUsername} completed this favor?',
+                                  favorId: favor.key,
+                                  assignedUser: favor.assignedUser,
                                 );
                               });
                           if (choice == COMPLETE) {
@@ -136,8 +135,6 @@ class _MyFavorsState extends State<MyFavors> {
     );
   }
 
-
-
   myFavorsDialog({
     required String title,
     required String text,
@@ -147,45 +144,46 @@ class _MyFavorsState extends State<MyFavors> {
   }) {
     return Platform.isIOS
         ? CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: TextStyle(
-              fontSize: 18.0,
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 18.0,
+              ),
             ),
-          ),
-          content: Text(
+            content: Text(
               text,
-            style: TextStyle(
-              fontSize: 16.0,
-            ),
-          ),
-          actions: [
-            CupertinoDialogAction(
-              child: Text(
-                'No',
-                style: TextStyle(color: Colors.blueAccent),
+              style: TextStyle(
+                fontSize: 16.0,
               ),
-              onPressed: () => Navigator.of(context).pop(),
             ),
-            CupertinoDialogAction(
-              child: Text(
-                'Yes',
-                style: TextStyle(color: Colors.blueAccent),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-              onPressed: () {
-                if (delete) {
-                  // Delete favor
-                  DatabaseService().deleteFavor(favorId);
-                  Navigator.of(context).pop(DELETE);
-                } else {
-                  // Mark as completed
-                  DatabaseService().markFavorAsCompleted(favorId, assignedUser!);
-                  Navigator.of(context).pop(COMPLETE);
-                }
-              },
-            ),
-          ],
-        )
+              CupertinoDialogAction(
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
+                onPressed: () {
+                  if (delete) {
+                    // Delete favor
+                    DatabaseService().deleteFavor(favorId);
+                    Navigator.of(context).pop(DELETE);
+                  } else {
+                    // Mark as completed
+                    DatabaseService()
+                        .markFavorAsCompleted(favorId, assignedUser!);
+                    Navigator.of(context).pop(COMPLETE);
+                  }
+                },
+              ),
+            ],
+          )
         : AlertDialog(
             title: Text(title),
             content: Text(text),
@@ -202,7 +200,8 @@ class _MyFavorsState extends State<MyFavors> {
                     Navigator.of(context).pop(DELETE);
                   } else {
                     // Mark as completed
-                    DatabaseService().markFavorAsCompleted(favorId, assignedUser!);
+                    DatabaseService()
+                        .markFavorAsCompleted(favorId, assignedUser!);
                     Navigator.of(context).pop(COMPLETE);
                   }
                 },

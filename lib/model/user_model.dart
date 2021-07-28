@@ -1,11 +1,11 @@
 import 'package:do_favors/shared/constants.dart';
 
 class UserModel {
-  late String id;
-  late String name;
-  late String email;
-  late int score;
-  late String photoUrl;
+  String? id = '';
+  String? name = '';
+  String? email = '';
+  int? score = -1;
+  String? photoUrl = '';
 
   UserModel({
     required this.id,

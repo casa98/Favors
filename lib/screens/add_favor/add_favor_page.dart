@@ -19,12 +19,12 @@ class _AddFavorState extends State<AddFavor> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
-  late UserProvider _userProvider;
+  late UserProvider _currentUser;
 
   @override
   void didChangeDependencies() {
     _screenWidth = MediaQuery.of(context).size.width;
-    _userProvider = context.watch<UserProvider>();
+    _currentUser = context.read<UserProvider>();
     super.didChangeDependencies();
   }
 
@@ -58,7 +58,6 @@ class _AddFavorState extends State<AddFavor> {
                     ),
                   ),
                 ),
-                //titleFormField(),
                 _textField(
                   hintText: Strings.hintTitle,
                   helperText: Strings.labelTitle,
@@ -66,7 +65,6 @@ class _AddFavorState extends State<AddFavor> {
                   textController: _titleController,
                 ),
                 SizedBox(height: 20.0),
-                //descriptionFormField(),
                 _textField(
                   hintText: Strings.hintDescription,
                   helperText: Strings.labelDescription,
@@ -74,7 +72,6 @@ class _AddFavorState extends State<AddFavor> {
                   textController: _descriptionController,
                 ),
                 SizedBox(height: 20.0),
-                //deliveryPlaceFormField(),
                 _textField(
                   hintText: Strings.hintLocation,
                   helperText: Strings.labelLocation,
@@ -87,18 +84,17 @@ class _AddFavorState extends State<AddFavor> {
                   title: Strings.requestFavor,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Decrease user score
-                      _userProvider
-                          .updateUserScore(_userProvider.currentUser.score-2);
+                      // Decrease user score in Provider and remote DB
+                      _currentUser.updateScore(_currentUser.score! - 2);
+                      DatabaseService().decreaseUserScore(_currentUser.id!);
+
                       // Save Favor in DB
                       DatabaseService().saveFavor(
                         _titleController.text,
                         _descriptionController.text,
                         _locationController.text,
                       );
-                      DatabaseService().decreaseUserScore(
-                        _userProvider.currentUser.id,
-                      );
+
                       Navigator.of(context).pop();
                       CustomSnackbar.customScaffoldMessenger(
                         context: context,
@@ -123,21 +119,20 @@ class _AddFavorState extends State<AddFavor> {
     required String labelTextError,
     required TextEditingController textController,
     bool isLastField = false,
-  }){
+  }) {
     return TextFormField(
       textCapitalization: TextCapitalization.sentences,
       keyboardType: TextInputType.text,
-      validator: (value){
-        if(value != null && value.trim().isEmpty){
+      validator: (value) {
+        if (value != null && value.trim().isEmpty) {
           return labelTextError;
-        }else{
+        } else {
           return null;
         }
       },
       controller: textController,
-      textInputAction: isLastField
-        ? TextInputAction.done
-        : TextInputAction.next,
+      textInputAction:
+          isLastField ? TextInputAction.done : TextInputAction.next,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         filled: true,

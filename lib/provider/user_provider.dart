@@ -2,43 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:do_favors/model/user_model.dart';
 
 class UserProvider with ChangeNotifier {
-  late UserModel _currentUser;
-  UserModel get currentUser => this._currentUser;
+  UserModel? _currentUser;
+  UserModel? get currentUser => this._currentUser;
 
-  UserProvider(){
-    _currentUser = UserModel(
-      id: '',
-      name: '',
-      email: '',
-      score: -1,
-      photoUrl: '',
-    );
+  String? _id;
+  String? get id => _id;
+
+  String? _name;
+  String? get name => _name;
+
+  String? _email;
+  String? get email => _email;
+
+  int? _score;
+  int? get score => _score;
+
+  String? _photourl;
+  String? get photoUrl => _photourl;
+
+  void setId(String id) {
+    this._id = id;
   }
 
-  setUser(UserModel user) {
-    this._currentUser = user;
+  void setName(String name) {
+    this._name = name;
+  }
+
+  void setEmail(String email) {
+    this._email = email;
+  }
+
+  void setScore(int score) {
+    this._score = score;
+    // Need to notify so that FAB is shown/hidden
     notifyListeners();
   }
 
-  clearUser(){
-    //TODO: Think of a non-null better solution for it:
-    this._currentUser = UserModel(
-      id: '',
-      name: '',
-      email: '',
-      score: -1,
-      photoUrl: '',
-    );
+  void updateScore(int newScore) {
+    this._score = newScore;
+    // Same case as above
     notifyListeners();
   }
 
-  updateUserScore(int newScore){
-    this._currentUser.score = newScore;
+  void setPhotoUrl(String photoUrl) {
+    this._photourl = photoUrl;
     notifyListeners();
   }
 
-  updateUserPhotoUrl(String newPhoto){
-    this._currentUser.photoUrl = newPhoto;
+  void updatePhotoUrl(String newPhotoUrl) {
+    this._photourl = newPhotoUrl;
     notifyListeners();
   }
 }
