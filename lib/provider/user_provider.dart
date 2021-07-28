@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:do_favors/model/user_model.dart';
 
 class UserProvider with ChangeNotifier {
-  UserModel? _currentUser;
-  UserModel? get currentUser => this._currentUser;
-
   String? _id;
   String? get id => _id;
 
@@ -52,5 +49,13 @@ class UserProvider with ChangeNotifier {
   void updatePhotoUrl(String newPhotoUrl) {
     this._photourl = newPhotoUrl;
     notifyListeners();
+  }
+
+  void clear() {
+    this._id = null;
+    this._name = null;
+    this._email = null;
+    this._score = null;
+    this._photourl = null;
   }
 }

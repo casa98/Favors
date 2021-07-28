@@ -19,8 +19,7 @@ class IncompleteFavors extends StatefulWidget {
 }
 
 class _IncompleteFavorsState extends State<IncompleteFavors> {
-
-  late final _incompleteFavorsController;
+  late final IncompleteFavorsController _incompleteFavorsController;
 
   @override
   void didChangeDependencies() {
@@ -39,18 +38,19 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: _incompleteFavorsController.fetchIncompleteFavors(),
-        builder: (context, snapshot){
-          switch(snapshot.connectionState){
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return Center(child: CircularProgressIndicator());
             default:
-              if(snapshot.hasError)
+              if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));
 
-              List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
-              print('Incomplete Favors length: ${favors.length}');
-              if(favors.isEmpty)
-                return NoItems(text: 'You don\'t have pending favors to complete');
+              List<Favor> favors =
+                  Util.fromDocumentToFavor(snapshot.data!.docs);
+              if (favors.isEmpty)
+                return NoItems(
+                    text: 'You don\'t have pending favors to complete');
 
               return SafeArea(
                 child: ListView.separated(
@@ -72,14 +72,14 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                       onTap: () async {
                         await showDialog(
                           context: context,
-                          builder: (_){
+                          builder: (_) {
                             return incompleteFavorDialog(
-                              title: 'Mark as completed',
+                              title: 'Mark as Completed',
                               text: 'Have you completed this favor?',
                               favorId: favor.key,
                               assignedUser: favor.assignedUser!,
                             );
-                          }
+                          },
                         );
                       },
                     );
@@ -97,7 +97,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
     required String text,
     required String favorId,
     required String assignedUser,
-  }){
+  }) {
     return Platform.isIOS
         ? CupertinoAlertDialog(
             title: Text(
@@ -116,14 +116,20 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
               CupertinoDialogAction(
                 child: Text(
                   'No',
-                  style: TextStyle(color: Colors.blueAccent),
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               CupertinoDialogAction(
                 child: Text(
                   'Yes',
-                  style: TextStyle(color: Colors.blueAccent),
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 onPressed: () {
                   // Mark as completed
@@ -131,14 +137,15 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                   Navigator.of(context).pop();
                   CustomSnackbar.customScaffoldMessenger(
                     context: context,
-                    text: 'Favor marked as completed',
+                    text: 'Favor marked as Completed',
                     iconData: Icons.done,
                   );
+
                   // Increase currentUser score
                   final currentUserScore =
-                      _incompleteFavorsController.currentUser.score;
-                  _incompleteFavorsController.currentUser.score =
-                      currentUserScore + 2;
+                      _incompleteFavorsController.currentUser.score!;
+                  _incompleteFavorsController.currentUser
+                      .updateScore(currentUserScore + 2);
                 },
               ),
             ],
@@ -158,18 +165,18 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                   Navigator.of(context).pop();
                   CustomSnackbar.customScaffoldMessenger(
                     context: context,
-                    text: 'Favor marked as completed',
+                    text: 'Favor marked as Completed',
                     iconData: Icons.done,
                   );
                   // Increase currentUser score
-                  final currentUserScore = _incompleteFavorsController
-                      .userProvider.currentUser.score;
-                  _incompleteFavorsController
-                      .userProvider.updateUserScore(currentUserScore + 2);
+                  final currentUserScore =
+                      _incompleteFavorsController.currentUser.score!;
+                  _incompleteFavorsController.currentUser
+                      .updateScore(currentUserScore + 2);
                 },
                 child: Text('Yes'),
               ),
             ],
-    );
+          );
   }
 }

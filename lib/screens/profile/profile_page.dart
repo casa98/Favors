@@ -10,7 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/action_button.dart';
-import 'package:do_favors/screens/profile/profile_bloc.dart';
+import 'package:do_favors/screens/profile/profile_controller.dart';
 import 'package:do_favors/shared/constants.dart';
 
 class Profile extends StatefulWidget {
@@ -23,17 +23,18 @@ class _ProfileState extends State<Profile> {
   late String asset;
   final picker = ImagePicker();
   late UserProvider _currentUser;
-  late ProfileBloc _profileBloc;
+  late final ProfileController _profileController;
 
   @override
   void didChangeDependencies() {
     _currentUser = context.read<UserProvider>();
-    _profileBloc = ProfileBloc(userProvider: _currentUser);
+    _profileController = ProfileController(_currentUser);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Profile Score: ${_currentUser.score}");
     final ThemeData theme = Theme.of(context);
     asset = theme.brightness == Brightness.light
         ? 'assets/no-photo.png'
@@ -41,8 +42,7 @@ class _ProfileState extends State<Profile> {
 
     String image = _currentUser.photoUrl ?? '';
     return Scaffold(
-      appBar: AppBar(
-        title: Text(Strings.profileTitle)),
+      appBar: AppBar(title: Text(Strings.profileTitle)),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -57,22 +57,25 @@ class _ProfileState extends State<Profile> {
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: StreamBuilder<bool>(
-                    stream: _profileBloc.showLoadingIndicator,
+                    stream: _profileController.showLoadingIndicator,
                     initialData: false,
                     builder: (context, AsyncSnapshot snapshot) {
-                      return !snapshot.data ? CachedNetworkImage(
-                        height: 200,
-                        width: 200,
-                        fit: BoxFit.cover,
-                        imageUrl: image,
-                        placeholder: (context, url) => image != ''
-                            ? _circularProgressIndicator()
-                            : _profileImage(),
-                        errorWidget: (context, url, error) =>
-                            _profileImage(),
-                      ) : Center(child: Text('Uploading...'),);
-                    }
-                ),
+                      return !snapshot.data
+                          ? CachedNetworkImage(
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.cover,
+                              imageUrl: image,
+                              placeholder: (context, url) => image != ''
+                                  ? _circularProgressIndicator()
+                                  : _profileImage(),
+                              errorWidget: (context, url, error) =>
+                                  _profileImage(),
+                            )
+                          : Center(
+                              child: Text('Uploading...'),
+                            );
+                    }),
               ),
               SizedBox(height: 16.0),
               ActionButton(
@@ -122,6 +125,7 @@ class _ProfileState extends State<Profile> {
                 onPressed: () async {
                   FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
+                  _profileController.clearProvider();
                 },
               ),
             ],
@@ -131,7 +135,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget _profileImage(){
+  Widget _profileImage() {
     return Container(
       child: Center(
         child: Image.asset(
@@ -143,7 +147,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget _circularProgressIndicator(){
+  Widget _circularProgressIndicator() {
     return Center(
       child: CircularProgressIndicator(
         strokeWidth: 4.0,
@@ -154,38 +158,40 @@ class _ProfileState extends State<Profile> {
   Future _takePhoto(ImageSource source) async {
     await Permission.photos.request();
     var permissionStatus = await Permission.photos.status;
-    if(permissionStatus.isGranted){
-      final pickedFile = await picker.pickImage(source: source, maxHeight: 512, maxWidth: 512);
-      if(pickedFile != null){
+    if (permissionStatus.isGranted) {
+      final pickedFile =
+          await picker.pickImage(source: source, maxHeight: 512, maxWidth: 512);
+      if (pickedFile != null) {
         _image = File(pickedFile.path);
         print("IMAGE PATH: " + _image.toString());
-        _profileBloc.uploadPicture(_image);
-      }else{
+        _profileController.uploadPicture(_image);
+      } else {
         print("NOT IMAGE SELECTED");
       }
     }
   }
 
-  void containerForSheet<String>({required BuildContext context, required Widget child}) {
+  void containerForSheet<String>(
+      {required BuildContext context, required Widget child}) {
     showCupertinoModalPopup<String>(
       context: context,
       builder: (BuildContext context) => child,
     );
   }
 
-  Widget _galleryOrCamera(){
+  Widget _galleryOrCamera() {
     return CupertinoActionSheet(
       title: Text(CHOOSE_OPTION),
       actions: [
         CupertinoActionSheetAction(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
             _takePhoto(ImageSource.camera);
           },
           child: Text(TAKE_A_PHOTO),
         ),
         CupertinoActionSheetAction(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
             _takePhoto(ImageSource.gallery);
           },
@@ -193,7 +199,7 @@ class _ProfileState extends State<Profile> {
         ),
       ],
       cancelButton: CupertinoActionSheetAction(
-        onPressed: (){
+        onPressed: () {
           Navigator.pop(context);
         },
         child: Text(CANCEL),

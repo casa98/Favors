@@ -25,13 +25,10 @@ abstract class LoadingIndicatorMixin {
     }
   }
 
-  Future<void> hideLoadingSpinner({required BuildContext context}) async {
+  void hideLoadingSpinner({required BuildContext context}) async {
     if (_displaying) {
+      _displaying = false;
       Navigator.of(context).pop();
-      Future.wait([_dismissedFuture!]).then((_) {
-        _displaying = false;
-        return;
-      });
     }
     return;
   }

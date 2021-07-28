@@ -108,7 +108,7 @@ class _MyFavorsState extends State<MyFavors> {
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
-                                  title: 'Mark as completed',
+                                  title: 'Mark as Completed',
                                   text:
                                       'Has ${favor.assignedUsername} completed this favor?',
                                   favorId: favor.key,
@@ -118,7 +118,7 @@ class _MyFavorsState extends State<MyFavors> {
                           if (choice == COMPLETE) {
                             CustomSnackbar.customScaffoldMessenger(
                               context: context,
-                              text: 'Favor marked as completed',
+                              text: 'Favor marked as Completed',
                               iconData: Icons.done,
                             );
                           }
@@ -160,14 +160,20 @@ class _MyFavorsState extends State<MyFavors> {
               CupertinoDialogAction(
                 child: Text(
                   'No',
-                  style: TextStyle(color: Colors.blueAccent),
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               CupertinoDialogAction(
                 child: Text(
                   'Yes',
-                  style: TextStyle(color: Colors.blueAccent),
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 onPressed: () {
                   if (delete) {

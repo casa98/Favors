@@ -86,8 +86,10 @@ class _AddFavorState extends State<AddFavor> {
                     if (_formKey.currentState!.validate()) {
                       // Decrease user score in Provider and remote DB
                       _currentUser.updateScore(_currentUser.score! - 2);
-                      DatabaseService().decreaseUserScore(_currentUser.id!);
-
+                      DatabaseService().decreaseUserScore(
+                        _currentUser.id!,
+                        _currentUser.score!,
+                      );
                       // Save Favor in DB
                       DatabaseService().saveFavor(
                         _titleController.text,

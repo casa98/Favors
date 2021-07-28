@@ -10,6 +10,7 @@ class CustomDrawerHeader extends StatelessWidget {
     final _currentUser = context.read<UserProvider>();
     print('Name: ${_currentUser.name}');
     print('Email: ${_currentUser.email}');
+    print("Drawer Score: ${_currentUser.score}");
     return UserAccountsDrawerHeader(
       decoration: BoxDecoration(
         color: Theme.of(context).accentColor,

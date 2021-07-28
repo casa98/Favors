@@ -101,14 +101,10 @@ class DatabaseService {
     });
   }
 
-  Future decreaseUserScore(String userId){
-    //TODO: Decrease user sore in Firestore
-    return userCollection.doc(userId).get().then((snapshot) {
-      var userNewScore = snapshot[SCORE] - 2;
-      userCollection.doc(userId).update({
-        SCORE: userNewScore,
+  Future decreaseUserScore(String userId, int newScore){
+    return userCollection.doc(userId).update({
+        SCORE: newScore,
       });
-    });
   }
 
   Future deleteFavor(String favorId) {
