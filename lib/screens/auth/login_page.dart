@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void _listenController(BuildContext context) {
+  _listenController(BuildContext context) {
     _loginController.showLoadingIndicator.listen((showLoadingIndicator) {
       if (showLoadingIndicator) {
         showLoadingSpinner(context: context);
@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage>
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
+      autocorrect: false,
       textInputAction: TextInputAction.next,
       onChanged: (value) => _email = value,
       validator: (value) {
@@ -138,6 +139,7 @@ class _LoginPageState extends State<LoginPage>
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
+      autocorrect: false,
       onChanged: (value) => _password = value,
       validator: (value) {
         if (value!.isNotEmpty) {

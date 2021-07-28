@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
+import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:do_favors/screens/auth/registration_controller.dart';
 import 'package:do_favors/shared/dialogs_mixin.dart';
 import 'package:do_favors/shared/loading_indicator_mixin.dart';
@@ -73,6 +75,9 @@ class _RegistrationPageState extends State<RegistrationPage>
             ),
           ),
           backgroundColor: Theme.of(context).backgroundColor,
+          brightness: context.read<AppStateNotifier>().isDarkMode
+              ? Brightness.dark
+              : Brightness.light,
         ),
         body: SafeArea(
           child: Center(
@@ -140,6 +145,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
+      autocorrect: false,
       textInputAction: TextInputAction.next,
       onChanged: (value) => _email = value,
       validator: (value) {
@@ -163,6 +169,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
+      autocorrect: false,
       textInputAction: TextInputAction.next,
       onChanged: (value) => _password = value,
       validator: (value) {
@@ -186,6 +193,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   TextFormField buildConfirmPasswordFormField() {
     return TextFormField(
       obscureText: true,
+      autocorrect: false,
       onChanged: (value) => _confirmPassword = value,
       validator: (value) {
         if (value!.isNotEmpty) {
