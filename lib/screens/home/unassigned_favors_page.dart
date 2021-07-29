@@ -55,7 +55,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
               // Remove favors requested by currentUser
               favors.removeWhere((element) => element.user == _userProvider.id);
 
-              if (favors.isEmpty) return NoItems(text: 'No Favors to do, yet');
+              if (favors.isEmpty) return NoItems(text: 'No favors to do, yet');
 
               return SafeArea(
                 child: ListView.separated(

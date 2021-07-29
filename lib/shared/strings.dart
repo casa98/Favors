@@ -58,6 +58,7 @@ class Strings {
   static const repeatPassword2      = "Please repeat your password";
   static const passwordsDoNotMatch  = "Passwords don\'t match";
   static const confirmYourPassword  = "Confirm your password";
+  static const forgotYourPassword   = "Forgot your password?";
 
   // Profile
   static const changePhoto          = "Change Photo";

@@ -22,7 +22,7 @@ class AuthLabels extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 0.0),
           onPressed: onPressed,
           child: Container(
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
             padding: EdgeInsets.all(16.0),
             child: Text(
               labelAction,

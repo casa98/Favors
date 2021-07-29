@@ -18,9 +18,7 @@ class AuthSubmitButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           title,
-          style: TextStyle(
-              color: Colors.white
-          ),
+          style: TextStyle(color: Colors.white),
         ),
       ),
       onPressed: onPressed,

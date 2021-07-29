@@ -26,6 +26,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   String _email = "";
   String _password = "";
   String _confirmPassword = "";
+  late MediaQueryData _mediaQuery;
   late RegistrationController _registrationController;
 
   @override
@@ -35,7 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage>
     }
   }
 
-  void _listenController(BuildContext context) {
+  _listenController(BuildContext context) {
     _registrationController.showLoadingIndicator.listen((showLoadingIndicator) {
       if (showLoadingIndicator) {
         showLoadingSpinner(context: context);
@@ -51,6 +52,7 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   @override
   void didChangeDependencies() {
+    _mediaQuery = MediaQuery.of(context);
     _registrationController = RegistrationController();
     _listenController(context);
     super.didChangeDependencies();
@@ -74,7 +76,7 @@ class _RegistrationPageState extends State<RegistrationPage>
               color: Theme.of(context).primaryColor,
             ),
           ),
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           brightness: context.read<AppStateNotifier>().isDarkMode
               ? Brightness.dark
               : Brightness.light,
@@ -85,7 +87,9 @@ class _RegistrationPageState extends State<RegistrationPage>
               physics: BouncingScrollPhysics(),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                  horizontal: _mediaQuery.orientation.index == 0
+                      ? MediaQuery.of(context).size.width * 0.05
+                      : MediaQuery.of(context).size.width * 0.2,
                 ),
                 child: Form(
                   key: _formKey,

@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage>
   final _formKey = GlobalKey<FormState>();
   String _email = "";
   String _password = "";
+  late MediaQueryData _mediaQuery;
   late LoginController _loginController;
 
   @override
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   void didChangeDependencies() {
+    _mediaQuery = MediaQuery.of(context);
     _loginController = LoginController();
     _listenController(context);
     super.didChangeDependencies();
@@ -72,7 +74,7 @@ class _LoginPageState extends State<LoginPage>
               color: Theme.of(context).primaryColor,
             ),
           ),
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           brightness: context.read<AppStateNotifier>().isDarkMode
               ? Brightness.dark
               : Brightness.light,
@@ -83,7 +85,9 @@ class _LoginPageState extends State<LoginPage>
               physics: BouncingScrollPhysics(),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                  horizontal: _mediaQuery.orientation.index == 0
+                      ? MediaQuery.of(context).size.width * 0.05
+                      : MediaQuery.of(context).size.width * 0.2,
                 ),
                 child: Form(
                   key: _formKey,
@@ -95,12 +99,18 @@ class _LoginPageState extends State<LoginPage>
                       buildPasswordFormField(),
                       SizedBox(height: 25.0),
                       _submitButton(),
-                      SizedBox(height: 16.0),
+                      SizedBox(height: 18.0),
+                      AuthLabels(
+                        label: '',
+                        labelAction: Strings.forgotYourPassword,
+                        onPressed: () {},
+                      ),
                       AuthLabels(
                         label: Strings.doNotHaveAnAccount,
                         labelAction: Strings.signUp,
                         onPressed: () => widget.toggleView(),
                       ),
+                      SizedBox(height: 16.0),
                     ],
                   ),
                 ),
