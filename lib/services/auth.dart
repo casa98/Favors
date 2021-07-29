@@ -28,6 +28,8 @@ class AuthService {
         await createUserCollection(user.uid, email, name);
         // Set user name in User instance
         await user.updateDisplayName(name);
+        // To have access to user.displayName
+        await user.reload();
       }
       return user;
     } catch (exception) {

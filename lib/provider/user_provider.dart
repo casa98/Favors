@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:do_favors/model/user_model.dart';
 
 class UserProvider with ChangeNotifier {
   String? _id;

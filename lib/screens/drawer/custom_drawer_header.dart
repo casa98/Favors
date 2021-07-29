@@ -1,3 +1,4 @@
+import 'package:do_favors/shared/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,9 +9,6 @@ class CustomDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _currentUser = context.read<UserProvider>();
-    print('Name: ${_currentUser.name}');
-    print('Email: ${_currentUser.email}');
-    print("Drawer Score: ${_currentUser.score}");
     return UserAccountsDrawerHeader(
       decoration: BoxDecoration(
         color: Theme.of(context).accentColor,
@@ -21,7 +19,7 @@ class CustomDrawerHeader extends StatelessWidget {
           ? CircleAvatar(
               backgroundColor: Colors.white,
               child: Text(
-                'M G',
+                Util.lettersForHeader(_currentUser.name ?? ''),
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w500,

@@ -4,7 +4,7 @@ class UserModel {
   String? id = '';
   String? name = '';
   String? email = '';
-  int? score = -1;
+  int? score = 0;
   String? photoUrl = '';
 
   UserModel({

@@ -10,7 +10,7 @@ class AddFavorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _currentUser = context.watch<UserProvider>();
-    var score = _currentUser.score ?? -1;
+    var score = _currentUser.score ?? 0;
     print('FAB: $score');
     print('FAB: ${_currentUser.id}');
     print('FAB: ${_currentUser.email}');

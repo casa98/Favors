@@ -17,7 +17,7 @@ class Strings {
   static const profileTitle         = "Profile";
   static const myFavorsTitle        = "My Favors";
   static const incompleteFavorsTitle= "Incomplete Favors";
-  static const statisticsTitle      = "Statistics";
+  static const leaderboardTitle      = "Leaderboard";
   static const settings             = "Settings";
   static const favorDetailsTitle    = "Favor Details";
 

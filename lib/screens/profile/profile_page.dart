@@ -78,8 +78,13 @@ class _ProfileState extends State<Profile> {
                     }),
               ),
               SizedBox(height: 16.0),
-              ActionButton(
-                title: Strings.changePhoto,
+              CupertinoButton(
+                child: Text(
+                  _currentUser.photoUrl == ''
+                      ? 'Set Profile Photo'
+                      : 'Change Photo',
+                  //style: TextStyle(color: Color(0xff5890c5)),
+                ),
                 onPressed: () {
                   containerForSheet<String>(
                     context: context,
@@ -87,40 +92,37 @@ class _ProfileState extends State<Profile> {
                   );
                 },
               ),
+              SizedBox(height: 16.0),
               Divider(
-                height: 32.0,
-                thickness: 2.0,
-                indent: 32.0,
-                endIndent: 32.0,
+                height: 0.0,
+                thickness: 0.8,
               ),
-              Text(
-                _currentUser.name ?? '',
-                style: TextStyle(
-                  fontSize: 16.0,
+              ListTile(
+                tileColor: Colors.white,
+                title: Text(_currentUser.name ?? ''),
+                trailing: Icon(Icons.edit),
+              ),
+              Divider(height: 0.0, thickness: 0.8),
+              ListTile(
+                tileColor: Colors.white,
+                title: Text(_currentUser.email ?? ''),
+              ),
+              Divider(height: 0.0, thickness: 0.8),
+              ListTile(
+                tileColor: Colors.white,
+                title: Text(
+                  _currentUser.score != null
+                      ? 'Score: ${_currentUser.score} points'
+                      : '',
                 ),
+                trailing: Icon(Icons.payment),
               ),
-              SizedBox(height: 10.0),
-              Text(
-                _currentUser.email ?? '',
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                'Score: ${_currentUser.score} points',
-                style: TextStyle(fontSize: 16.0),
-              ),
-              SizedBox(height: 30.0),
+              Divider(height: 0.0, thickness: 0.8),
+              SizedBox(height: 16.0),
               CupertinoButton(
-                color: Colors.redAccent,
-                pressedOpacity: 0.8,
-                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                 child: Text(
                   Strings.signOut,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(color: Colors.redAccent),
                 ),
                 onPressed: () async {
                   FirebaseAuth.instance.signOut();

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:do_favors/widgets/custom_drawer_header.dart';
+import 'package:do_favors/screens/drawer/custom_drawer_header.dart';
 import 'package:do_favors/shared/strings.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _mediaQuery = MediaQuery.of(context);
     return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: _mediaQuery.orientation.index == 0
+          ? _mediaQuery.size.width * 0.75
+          : _mediaQuery.size.width * 0.4,
       child: Drawer(
         child: SafeArea(
           left: false,
@@ -20,9 +23,7 @@ class AppDrawer extends StatelessWidget {
               CustomDrawerHeader(),
               ListTile(
                 title: Text(Strings.homeTitle),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                onTap: () => Navigator.pop(context),
                 leading: Icon(Icons.home),
               ),
               _createDrawerItem(context, Strings.profileTitle,
@@ -32,8 +33,8 @@ class AppDrawer extends StatelessWidget {
                   Strings.myFavorsRoute, Icons.list),
               _createDrawerItem(context, Strings.incompleteFavorsTitle,
                   Strings.incompleteFavorsRoute, Icons.grading),
-              _createDrawerItem(context, Strings.statisticsTitle,
-                  Strings.statisticsRoute, Icons.bar_chart),
+              _createDrawerItem(context, Strings.leaderboardTitle,
+                  Strings.statisticsRoute, Icons.leaderboard_rounded),
               Divider(),
               _createDrawerItem(context, Strings.settings,
                   Strings.settingsRoute, Icons.settings),

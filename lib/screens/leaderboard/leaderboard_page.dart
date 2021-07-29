@@ -16,7 +16,6 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
-
   late final _leaderboardController;
 
   @override
@@ -31,7 +30,7 @@ class _LeaderboardState extends State<Leaderboard> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(Strings.statisticsTitle),
+          title: Text(Strings.leaderboardTitle),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -41,9 +40,10 @@ class _LeaderboardState extends State<Leaderboard> {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               default:
-                if(snapshot.hasError)
+                if (snapshot.hasError)
                   return Center(child: Text('Error: ${snapshot.error}'));
-                List<UserModel> users = Util.fromDocumentToUser(snapshot.data!.docs);
+                List<UserModel> users =
+                    Util.fromDocumentToUser(snapshot.data!.docs);
 
                 return SafeArea(
                   child: ListView.separated(
@@ -58,7 +58,8 @@ class _LeaderboardState extends State<Leaderboard> {
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: user.photoUrl != ''
