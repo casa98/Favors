@@ -11,7 +11,7 @@ class CustomDrawerHeader extends StatelessWidget {
     final _currentUser = context.read<UserProvider>();
     return UserAccountsDrawerHeader(
       decoration: BoxDecoration(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).appBarTheme.color,
       ),
       accountName: Text(_currentUser.name ?? 'Welcome back!'),
       accountEmail: Text(_currentUser.email ?? ''),

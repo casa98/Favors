@@ -33,14 +33,14 @@ class AppTheme {
     primarySwatch: MaterialColor(0xff153032, lightColor),
     primaryColor: Color(0xff151e32),
     accentColor: Color(0xff151e32),
-    backgroundColor: Colors.grey[50],
-    secondaryHeaderColor: Colors.grey[200],
+    backgroundColor: Colors.white,
+    scaffoldBackgroundColor: Colors.grey[50],
     dialogBackgroundColor: Colors.grey[50],
     splashColor: Colors.transparent,
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
-
+      color: Color(0xff151e32),
       // To make status bar icons light
       brightness: Brightness.dark,
     ),
@@ -50,16 +50,15 @@ class AppTheme {
     primarySwatch: MaterialColor(0xff5890c5, darkColor),
     primaryColor: Color(0xff5890c5),
     accentColor: Color(0xff5890c5),
-    backgroundColor: Color(0xff151e32),
-    secondaryHeaderColor: Color(0xff32394c),
+    backgroundColor: Color(0xff202c44),
+    scaffoldBackgroundColor: Color(0xff151e32),
     brightness: Brightness.dark,
     dialogBackgroundColor: Color(0xff151e32),
     splashColor: Colors.transparent,
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      color: Color(0xff151e32),
-      //color: Color(0x88293951),
+      color: Color(0xff202c44),
       iconTheme: IconThemeData(
         color: Colors.white,
       ),

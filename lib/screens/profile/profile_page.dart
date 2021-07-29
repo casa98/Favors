@@ -98,18 +98,19 @@ class _ProfileState extends State<Profile> {
                 thickness: 0.8,
               ),
               ListTile(
-                tileColor: Colors.white,
+                tileColor: Theme.of(context).backgroundColor,
                 title: Text(_currentUser.name ?? ''),
                 trailing: Icon(Icons.edit),
               ),
               Divider(height: 0.0, thickness: 0.8),
               ListTile(
-                tileColor: Colors.white,
+                tileColor: Theme.of(context).backgroundColor,
                 title: Text(_currentUser.email ?? ''),
+                trailing: Text('verified'),
               ),
               Divider(height: 0.0, thickness: 0.8),
               ListTile(
-                tileColor: Colors.white,
+                tileColor: Theme.of(context).backgroundColor,
                 title: Text(
                   _currentUser.score != null
                       ? 'Score: ${_currentUser.score} points'
