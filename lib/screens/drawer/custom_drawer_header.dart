@@ -15,28 +15,29 @@ class CustomDrawerHeader extends StatelessWidget {
       ),
       accountName: Text(_currentUser.name ?? 'Welcome back!'),
       accountEmail: Text(_currentUser.email ?? ''),
-      currentAccountPicture: _currentUser.photoUrl == ''
-          ? CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Text(
-                Util.lettersForHeader(_currentUser.name ?? ''),
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).primaryColor,
+      currentAccountPicture:
+          _currentUser.photoUrl == '' || _currentUser.photoUrl == null
+              ? CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    Util.lettersForHeader(_currentUser.name ?? ''),
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: _currentUser.photoUrl ?? '',
+                  ),
                 ),
-              ),
-            )
-          : Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: _currentUser.photoUrl ?? '',
-              ),
-            ),
     );
   }
 }

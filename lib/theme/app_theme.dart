@@ -59,9 +59,6 @@ class AppTheme {
       centerTitle: true,
       elevation: 0,
       color: Color(0xff202c44),
-      iconTheme: IconThemeData(
-        color: Colors.white,
-      ),
     ),
     canvasColor: Color(0xff151e32),
     floatingActionButtonTheme: FloatingActionButtonThemeData(

@@ -9,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/shared/strings.dart';
-import 'package:do_favors/widgets/action_button.dart';
 import 'package:do_favors/screens/profile/profile_controller.dart';
 import 'package:do_favors/shared/constants.dart';
 
@@ -50,10 +49,10 @@ class _ProfileState extends State<Profile> {
             children: [
               SizedBox(height: 24.0),
               Container(
-                height: 200,
-                width: 200,
+                height: 150,
+                width: 150,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(100.0)),
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: StreamBuilder<bool>(
@@ -62,37 +61,35 @@ class _ProfileState extends State<Profile> {
                     builder: (context, AsyncSnapshot snapshot) {
                       return !snapshot.data
                           ? CachedNetworkImage(
-                              height: 200,
-                              width: 200,
+                              height: 150,
+                              width: 150,
                               fit: BoxFit.cover,
                               imageUrl: image,
                               placeholder: (context, url) => image != ''
-                                  ? _circularProgressIndicator()
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 4.0,
+                                      ),
+                                    )
                                   : _profileImage(),
-                              errorWidget: (context, url, error) =>
-                                  _profileImage(),
+                              errorWidget: (_, __, ___) => _profileImage(),
                             )
                           : Center(
                               child: Text('Uploading...'),
                             );
                     }),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 12.0),
               CupertinoButton(
                 child: Text(
                   _currentUser.photoUrl == ''
                       ? 'Set Profile Photo'
                       : 'Change Photo',
-                  //style: TextStyle(color: Color(0xff5890c5)),
+                  style: TextStyle(color: Color(0xff5890c5)),
                 ),
-                onPressed: () {
-                  containerForSheet<String>(
-                    context: context,
-                    child: _galleryOrCamera(),
-                  );
-                },
+                onPressed: () => _chooseImageSource(),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 12.0),
               Divider(
                 height: 0.0,
                 thickness: 0.8,
@@ -119,11 +116,11 @@ class _ProfileState extends State<Profile> {
                 trailing: Icon(Icons.payment),
               ),
               Divider(height: 0.0, thickness: 0.8),
-              SizedBox(height: 16.0),
+              SizedBox(height: 12.0),
               CupertinoButton(
                 child: Text(
                   Strings.signOut,
-                  style: TextStyle(color: Colors.redAccent),
+                  style: TextStyle(color: Colors.redAccent[200]),
                 ),
                 onPressed: () async {
                   FirebaseAuth.instance.signOut();
@@ -131,6 +128,7 @@ class _ProfileState extends State<Profile> {
                   _profileController.clearProvider();
                 },
               ),
+              SizedBox(height: 12.0),
             ],
           ),
         ),
@@ -138,22 +136,27 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget _profileImage() {
-    return Container(
-      child: Center(
-        child: Image.asset(
-          asset,
-          width: 100,
-          height: 100,
-        ),
-      ),
-    );
+  _chooseImageSource() {
+    Platform.isIOS
+        ? containerForSheet<String>(
+            context: context,
+            child: _iOSPhotoChooser(),
+          )
+        : showModalBottomSheet(
+            context: context,
+            builder: (context) => androidPhotoChooser(),
+          );
   }
 
-  Widget _circularProgressIndicator() {
-    return Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 4.0,
+  Widget _profileImage() {
+    return CupertinoButton(
+      onPressed: () => _chooseImageSource(),
+      child: Center(
+        child: Icon(
+          Icons.add_a_photo_rounded,
+          size: 80,
+          color: Theme.of(context).primaryColor,
+        ),
       ),
     );
   }
@@ -171,20 +174,61 @@ class _ProfileState extends State<Profile> {
       } else {
         print("NOT IMAGE SELECTED");
       }
+    } else {
+      openAppSettings();
     }
   }
 
-  void containerForSheet<String>(
-      {required BuildContext context, required Widget child}) {
+  void containerForSheet<String>({
+    required BuildContext context,
+    required Widget child,
+  }) {
     showCupertinoModalPopup<String>(
       context: context,
       builder: (BuildContext context) => child,
     );
   }
 
-  Widget _galleryOrCamera() {
+  Widget androidPhotoChooser() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          leading: Icon(
+            Icons.camera_alt,
+            color: Theme.of(context).primaryColor,
+          ),
+          title: Text('Camera'),
+          onTap: () {
+            Navigator.pop(context);
+            _takePhoto(ImageSource.camera);
+          },
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.photo,
+            color: Theme.of(context).primaryColor,
+          ),
+          title: Text('Gallery'),
+          onTap: () {
+            Navigator.pop(context);
+            _takePhoto(ImageSource.gallery);
+          },
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.cancel,
+            color: Theme.of(context).primaryColor,
+          ),
+          title: Text(CANCEL),
+          onTap: () => Navigator.pop(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _iOSPhotoChooser() {
     return CupertinoActionSheet(
-      title: Text(CHOOSE_OPTION),
       actions: [
         CupertinoActionSheetAction(
           onPressed: () {
