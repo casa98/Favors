@@ -77,7 +77,7 @@ class _RegistrationPageState extends State<RegistrationPage>
             ),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          brightness: context.read<AppStateNotifier>().isDarkMode
+          brightness: context.read<AppThemeNotifier>().isDarkMode
               ? Brightness.dark
               : Brightness.light,
         ),

@@ -76,7 +76,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                             return incompleteFavorDialog(
                               title: 'Mark as Completed',
                               text: 'Have you completed this favor?',
-                              favorId: favor.key,
+                              favor: favor,
                               assignedUser: favor.assignedUser!,
                             );
                           },
@@ -95,7 +95,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
   incompleteFavorDialog({
     required String title,
     required String text,
-    required String favorId,
+    required Favor favor,
     required String assignedUser,
   }) {
     return Platform.isIOS
@@ -133,7 +133,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                 ),
                 onPressed: () {
                   // Mark as completed
-                  DatabaseService().markFavorAsCompleted(favorId, assignedUser);
+                  DatabaseService().markFavorAsCompletedUnconfirmed(favor.key);
                   Navigator.of(context).pop();
                   CustomSnackbar.customScaffoldMessenger(
                     context: context,
@@ -141,11 +141,9 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     iconData: Icons.done,
                   );
 
-                  // Increase currentUser score
-                  final currentUserScore =
-                      _incompleteFavorsController.currentUser.score!;
-                  _incompleteFavorsController.currentUser
-                      .updateScore(currentUserScore + 2);
+                  // TODO:Send notification to `favor.user` (who requeted the favor)
+                  // Say like: 'John Marked your favor as completed, confirm this action'
+                  // Once favor requester confirms, increase `favor.assignedUser` score
                 },
               ),
             ],
@@ -161,7 +159,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
               TextButton(
                 onPressed: () {
                   // Mark as completed
-                  DatabaseService().markFavorAsCompleted(favorId, assignedUser);
+                  DatabaseService().markFavorAsCompletedUnconfirmed(favor.key);
                   Navigator.of(context).pop();
                   CustomSnackbar.customScaffoldMessenger(
                     context: context,

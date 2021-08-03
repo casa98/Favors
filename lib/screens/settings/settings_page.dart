@@ -27,21 +27,23 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Platform.isIOS
                     ? ListTile(
-                  title: Text('Dark Mode'),
-                  trailing: CupertinoSwitch(
-                    value: Provider.of<AppStateNotifier>(context).isDarkMode,
-                    onChanged: (value){
-                      Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
-                    },
-                  ),
-                )
+                        title: Text('Dark Mode'),
+                        trailing: CupertinoSwitch(
+                          value: context.read<AppThemeNotifier>().isDarkMode,
+                          onChanged: (value) {
+                            context.read<AppThemeNotifier>().updateTheme(value);
+                          },
+                        ),
+                      )
                     : SwitchListTile(
-                  title: Text('Dark Mode'),
-                  value: Provider.of<AppStateNotifier>(context).isDarkMode,
-                  onChanged: (value) {
-                    Provider.of<AppStateNotifier>(context, listen: false).updateTheme(value);
-                  },
-                ),
+                        title: Text('Dark Mode'),
+                        value:
+                            Provider.of<AppThemeNotifier>(context).isDarkMode,
+                        onChanged: (value) {
+                          Provider.of<AppThemeNotifier>(context, listen: false)
+                              .updateTheme(value);
+                        },
+                      ),
                 Divider(height: 0.0),
               ],
             ),

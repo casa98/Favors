@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AppStateNotifier()),
+        ChangeNotifierProvider(create: (_) => AppThemeNotifier()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: Consumer<AppStateNotifier>(builder: (_, appState, __) {
+      child: Consumer<AppThemeNotifier>(builder: (_, appState, __) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppStateNotifier extends ChangeNotifier {
+class AppThemeNotifier extends ChangeNotifier {
   static const key = "theme";
   late SharedPreferences _pref;
   late bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
 
-  AppStateNotifier() {
+  AppThemeNotifier() {
     _isDarkMode = false;
     loadTheme();
   }

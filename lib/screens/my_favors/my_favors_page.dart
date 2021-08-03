@@ -59,12 +59,22 @@ class _MyFavorsState extends State<MyFavors> {
                   separatorBuilder: (context, index) => Divider(height: 0.0),
                   itemBuilder: (context, index) {
                     var favor = favors[index];
-                    if (favor.status == '-1')
-                      favor.status = Strings.favorUnassigned;
-                    else if (favor.status == '1')
-                      favor.status = Strings.favorAssigned;
-                    else
-                      favor.status = Strings.favorCompleted;
+                    switch (favor.status) {
+                      case "-1":
+                        favor.status = Strings.favorUnassigned;
+                        break;
+                      case "1":
+                        favor.status = Strings.favorAssigned;
+                        break;
+                      case "2":
+                        favor.status = Strings.favorCompletedButUnconfirmed;
+                        break;
+                      case "0":
+                        favor.status = Strings.favorCompletedAndConfirmed;
+                        break;
+                      default:
+                        favor.status = "Unkown Status: ${favor.status}";
+                    }
 
                     return ListTile(
                       title: Text(
@@ -103,12 +113,16 @@ class _MyFavorsState extends State<MyFavors> {
                             );
                           }
                         }
-                        if (favor.status == Strings.favorAssigned) {
+                        if (favor.status == Strings.favorAssigned ||
+                            favor.status ==
+                                Strings.favorCompletedButUnconfirmed) {
                           var choice = await showDialog(
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
-                                  title: 'Mark as Completed',
+                                  title: favor.status == Strings.favorAssigned
+                                      ? 'Mark as Completed'
+                                      : 'Confirm Completion',
                                   text:
                                       'Has ${favor.assignedUsername} completed this favor?',
                                   favorId: favor.key,
@@ -121,6 +135,9 @@ class _MyFavorsState extends State<MyFavors> {
                               text: 'Favor marked as Completed',
                               iconData: Icons.done,
                             );
+
+                            // TODO:Send notification to `favor.assignedUser` (who made the favor)
+                            // Say like: 'Jane has accepted your favor, your score increased!
                           }
                         }
                       },
@@ -183,7 +200,7 @@ class _MyFavorsState extends State<MyFavors> {
                   } else {
                     // Mark as completed
                     DatabaseService()
-                        .markFavorAsCompleted(favorId, assignedUser!);
+                        .markFavorAsCompletedConfirmed(favorId, assignedUser!);
                     Navigator.of(context).pop(COMPLETE);
                   }
                 },
@@ -207,7 +224,7 @@ class _MyFavorsState extends State<MyFavors> {
                   } else {
                     // Mark as completed
                     DatabaseService()
-                        .markFavorAsCompleted(favorId, assignedUser!);
+                        .markFavorAsCompletedConfirmed(favorId, assignedUser!);
                     Navigator.of(context).pop(COMPLETE);
                   }
                 },

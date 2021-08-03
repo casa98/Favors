@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          brightness: context.read<AppStateNotifier>().isDarkMode
+          brightness: context.read<AppThemeNotifier>().isDarkMode
               ? Brightness.dark
               : Brightness.light,
         ),

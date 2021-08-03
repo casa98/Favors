@@ -16,28 +16,37 @@ class AppDrawer extends StatelessWidget {
           left: false,
           right: false,
           top: false,
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            children: <Widget>[
+          child: Column(
+            children: [
               CustomDrawerHeader(),
-              ListTile(
-                title: Text(Strings.homeTitle),
-                onTap: () => Navigator.pop(context),
-                leading: Icon(Icons.home),
+              Expanded(
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(Strings.homeTitle),
+                      onTap: () => Navigator.pop(context),
+                      leading: Icon(Icons.home),
+                    ),
+                    _createDrawerItem(context, Strings.profileTitle,
+                        Strings.profileRoute, Icons.person),
+                    Divider(),
+                    _createDrawerItem(
+                        context,
+                        Strings.myFavorsTitle,
+                        Strings.myFavorsRoute,
+                        Icons.format_list_numbered_rounded),
+                    _createDrawerItem(context, Strings.incompleteFavorsTitle,
+                        Strings.incompleteFavorsRoute, Icons.grading),
+                    _createDrawerItem(context, Strings.leaderboardTitle,
+                        Strings.statisticsRoute, Icons.leaderboard_rounded),
+                    Divider(),
+                    _createDrawerItem(context, Strings.settings,
+                        Strings.settingsRoute, Icons.settings),
+                  ],
+                ),
               ),
-              _createDrawerItem(context, Strings.profileTitle,
-                  Strings.profileRoute, Icons.person),
-              Divider(),
-              _createDrawerItem(context, Strings.myFavorsTitle,
-                  Strings.myFavorsRoute, Icons.list),
-              _createDrawerItem(context, Strings.incompleteFavorsTitle,
-                  Strings.incompleteFavorsRoute, Icons.grading),
-              _createDrawerItem(context, Strings.leaderboardTitle,
-                  Strings.statisticsRoute, Icons.leaderboard_rounded),
-              Divider(),
-              _createDrawerItem(context, Strings.settings,
-                  Strings.settingsRoute, Icons.settings),
             ],
           ),
         ),

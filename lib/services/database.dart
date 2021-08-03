@@ -4,18 +4,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:do_favors/shared/constants.dart';
 
 class DatabaseService {
-
   final userCollection = FirebaseFirestore.instance.collection(USER);
   final favorsCollection = FirebaseFirestore.instance.collection(FAVORS);
   final User? currentUser = FirebaseAuth.instance.currentUser;
   static DatabaseService? _instance;
 
-  factory DatabaseService(){
-    if(_instance != null) return _instance!;
+  factory DatabaseService() {
+    if (_instance != null) return _instance!;
     return DatabaseService._internal();
   }
 
-  DatabaseService._internal(){
+  DatabaseService._internal() {
     /*
     userCollection = FirebaseFirestore.instance.collection(USER);
     favorsCollection = FirebaseFirestore.instance.collection(FAVORS);
@@ -23,18 +22,20 @@ class DatabaseService {
     */
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchUnassignedFavors() async{
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUnassignedFavors() async {
     return favorsCollection
         .where(FAVOR_STATUS, isEqualTo: -1)
-        .orderBy(FAVOR_TIMESTAMP, descending: true).get();
+        .orderBy(FAVOR_TIMESTAMP, descending: true)
+        .get();
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchIncompleteFavors() async{
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchIncompleteFavors() async {
     return favorsCollection
         .where(FAVOR_STATUS, isEqualTo: 1)
         .where(FAVOR_ASSIGNED_USER,
-        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .orderBy(FAVOR_TIMESTAMP, descending: true).get();
+            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy(FAVOR_TIMESTAMP, descending: true)
+        .get();
   }
 
   Future saveFavor(
@@ -52,8 +53,6 @@ class DatabaseService {
       newUserScore = snapshot[SCORE] - 2;
       var key = favorsCollection.doc().id;
       return await favorsCollection.doc(key).set({
-        //FAVOR_ASSIGNED_USER: '',
-        //FAVOR_ASSIGNED_USERNAME: '',
         FAVOR_TIMESTAMP: DateTime.now().millisecondsSinceEpoch,
         FAVOR_DESCRIPTION: description,
         FAVOR_LOCATION: location,
@@ -87,9 +86,10 @@ class DatabaseService {
     });
   }
 
-  Future markFavorAsCompleted(String favorId, String userId) {
+  /// User requester confirms their favor was completed
+  Future markFavorAsCompletedConfirmed(String favorId, String userId) {
     return favorsCollection.doc(favorId).update({
-      FAVOR_STATUS: 2,
+      FAVOR_STATUS: 0,
     }).then((value) {
       // Increase by 2 the SCORE of the user who made the favor
       userCollection.doc(userId).get().then((snapshot) {
@@ -101,10 +101,18 @@ class DatabaseService {
     });
   }
 
-  Future decreaseUserScore(String userId, int newScore){
+  /// A user making a favor marks it as completed, missing for favor requester 
+  /// to mark it as completed.
+  Future markFavorAsCompletedUnconfirmed(String favorId) {
+    return favorsCollection.doc(favorId).update({
+      FAVOR_STATUS: 2,
+    });
+  }
+
+  Future decreaseUserScore(String userId, int newScore) {
     return userCollection.doc(userId).update({
-        SCORE: newScore,
-      });
+      SCORE: newScore,
+    });
   }
 
   Future deleteFavor(String favorId) {

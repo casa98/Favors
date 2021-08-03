@@ -25,7 +25,8 @@ class Strings {
   static const favorStatus = "Status: ";
   static const favorAssigned = "Assigned";
   static const favorUnassigned = "Unassigned";
-  static const favorCompleted = "Completed";
+  static const favorCompletedButUnconfirmed = "Completed but Unconfirmed";
+  static const favorCompletedAndConfirmed = "Completed and Confirmed";
 
   // Authentication
   static const userNotFound         = "No user registered with this email";

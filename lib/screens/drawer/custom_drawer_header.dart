@@ -15,6 +15,7 @@ class CustomDrawerHeader extends StatelessWidget {
       ),
       accountName: Text(_currentUser.name ?? 'Welcome back!'),
       accountEmail: Text(_currentUser.email ?? ''),
+      margin: EdgeInsets.zero,
       currentAccountPicture:
           _currentUser.photoUrl == '' || _currentUser.photoUrl == null
               ? CircleAvatar(
