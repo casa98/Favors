@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:do_favors/services/notifications_service.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/theme/app_theme.dart';
 import 'package:do_favors/router/app_router.dart';
@@ -11,9 +12,9 @@ import 'theme/app_state_notifier.dart';
 import 'shared/strings.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await PushNotificationsService.initializeService();
 
   runApp(MyApp());
 }
