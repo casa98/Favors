@@ -1,3 +1,5 @@
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:do_favors/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:do_favors/shared/strings.dart';
@@ -6,6 +8,7 @@ import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
+import 'package:provider/provider.dart';
 
 class FavorDetail extends StatefulWidget {
   final Favor _favor;
@@ -90,18 +93,28 @@ class _FavorDetailState extends State<FavorDetail> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _buttonVisible ? ActionButton(
-        title: Strings.doThisFavor,
-        onPressed: () {
-          DatabaseService().markFavorAsAssigned(widget._favor.key);
-          hideButton();
-          CustomSnackbar.customScaffoldMessenger(
-            context: context,
-            text: 'You\'re now doing this favor',
-            iconData: Icons.thumb_up,
-          );
-        },
-      ) : SizedBox(),
+      floatingActionButton: _buttonVisible
+          ? ActionButton(
+              title: Strings.doThisFavor,
+              onPressed: () {
+                DatabaseService().markFavorAsAssigned(widget._favor.key);
+                hideButton();
+                CustomSnackbar.customScaffoldMessenger(
+                  context: context,
+                  text: 'You\'re now doing this favor',
+                  iconData: Icons.thumb_up,
+                );
+
+                // Send notification to {favor.user}
+                final currentUser = context.read<UserProvider>();
+                ApiService().sendNotification(
+                  to: widget._favor.user,
+                  title: 'Your favor is In Progress!',
+                  body: '${currentUser.name} is doing your favor',
+                );
+              },
+            )
+          : SizedBox(),
     );
   }
 }

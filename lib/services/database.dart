@@ -101,11 +101,21 @@ class DatabaseService {
     });
   }
 
-  /// A user making a favor marks it as completed, missing for favor requester 
+  /// A user making a favor marks it as completed, missing for favor requester
   /// to mark it as completed.
   Future markFavorAsCompletedUnconfirmed(String favorId) {
     return favorsCollection.doc(favorId).update({
       FAVOR_STATUS: 2,
+    });
+  }
+
+  Future increaseUserScore(String userId) async {
+    // Get user score first, then update it
+    userCollection.doc(userId).get().then((snapshot) {
+      var userNewScore = snapshot[SCORE] + 2;
+      userCollection.doc(userId).update({
+        SCORE: userNewScore,
+      });
     });
   }
 

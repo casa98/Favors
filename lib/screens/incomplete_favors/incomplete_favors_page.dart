@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:do_favors/services/api_service.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/widgets/custom_snackbar.dart';
@@ -166,11 +167,12 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     text: 'Favor marked as Completed',
                     iconData: Icons.done,
                   );
-                  // Increase currentUser score
-                  final currentUserScore =
-                      _incompleteFavorsController.currentUser.score!;
-                  _incompleteFavorsController.currentUser
-                      .updateScore(currentUserScore + 2);
+
+                  ApiService().sendNotification(
+                    to: favor.user,
+                    title: '${favor.assignedUsername} completed your favor',
+                    body: 'Confirm this action',
+                  );
                 },
                 child: Text('Yes'),
               ),

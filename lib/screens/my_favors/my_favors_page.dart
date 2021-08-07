@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:do_favors/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -136,8 +137,14 @@ class _MyFavorsState extends State<MyFavors> {
                               iconData: Icons.done,
                             );
 
-                            // TODO:Send notification to `favor.assignedUser` (who made the favor)
-                            // Say like: 'Jane has accepted your favor, your score increased!
+                            DatabaseService().increaseUserScore(favor.assignedUser!);
+
+                            ApiService().sendNotification(
+                              to: favor.assignedUser!,
+                              title: 'Your score Increased!',
+                              body:
+                                  '${favor.username} confirmed you completed their favor',
+                            );
                           }
                         }
                       },
