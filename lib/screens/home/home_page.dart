@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: UnassignedFavors(),
       ),
-      floatingActionButton: const AddFavorButton(),
+      floatingActionButton: AddFavorButton(),
     );
   }
 }

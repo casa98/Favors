@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/services/api_service.dart';
-import 'package:flutter/material.dart';
-
 import 'package:do_favors/shared/strings.dart';
-import 'package:do_favors/widgets/action_button.dart';
+import 'package:do_favors/widgets/bouncing_button.dart';
 import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/model/favor.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/constants.dart';
-import 'package:provider/provider.dart';
 
 class FavorDetail extends StatefulWidget {
   final Favor _favor;
@@ -94,8 +94,7 @@ class _FavorDetailState extends State<FavorDetail> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _buttonVisible
-          ? ActionButton(
-              title: Strings.doThisFavor,
+          ? BouncingButton(
               onPressed: () {
                 DatabaseService().markFavorAsAssigned(widget._favor.key);
                 hideButton();
@@ -113,6 +112,13 @@ class _FavorDetailState extends State<FavorDetail> {
                   body: '${currentUser.name} is doing your favor',
                 );
               },
+              child: Text(
+                Strings.doThisFavor,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                ),
+              ),
             )
           : SizedBox(),
     );

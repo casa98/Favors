@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/shared/strings.dart';
-import 'package:do_favors/widgets/action_button.dart';
+import 'package:do_favors/widgets/bouncing_button.dart';
 import 'package:do_favors/services/database.dart';
 
 class AddFavor extends StatefulWidget {
@@ -80,8 +80,7 @@ class _AddFavorState extends State<AddFavor> {
                   isLastField: true,
                 ),
                 SizedBox(height: 20.0),
-                ActionButton(
-                  title: Strings.requestFavor,
+                BouncingButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Decrease user score in Provider and remote DB
@@ -105,6 +104,13 @@ class _AddFavorState extends State<AddFavor> {
                       );
                     }
                   },
+                  child: Text(
+                    Strings.requestFavor,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20.0),
               ],
