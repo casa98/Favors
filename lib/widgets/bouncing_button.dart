@@ -25,10 +25,10 @@ class _BouncingButtonState extends State<BouncingButton>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(
-        milliseconds: 100,
+        milliseconds: 25,
       ),
       lowerBound: 0.0,
-      upperBound: 0.1,
+      upperBound: 0.05,
     )..addListener(() => setState(() {}));
     super.initState();
   }
@@ -39,12 +39,15 @@ class _BouncingButtonState extends State<BouncingButton>
   Widget build(BuildContext context) {
     _scale = 1 - _controller.value;
     return GestureDetector(
-      onTapUp: (TapUpDetails details) => _tapUp(details),
-      onPanStart: (_) => _controller.reverse(),
-      onTapDown: (TapDownDetails details) {
-        _tapDown(details);
+      onTapUp: (TapUpDetails details) async {
+        await Future.delayed(Duration(milliseconds: 50));
+        _tapUp(details);
         onPressed();
       },
+      onPanStart: (_) => _controller.reverse(),
+      // [USER_SCROLL]: To restore item size when it's released
+      onPanCancel: () => _controller.reverse(),
+      onTapDown: (TapDownDetails details) => _tapDown(details),
       child: Transform.scale(
         scale: _scale,
         child: Container(

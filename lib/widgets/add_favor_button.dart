@@ -19,7 +19,7 @@ class _AddFavorButtonState extends State<AddFavorButton>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(
-        milliseconds: 100,
+        milliseconds: 25,
       ),
       lowerBound: 0.0,
       upperBound: 0.1,
@@ -57,9 +57,16 @@ class _AddFavorButtonState extends State<AddFavorButton>
     var score = _currentUser.score ?? 0;
     if (score >= 2) {
       return GestureDetector(
-        onTapDown: _tapDown,
+        onTapUp: (TapUpDetails details) async {
+          await Future.delayed(Duration(milliseconds: 50));
+          _tapUp(details);
+        },
         onPanStart: (_) => _controller.reverse(),
-        onTapUp: _tapUp,
+        // [USER_SCROLL]: To restore item size when it's released
+        onPanCancel: () => _controller.reverse(),
+        onTapDown: (TapDownDetails details) async {
+          _tapDown(details);
+        },
         child: Transform.scale(
           scale: _scale,
           child: Container(
