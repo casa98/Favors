@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:do_favors/provider/user_provider.dart';
@@ -33,18 +32,8 @@ class ProfileController {
       _userCollection.doc(_currentUser.id).update({
         IMAGE: downloadUrl,
       });
-      // Update user photoUrl in provider too
-      //userProvider!.updateUserPhotoUrl(downloadUrl);
       _showLoadingIndicator.sink.add(false);
     });
-  }
-
-  Future<String> loadScore() async {
-    final score = await FirebaseFirestore.instance
-        .collection(USER)
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    return 'Score: ${score[SCORE].toString()} points';
   }
 
   clearProvider() {

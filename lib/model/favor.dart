@@ -6,9 +6,9 @@ class Favor {
   late String description;
   late String location;
   late String title;
-  late String key;
-  late String status;
-  late int timestamp;
+  late String? key;
+  late String? status;
+  late int? timestamp;
   late String user;
   late String username;
 
@@ -18,9 +18,9 @@ class Favor {
     required this.description,
     required this.location,
     required this.title,
-    required this.key,
-    required this.status,
-    required this.timestamp,
+    this.key,
+    this.status,
+    this.timestamp,
     required this.user,
     required this.username,
   });

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_favors/model/favor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:do_favors/shared/constants.dart';
@@ -38,35 +39,24 @@ class DatabaseService {
         .get();
   }
 
-  Future saveFavor(
-    String title,
-    String description,
-    String location,
-  ) async {
-    dynamic username;
-    dynamic newUserScore;
-    await userCollection
-        .doc(currentUser!.uid)
-        .get()
-        .then<dynamic>((snapshot) async {
-      username = snapshot[USERNAME];
-      newUserScore = snapshot[SCORE] - 2;
-      var key = favorsCollection.doc().id;
-      return await favorsCollection.doc(key).set({
-        FAVOR_TIMESTAMP: DateTime.now().millisecondsSinceEpoch,
-        FAVOR_DESCRIPTION: description,
-        FAVOR_LOCATION: location,
-        FAVOR_TITLE: title,
-        FAVOR_KEY: key,
-        FAVOR_STATUS: -1, // Unassigned
-        FAVOR_USER: currentUser!.uid,
-        FAVOR_USERNAME: username,
-      }).then((value) {
-        // Decrease by 2 the SCORE of the user who asked for the favor
-        print(newUserScore);
-        userCollection.doc(currentUser!.uid).update({
-          SCORE: newUserScore,
-        });
+  Future saveFavor({
+    required Favor favor,
+    required int newScore,
+  }) async {
+    final key = favorsCollection.doc().id;
+    return await favorsCollection.doc(key).set({
+      FAVOR_TIMESTAMP: DateTime.now().millisecondsSinceEpoch,
+      FAVOR_DESCRIPTION: favor.description,
+      FAVOR_LOCATION: favor.location,
+      FAVOR_TITLE: favor.title,
+      FAVOR_KEY: key,
+      FAVOR_STATUS: -1, // Unassigned
+      FAVOR_USER: currentUser!.uid,
+      FAVOR_USERNAME: favor.username,
+    }).then((value) {
+      // Decrease by 2 the SCORE of the (current) user who asked for the favor
+      userCollection.doc(currentUser!.uid).update({
+        SCORE: newScore,
       });
     });
   }
@@ -91,9 +81,10 @@ class DatabaseService {
     return favorsCollection.doc(favorId).update({
       FAVOR_STATUS: 0,
     }).then((value) {
+      print('Gonna call this bitch');
       // Increase by 2 the SCORE of the user who made the favor
       userCollection.doc(userId).get().then((snapshot) {
-        var userNewScore = snapshot[SCORE] + 2;
+        final userNewScore = snapshot[SCORE] + 2;
         userCollection.doc(userId).update({
           SCORE: userNewScore,
         });
@@ -116,12 +107,6 @@ class DatabaseService {
       userCollection.doc(userId).update({
         SCORE: userNewScore,
       });
-    });
-  }
-
-  Future decreaseUserScore(String userId, int newScore) {
-    return userCollection.doc(userId).update({
-      SCORE: newScore,
     });
   }
 

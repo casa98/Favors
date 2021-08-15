@@ -68,7 +68,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                       subtitle: Text(favor.description,
                           overflow: TextOverflow.ellipsis),
                       trailing: Text(
-                        Util.readFavorTimestamp(favor.timestamp),
+                        Util.readFavorTimestamp(favor.timestamp!),
                       ),
                       onTap: () async {
                         await showDialog(
@@ -132,20 +132,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                onPressed: () {
-                  // Mark as completed
-                  DatabaseService().markFavorAsCompletedUnconfirmed(favor.key);
-                  Navigator.of(context).pop();
-                  CustomSnackbar.customScaffoldMessenger(
-                    context: context,
-                    text: 'Favor marked as Completed',
-                    iconData: Icons.done,
-                  );
-
-                  // TODO:Send notification to `favor.user` (who requeted the favor)
-                  // Say like: 'John Marked your favor as completed, confirm this action'
-                  // Once favor requester confirms, increase `favor.assignedUser` score
-                },
+                onPressed: () => _onFavorMarkedAsCompleted(favor),
               ),
             ],
           )
@@ -158,25 +145,27 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                 child: Text('No'),
               ),
               TextButton(
-                onPressed: () {
-                  // Mark as completed
-                  DatabaseService().markFavorAsCompletedUnconfirmed(favor.key);
-                  Navigator.of(context).pop();
-                  CustomSnackbar.customScaffoldMessenger(
-                    context: context,
-                    text: 'Favor marked as Completed',
-                    iconData: Icons.done,
-                  );
-
-                  ApiService().sendNotification(
-                    to: favor.user,
-                    title: '${favor.assignedUsername} completed your favor',
-                    body: 'Confirm this action',
-                  );
-                },
+                onPressed: () => _onFavorMarkedAsCompleted(favor),
                 child: Text('Yes'),
               ),
             ],
           );
+  }
+
+  void _onFavorMarkedAsCompleted(Favor favor) {
+    // Mark as completed
+    DatabaseService().markFavorAsCompletedUnconfirmed(favor.key!);
+    Navigator.of(context).pop();
+    CustomSnackbar.customScaffoldMessenger(
+      context: context,
+      text: 'Favor marked as Completed',
+      iconData: Icons.done,
+    );
+
+    ApiService().sendNotification(
+      to: favor.user,
+      title: '${favor.assignedUsername} completed your favor',
+      body: 'Confirm this action',
+    );
   }
 }

@@ -86,12 +86,12 @@ class _MyFavorsState extends State<MyFavors> {
                         children: [
                           Text(Strings.favorStatus),
                           Text(
-                            favor.status,
+                            favor.status!,
                           ),
                         ],
                       ),
                       trailing: Text(
-                        Util.readFavorTimestamp(favor.timestamp),
+                        Util.readFavorTimestamp(favor.timestamp!),
                       ),
                       onTap: () async {
                         // showDialog returns a value, it's sent via pop()
@@ -103,7 +103,7 @@ class _MyFavorsState extends State<MyFavors> {
                                   title: 'Delete Favor',
                                   text: 'Sure you want to delete this favor?',
                                   delete: true,
-                                  favorId: favor.key,
+                                  favorId: favor.key!,
                                 );
                               });
                           if (choice == DELETE) {
@@ -126,7 +126,7 @@ class _MyFavorsState extends State<MyFavors> {
                                       : 'Confirm Completion',
                                   text:
                                       'Has ${favor.assignedUsername} completed this favor?',
-                                  favorId: favor.key,
+                                  favorId: favor.key!,
                                   assignedUser: favor.assignedUser,
                                 );
                               });

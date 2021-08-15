@@ -1,3 +1,4 @@
+import 'package:do_favors/model/favor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,17 +84,22 @@ class _AddFavorState extends State<AddFavor> {
                 BouncingButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Decrease user score in Provider and remote DB
-                      _currentUser.updateScore(_currentUser.score! - 2);
-                      DatabaseService().decreaseUserScore(
-                        _currentUser.id!,
-                        _currentUser.score!,
+                      // Decrease user score in Provider
+                      final newScore = _currentUser.score! - 2;
+                      _currentUser.updateScore(newScore);
+
+                      Favor newFavor = Favor(
+                        title: _titleController.text,
+                        description: _descriptionController.text,
+                        location: _locationController.text,
+                        user: _currentUser.id!,
+                        username: _currentUser.name!,
                       );
-                      // Save Favor in DB
+
+                      // Save Favor in DB and decrease score there too
                       DatabaseService().saveFavor(
-                        _titleController.text,
-                        _descriptionController.text,
-                        _locationController.text,
+                        favor: newFavor,
+                        newScore: newScore,
                       );
 
                       Navigator.of(context).pop();

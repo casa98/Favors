@@ -19,26 +19,19 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late File _image;
-  late String asset;
   final picker = ImagePicker();
   late UserProvider _currentUser;
-  late final ProfileController _profileController;
+  late ProfileController _profileController;
 
   @override
   void didChangeDependencies() {
-    _currentUser = context.read<UserProvider>();
+    _currentUser = context.watch<UserProvider>();
     _profileController = ProfileController(_currentUser);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Profile Score: ${_currentUser.score}");
-    final ThemeData theme = Theme.of(context);
-    asset = theme.brightness == Brightness.light
-        ? 'assets/no-photo.png'
-        : 'assets/no-photo-dark.png';
-
     String image = _currentUser.photoUrl ?? '';
     return Scaffold(
       appBar: AppBar(title: Text(Strings.profileTitle)),
@@ -111,7 +104,7 @@ class _ProfileState extends State<Profile> {
                 title: Text(
                   _currentUser.score != null
                       ? 'Score: ${_currentUser.score} points'
-                      : '',
+                      : 'Score Unavailable',
                 ),
                 trailing: Icon(Icons.payment),
               ),
@@ -169,7 +162,6 @@ class _ProfileState extends State<Profile> {
           await picker.pickImage(source: source, maxHeight: 512, maxWidth: 512);
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        print("IMAGE PATH: " + _image.toString());
         _profileController.uploadPicture(_image);
       } else {
         print("NOT IMAGE SELECTED");
@@ -252,5 +244,11 @@ class _ProfileState extends State<Profile> {
         child: Text(CANCEL),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _profileController.dispose();
+    super.dispose();
   }
 }

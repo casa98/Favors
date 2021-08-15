@@ -1,14 +1,12 @@
-import 'package:do_favors/theme/app_state_notifier.dart';
-import 'package:do_favors/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:do_favors/screens/home/unassigned_favors_controller.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/widgets/no_items.dart';
 import 'package:do_favors/model/favor.dart';
-import 'package:do_favors/shared/constants.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 
@@ -26,22 +24,8 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
   void didChangeDependencies() {
     _userProvider = context.read<UserProvider>();
     _unassignedFavorsController = UnassignedFavorsController(_userProvider);
-
     _apptheme = context.read<AppThemeNotifier>();
-
-    getUserData(_userProvider);
     super.didChangeDependencies();
-  }
-
-  void getUserData(UserProvider _userProvider) async {
-    // Fetch user name, photoUrl, and score. Save those into Provider.
-    final userDB = await FirebaseFirestore.instance
-        .collection(USER)
-        .doc(_userProvider.id)
-        .get();
-    final int score = int.parse(userDB[SCORE].toString());
-    _userProvider.updateScore(score);
-    _userProvider.updatePhotoUrl(userDB[IMAGE] ?? '');
   }
 
   @override
@@ -86,7 +70,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             trailing: Text(
-                              Util.readFavorTimestamp(favor.timestamp),
+                              Util.readFavorTimestamp(favor.timestamp!),
                             ),
                             onTap: () {
                               Navigator.pushNamed(
@@ -106,8 +90,6 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
 
   // Unconfirmed favors are Favors completed but completion still not confirmed by favor requester
   Widget unconfirmedFavors() {
-    List<Widget> items = [];
-
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
       stream: _unassignedFavorsController.fetchUnconfirmedFavors(),
       builder: (context, snapshot) {
@@ -121,7 +103,6 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
             List<Favor> favors = Util.fromDocumentToFavor(snapshot.data!.docs);
             // Keep Unconfirmed favors only (the ones whose score is 0)
             favors.removeWhere((element) => element.status != "2");
-            print("${favors.length} pending favors mine, have been completed");
 
             if (favors.isEmpty) return SizedBox();
             return Column(

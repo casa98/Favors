@@ -96,7 +96,7 @@ class _FavorDetailState extends State<FavorDetail> {
       floatingActionButton: _buttonVisible
           ? BouncingButton(
               onPressed: () {
-                DatabaseService().markFavorAsAssigned(widget._favor.key);
+                DatabaseService().markFavorAsAssigned(widget._favor.key!);
                 hideButton();
                 CustomSnackbar.customScaffoldMessenger(
                   context: context,

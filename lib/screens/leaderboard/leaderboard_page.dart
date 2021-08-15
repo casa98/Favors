@@ -42,8 +42,7 @@ class _LeaderboardState extends State<Leaderboard> {
               default:
                 if (snapshot.hasError)
                   return Center(child: Text('Error: ${snapshot.error}'));
-                List<UserModel> users =
-                    Util.fromDocumentToUser(snapshot.data!.docs);
+                final users = Util.fromDocumentToUser(snapshot.data!.docs);
 
                 return SafeArea(
                   child: ListView.separated(
