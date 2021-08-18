@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
 import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:do_favors/screens/home/unassigned_favors_controller.dart';
@@ -53,14 +55,18 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                 children: [
                   unconfirmedFavors(),
                   Expanded(
-                    child: ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: favors.length,
-                        separatorBuilder: (context, index) =>
-                            Divider(height: 0.0, thickness: 0.4),
-                        itemBuilder: (context, index) {
-                          final favor = favors[index];
-                          return ListTile(
+                    child: ImplicitlyAnimatedList<Favor>(
+                      insertDuration: Duration(milliseconds: 300),
+                      removeDuration: Duration(milliseconds: 300),
+                      physics: BouncingScrollPhysics(),
+                      items: favors,
+                      areItemsTheSame: (a, b) => a.key == b.key,
+                      itemBuilder: (context, animation, favor, index) {
+                        return SizeFadeTransition(
+                          sizeFraction: 0.7,
+                          curve: Curves.easeInOut,
+                          animation: animation,
+                          child: ListTile(
                             title: Text(
                               favor.title,
                               overflow: TextOverflow.ellipsis,
@@ -79,8 +85,10 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                                 arguments: favor,
                               );
                             },
-                          );
-                        }),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ));

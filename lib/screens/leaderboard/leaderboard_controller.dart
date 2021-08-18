@@ -9,10 +9,10 @@ class LeaderboardController {
 
   LeaderboardController(this._currentUser);
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
+  Future<QuerySnapshot<Map<String, dynamic>>> getUsers() {
     return FirebaseFirestore.instance
         .collection(USER)
         .orderBy(SCORE, descending: true)
-        .snapshots();
+        .get();
   }
 }

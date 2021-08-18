@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
 import 'package:do_favors/services/api_service.dart';
 import 'package:do_favors/provider/user_provider.dart';
@@ -54,35 +56,41 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
                     text: 'You don\'t have pending favors to complete');
 
               return SafeArea(
-                child: ListView.separated(
+                child: ImplicitlyAnimatedList<Favor>(
+                  insertDuration: Duration(milliseconds: 300),
+                  removeDuration: Duration(milliseconds: 300),
                   physics: BouncingScrollPhysics(),
-                  itemCount: favors.length,
-                  separatorBuilder: (context, index) => Divider(height: 0.0),
-                  itemBuilder: (context, index) {
-                    var favor = favors[index];
-                    return ListTile(
-                      title: Text(
-                        favor.title,
-                        overflow: TextOverflow.ellipsis,
+                  items: favors,
+                  areItemsTheSame: (a, b) => a.key == b.key,
+                  itemBuilder: (context, animation, favor, index) {
+                    return SizeFadeTransition(
+                      sizeFraction: 0.7,
+                      curve: Curves.easeInOut,
+                      animation: animation,
+                      child: ListTile(
+                        title: Text(
+                          favor.title,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(favor.description,
+                            overflow: TextOverflow.ellipsis),
+                        trailing: Text(
+                          Util.readFavorTimestamp(favor.timestamp!),
+                        ),
+                        onTap: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (_) {
+                              return incompleteFavorDialog(
+                                title: 'Mark as Completed',
+                                text: 'Have you completed this favor?',
+                                favor: favor,
+                                assignedUser: favor.assignedUser!,
+                              );
+                            },
+                          );
+                        },
                       ),
-                      subtitle: Text(favor.description,
-                          overflow: TextOverflow.ellipsis),
-                      trailing: Text(
-                        Util.readFavorTimestamp(favor.timestamp!),
-                      ),
-                      onTap: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (_) {
-                            return incompleteFavorDialog(
-                              title: 'Mark as Completed',
-                              text: 'Have you completed this favor?',
-                              favor: favor,
-                              assignedUser: favor.assignedUser!,
-                            );
-                          },
-                        );
-                      },
                     );
                   },
                 ),

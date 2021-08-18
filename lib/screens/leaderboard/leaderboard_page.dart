@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -33,8 +35,8 @@ class _LeaderboardState extends State<Leaderboard> {
           title: Text(Strings.leaderboardTitle),
           centerTitle: true,
         ),
-        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: _leaderboardController.getUsers(),
+        body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          future: _leaderboardController.getUsers(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -45,47 +47,54 @@ class _LeaderboardState extends State<Leaderboard> {
                 final users = Util.fromDocumentToUser(snapshot.data!.docs);
 
                 return SafeArea(
-                  child: ListView.separated(
+                  child: ImplicitlyAnimatedList<UserModel>(
+                    insertDuration: Duration(milliseconds: 300),
+                    removeDuration: Duration(milliseconds: 300),
                     physics: BouncingScrollPhysics(),
-                    itemCount: users.length,
-                    separatorBuilder: (context, index) => Divider(height: 0.0),
-                    itemBuilder: (context, index) {
+                    items: users,
+                    areItemsTheSame: (a, b) => a.id == b.id,
+                    itemBuilder: (context, animation, favor, index) {
                       var user = users[index];
                       var score = '${user.score.toString()} points';
-                      return ListTile(
-                        leading: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: user.photoUrl != ''
-                              ? CachedNetworkImage(
-                                  fit: BoxFit.cover,
-                                  imageUrl: user.photoUrl ?? '',
-                                )
-                              : CircleAvatar(
-                                  radius: 26,
-                                  backgroundColor: Colors.primaries[
-                                      Random().nextInt(Colors.accents.length)],
-                                  child: Text(
-                                    Util.lettersForHeader(user.name ?? 'Name'),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
+                      return SizeFadeTransition(
+                        sizeFraction: 0.7,
+                        curve: Curves.easeInOut,
+                        animation: animation,
+                        child: ListTile(
+                          leading: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50.0)),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: user.photoUrl != ''
+                                ? CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: user.photoUrl ?? '',
+                                  )
+                                : CircleAvatar(
+                                    radius: 26,
+                                    backgroundColor: Colors.primaries[Random()
+                                        .nextInt(Colors.accents.length)],
+                                    child: Text(
+                                      Util.lettersForHeader(
+                                          user.name ?? 'Name'),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                ),
+                          ),
+                          title: Text(
+                            user.name ?? 'Name',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(user.email ?? 'Email'),
+                          trailing: Text(score),
                         ),
-                        title: Text(
-                          user.name ?? 'Name',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(user.email ?? 'Email'),
-                        trailing: Text(score),
-                        onTap: () {},
                       );
                     },
                   ),

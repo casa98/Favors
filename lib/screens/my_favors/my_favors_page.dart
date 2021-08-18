@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/model/favor.dart';
@@ -54,49 +56,34 @@ class _MyFavorsState extends State<MyFavors> {
                 return NoItems(text: 'You haven\'t requested any favors yet');
 
               return SafeArea(
-                child: ListView.separated(
+                child: ImplicitlyAnimatedList<Favor>(
+                  insertDuration: Duration(milliseconds: 300),
+                  removeDuration: Duration(milliseconds: 300),
                   physics: BouncingScrollPhysics(),
-                  itemCount: favors.length,
-                  separatorBuilder: (context, index) => Divider(height: 0.0),
-                  itemBuilder: (context, index) {
-                    var favor = favors[index];
-                    switch (favor.status) {
-                      case "-1":
-                        favor.status = Strings.favorUnassigned;
-                        break;
-                      case "1":
-                        favor.status = Strings.favorAssigned;
-                        break;
-                      case "2":
-                        favor.status = Strings.favorCompletedButUnconfirmed;
-                        break;
-                      case "0":
-                        favor.status = Strings.favorCompletedAndConfirmed;
-                        break;
-                      default:
-                        favor.status = "Unkown Status: ${favor.status}";
-                    }
-
-                    return ListTile(
-                      title: Text(
-                        favor.title,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Text(Strings.favorStatus),
-                          Text(
-                            favor.status!,
-                          ),
-                        ],
-                      ),
-                      trailing: Text(
-                        Util.readFavorTimestamp(favor.timestamp!),
-                      ),
-                      onTap: () async {
-                        // showDialog returns a value, it's sent via pop()
-                        if (favor.status == Strings.favorUnassigned) {
-                          var choice = await showDialog(
+                  items: favors,
+                  areItemsTheSame: (a, b) => a.key == b.key,
+                  itemBuilder: (context, animation, favor, index) {
+                    return SizeFadeTransition(
+                      sizeFraction: 0.7,
+                      curve: Curves.easeInOut,
+                      animation: animation,
+                      child: ListTile(
+                        title: Text(
+                          favor.title,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          '${Strings.favorStatus} ${_getFavorStatus(favor.status!)}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: Text(
+                          Util.readFavorTimestamp(favor.timestamp!),
+                        ),
+                        onTap: () async {
+                          // showDialog returns a value, it's sent via pop()
+                          if (favor.status == "-1") {
+                            // Favor Unassigned, can be deleted
+                            var choice = await showDialog(
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
@@ -105,19 +92,19 @@ class _MyFavorsState extends State<MyFavors> {
                                   delete: true,
                                   favorId: favor.key!,
                                 );
-                              });
-                          if (choice == DELETE) {
-                            CustomSnackbar.customScaffoldMessenger(
-                              context: context,
-                              text: 'Favor Deleted',
-                              iconData: Icons.delete_forever_rounded,
+                              },
                             );
-                          }
-                        }
-                        if (favor.status == Strings.favorAssigned ||
-                            favor.status ==
-                                Strings.favorCompletedButUnconfirmed) {
-                          var choice = await showDialog(
+                            if (choice == DELETE) {
+                              CustomSnackbar.customScaffoldMessenger(
+                                context: context,
+                                text: 'Favor Deleted',
+                                iconData: Icons.delete_forever_rounded,
+                              );
+                            }
+                          } else if (favor.status == "1" ||
+                              favor.status == "2") {
+                            // Favor Assigned or missing to Confirm Completion
+                            var choice = await showDialog(
                               context: context,
                               builder: (context) {
                                 return myFavorsDialog(
@@ -129,25 +116,28 @@ class _MyFavorsState extends State<MyFavors> {
                                   favorId: favor.key!,
                                   assignedUser: favor.assignedUser,
                                 );
-                              });
-                          if (choice == COMPLETE) {
-                            CustomSnackbar.customScaffoldMessenger(
-                              context: context,
-                              text: 'Favor marked as Completed',
-                              iconData: Icons.done,
+                              },
                             );
+                            if (choice == COMPLETE) {
+                              CustomSnackbar.customScaffoldMessenger(
+                                context: context,
+                                text: 'Favor marked as Completed',
+                                iconData: Icons.done,
+                              );
 
-                            DatabaseService().increaseUserScore(favor.assignedUser!);
+                              DatabaseService()
+                                  .increaseUserScore(favor.assignedUser!);
 
-                            ApiService().sendNotification(
-                              to: favor.assignedUser!,
-                              title: 'Your score Increased!',
-                              body:
-                                  '${favor.username} confirmed you completed their favor',
-                            );
+                              ApiService().sendNotification(
+                                to: favor.assignedUser!,
+                                title: 'Your score Increased!',
+                                body:
+                                    '${favor.username} confirmed you completed their favor',
+                              );
+                            }
                           }
-                        }
-                      },
+                        },
+                      ),
                     );
                   },
                 ),
@@ -157,6 +147,21 @@ class _MyFavorsState extends State<MyFavors> {
         },
       ),
     );
+  }
+
+  String _getFavorStatus(String status) {
+    switch (status) {
+      case "-1":
+        return Strings.favorUnassigned;
+      case "1":
+        return Strings.favorAssigned;
+      case "2":
+        return Strings.favorCompletedButUnconfirmed;
+      case "0":
+        return Strings.favorCompletedAndConfirmed;
+      default:
+        return status;
+    }
   }
 
   myFavorsDialog({
