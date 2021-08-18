@@ -112,11 +112,18 @@ class _FavorDetailState extends State<FavorDetail> {
                   body: '${currentUser.name} is doing your favor',
                 );
               },
-              child: Text(
-                Strings.doThisFavor,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 64.0, vertical: 14.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                ),
+                child: Text(
+                  Strings.doThisFavor,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             )

@@ -110,11 +110,20 @@ class _AddFavorState extends State<AddFavor> {
                       );
                     }
                   },
-                  child: Text(
-                    Strings.requestFavor,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 64.0, vertical: 14.0),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(16.0)),
+                    ),
+                    child: Text(
+                      Strings.requestFavor,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
