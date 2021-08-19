@@ -12,7 +12,7 @@ class LoginController {
   void login({email: String, password: String}) {
     _showLoadingIndicator.add(true);
     AuthService().signInWithEmailAndPassword(email, password).then((value) {
-      _showLoadingIndicator.add(false);
+      //_showLoadingIndicator.add(false); // See lib/wrapper.dart
     }).catchError((error) {
       _showLoadingIndicator.add(false);
       _displayMessage.add(error.message);

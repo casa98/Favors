@@ -12,6 +12,14 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late AppThemeNotifier _appThemeNotifier;
+
+  @override
+  void didChangeDependencies() {
+    _appThemeNotifier = context.read<AppThemeNotifier>();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,20 +37,17 @@ class _SettingsPageState extends State<SettingsPage> {
                     ? ListTile(
                         title: Text('Dark Mode'),
                         trailing: CupertinoSwitch(
-                          value: context.read<AppThemeNotifier>().isDarkMode,
-                          onChanged: (value) {
-                            context.read<AppThemeNotifier>().updateTheme(value);
-                          },
+                          value: _appThemeNotifier.isDarkMode,
+                          onChanged: (value) => context
+                              .read<AppThemeNotifier>()
+                              .updateTheme(value),
                         ),
                       )
                     : SwitchListTile(
                         title: Text('Dark Mode'),
-                        value:
-                            Provider.of<AppThemeNotifier>(context).isDarkMode,
-                        onChanged: (value) {
-                          Provider.of<AppThemeNotifier>(context, listen: false)
-                              .updateTheme(value);
-                        },
+                        value: _appThemeNotifier.isDarkMode,
+                        onChanged: (value) =>
+                            context.read<AppThemeNotifier>().updateTheme(value),
                       ),
                 Divider(height: 0.0),
               ],

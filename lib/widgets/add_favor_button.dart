@@ -29,8 +29,9 @@ class _AddFavorButtonState extends State<AddFavorButton>
           width: 56,
           height: 56,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50.0),
+            // Having ridiculous iisue with this color
             color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(50.0),
           ),
           child: Icon(Icons.add, color: Colors.white),
         ),

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:do_favors/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,10 +8,12 @@ import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/model/favor.dart';
+import 'package:do_favors/services/api_service.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/screens/my_favors/my_favors_controller.dart';
 import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/widgets/no_items.dart';
+import 'package:do_favors/widgets/loading_indicator.dart';
 import 'package:do_favors/services/database.dart';
 import 'package:do_favors/shared/util.dart';
 
@@ -45,7 +46,7 @@ class _MyFavorsState extends State<MyFavors> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
+              return LoadingIndicator();
             default:
               if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));

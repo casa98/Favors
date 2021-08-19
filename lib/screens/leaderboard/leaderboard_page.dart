@@ -9,6 +9,7 @@ import 'dart:math';
 import 'package:do_favors/screens/leaderboard/leaderboard_controller.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/model/user_model.dart';
+import 'package:do_favors/widgets/loading_indicator.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/shared/util.dart';
 
@@ -40,7 +41,7 @@ class _LeaderboardState extends State<Leaderboard> {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
+                return LoadingIndicator();
               default:
                 if (snapshot.hasError)
                   return Center(child: Text('Error: ${snapshot.error}'));

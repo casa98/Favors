@@ -12,6 +12,7 @@ import 'package:do_favors/services/database.dart';
 import 'package:do_favors/widgets/custom_snackbar.dart';
 import 'package:do_favors/screens/incomplete_favors/incomplete_favors_controller.dart';
 import 'package:do_favors/model/favor.dart';
+import 'package:do_favors/widgets/loading_indicator.dart';
 import 'package:do_favors/shared/util.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/widgets/no_items.dart';
@@ -44,7 +45,7 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
+              return LoadingIndicator();
             default:
               if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));

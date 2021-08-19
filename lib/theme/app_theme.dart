@@ -30,6 +30,7 @@ class AppTheme {
   };
 
   static final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
     primarySwatch: MaterialColor(0xff153032, lightColor),
     primaryColor: Color(0xff151e32),
     accentColor: Color(0xff151e32),
@@ -47,12 +48,12 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
     primarySwatch: MaterialColor(0xff5890c5, darkColor),
     primaryColor: Color(0xff5890c5),
     accentColor: Color(0xff5890c5),
     backgroundColor: Color(0xff202c44),
     scaffoldBackgroundColor: Color(0xff151e32),
-    brightness: Brightness.dark,
     dialogBackgroundColor: Color(0xff151e32),
     splashColor: Colors.transparent,
     appBarTheme: AppBarTheme(

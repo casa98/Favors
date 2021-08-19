@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:do_favors/screens/home/unassigned_favors_page.dart';
 import 'package:do_favors/screens/home/home_page_controller.dart';
@@ -21,9 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void didChangeDependencies() {
-    print('didChangeDependencies was called');
     _userProvider = context.read<UserProvider>();
-    //_homePageController = HomePageController(_userProvider);
 
     getUserData(_userProvider);
     super.didChangeDependencies();
@@ -34,7 +31,6 @@ class _HomePageState extends State<HomePage> {
     _homePageController.userScoreUpdated().listen((response) {
       if (response.data() != null) {
         final score = response[SCORE];
-        print('NEW USER SCOREEEEEEEEEEEEEE: $score');
         _userProvider.updateScore(score);
         _userProvider.updatePhotoUrl(response[IMAGE] ?? '');
       }
@@ -53,11 +49,5 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: AddFavorButton(),
     );
-  }
-
-  @override
-  void dispose() {
-    _homePageController.dispose();
-    super.dispose();
   }
 }
