@@ -125,15 +125,18 @@ class _MyFavorsState extends State<MyFavors> {
                                 iconData: Icons.done,
                               );
 
-                              DatabaseService()
-                                  .increaseUserScore(favor.assignedUser!);
-
+                              DatabaseService().markFavorAsCompletedConfirmed(
+                                favor.key!,
+                                favor.assignedUser!,
+                              );
                               ApiService().sendNotification(
                                 to: favor.assignedUser!,
                                 title: 'Your score Increased!',
                                 body:
                                     '${favor.username} confirmed you completed their favor',
                               );
+                            } else {
+                              DatabaseService().deleteFavor(favor.key!);
                             }
                           }
                         },
@@ -205,16 +208,10 @@ class _MyFavorsState extends State<MyFavors> {
                   ),
                 ),
                 onPressed: () {
-                  if (delete) {
-                    // Delete favor
-                    DatabaseService().deleteFavor(favorId);
+                  if (delete)
                     Navigator.of(context).pop(DELETE);
-                  } else {
-                    // Mark as completed
-                    DatabaseService()
-                        .markFavorAsCompletedConfirmed(favorId, assignedUser!);
+                  else
                     Navigator.of(context).pop(COMPLETE);
-                  }
                 },
               ),
             ],
@@ -229,16 +226,10 @@ class _MyFavorsState extends State<MyFavors> {
               ),
               TextButton(
                 onPressed: () {
-                  if (delete) {
-                    // Delete favor
-                    DatabaseService().deleteFavor(favorId);
+                  if (delete)
                     Navigator.of(context).pop(DELETE);
-                  } else {
-                    // Mark as completed
-                    DatabaseService()
-                        .markFavorAsCompletedConfirmed(favorId, assignedUser!);
+                  else
                     Navigator.of(context).pop(COMPLETE);
-                  }
                 },
                 child: Text('Yes'),
               ),

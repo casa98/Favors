@@ -81,7 +81,6 @@ class DatabaseService {
     return favorsCollection.doc(favorId).update({
       FAVOR_STATUS: 0,
     }).then((value) {
-      print('Gonna call this bitch');
       // Increase by 2 the SCORE of the user who made the favor
       userCollection.doc(userId).get().then((snapshot) {
         final userNewScore = snapshot[SCORE] + 2;
@@ -97,16 +96,6 @@ class DatabaseService {
   Future markFavorAsCompletedUnconfirmed(String favorId) {
     return favorsCollection.doc(favorId).update({
       FAVOR_STATUS: 2,
-    });
-  }
-
-  Future increaseUserScore(String userId) async {
-    // Get user score first, then update it
-    userCollection.doc(userId).get().then((snapshot) {
-      var userNewScore = snapshot[SCORE] + 2;
-      userCollection.doc(userId).update({
-        SCORE: userNewScore,
-      });
     });
   }
 
