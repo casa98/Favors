@@ -136,8 +136,6 @@ class _MyFavorsState extends State<MyFavors> {
                                 body:
                                     '${favor.username} confirmed you completed their favor',
                               );
-                            } else {
-                              DatabaseService().deleteFavor(favor.key!);
                             }
                           }
                         },
@@ -220,6 +218,10 @@ class _MyFavorsState extends State<MyFavors> {
         : AlertDialog(
             title: Text(title),
             content: Text(text),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 0, color: Colors.transparent),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),

@@ -33,6 +33,10 @@ abstract class DialogsMixin {
               return AlertDialog(
                 title: Text('Error'),
                 content: Text(message),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(width: 0, color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 actions: [
                   TextButton(
                     child: Text('Ok'),

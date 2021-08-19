@@ -148,6 +148,10 @@ class _IncompleteFavorsState extends State<IncompleteFavors> {
         : AlertDialog(
             title: Text(title),
             content: Text(text),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 0, color: Colors.transparent),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
