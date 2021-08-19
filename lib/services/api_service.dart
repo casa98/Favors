@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiService {
-  final baseUrl = 'http://10.0.2.2:3000/api';
+  final baseUrl = 'https://flutter-favors.herokuapp.com/api';
   final headers = {'Content-Type': 'application/json'};
 
   Future<void> uploadDeviceToken(
