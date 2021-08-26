@@ -122,7 +122,7 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
                       : Colors.grey[200],
                   title: Text(
                       '${favors.length} of your favors ${favors.length == 1 ? 'was' : 'were'} completed.'),
-                  subtitle: Text('Please tap confirm these actions.'),
+                  subtitle: Text('Please tap to confirm these actions.'),
                   onTap: () =>
                       Navigator.pushNamed(context, Strings.myFavorsRoute),
                 ),
