@@ -116,21 +116,17 @@ class _UnassignedFavorsState extends State<UnassignedFavors> {
             if (favors.isEmpty) return SizedBox();
             return Column(
               children: [
-                if (_apptheme.isDarkMode)
-                  Divider(
-                    height: 2.0,
-                  ),
                 ListTile(
-                  tileColor: _apptheme.isDarkMode
+                  tileColor: Brightness.dark == Theme.of(context).brightness
                       ? Theme.of(context).backgroundColor
                       : Colors.grey[200],
                   title: Text(
                       '${favors.length} of your favors ${favors.length == 1 ? 'was' : 'were'} completed.'),
-                  subtitle: Text('Please confirm these actions.'),
+                  subtitle: Text('Please tap confirm these actions.'),
                   onTap: () =>
                       Navigator.pushNamed(context, Strings.myFavorsRoute),
                 ),
-                if (!_apptheme.isDarkMode)
+                if (Theme.of(context).brightness == Brightness.light)
                   Divider(
                     thickness: 1.0,
                     height: 0.0,

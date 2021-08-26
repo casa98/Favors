@@ -24,7 +24,6 @@ class Wrapper extends StatelessWidget {
             /// causing loading inidicator to stay visible even on HomePage (and a horrible error in console).
             /// Could be dangerous and lead to future issues
             Navigator.maybePop(context);
-            /// Line above also causes to pop when theme is changed (as all widget tree is traversed)
 
             // Manage deviceToken used for Push Notifications
             PushNotificationsService.manageDeviceToken(user.uid);
