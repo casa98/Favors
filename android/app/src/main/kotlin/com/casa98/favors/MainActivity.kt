@@ -1,4 +1,4 @@
-package com.casamono.do_favors
+package com.casa98.favors
 
 import io.flutter.embedding.android.FlutterActivity
 
