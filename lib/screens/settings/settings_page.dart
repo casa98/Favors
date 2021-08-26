@@ -35,19 +35,19 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Platform.isIOS
                     ? ListTile(
-                        title: Text('Dark Mode'),
+                        title: Text('Dark Mode (Match System)'),
                         trailing: CupertinoSwitch(
                           value: _appThemeNotifier.isDarkMode,
-                          onChanged: (value) => context
-                              .read<AppThemeNotifier>()
-                              .updateTheme(value),
+                          //onChanged: (value) => context.read<AppThemeNotifier>().updateTheme(value),
+                          onChanged: null,
                         ),
                       )
                     : SwitchListTile(
-                        title: Text('Dark Mode'),
-                        value: _appThemeNotifier.isDarkMode,
-                        onChanged: (value) =>
-                            context.read<AppThemeNotifier>().updateTheme(value),
+                        title: Text('Dark Mode (Match System)'),
+                        //value: _appThemeNotifier.isDarkMode,
+                        value: false,
+                        //onChanged: (value) => context.read<AppThemeNotifier>().updateTheme(value),
+                        onChanged: null,
                       ),
                 Divider(height: 0.0),
               ],
