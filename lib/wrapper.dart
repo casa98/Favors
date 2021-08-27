@@ -42,7 +42,6 @@ class Wrapper extends StatelessWidget {
   _getUserInfo({required BuildContext context, required User user}) async {
     final currentUser = context.read<UserProvider>();
     currentUser.setId(user.uid);
-    currentUser.setName(user.displayName ?? 'Welcome!');
     currentUser.setEmail(user.email!);
   }
 }

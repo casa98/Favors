@@ -22,6 +22,7 @@ class UserProvider with ChangeNotifier {
 
   void setName(String name) {
     this._name = name;
+    notifyListeners();
   }
 
   void setEmail(String email) {

@@ -77,9 +77,9 @@ class _RegistrationPageState extends State<RegistrationPage>
             ),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          brightness: context.read<AppThemeNotifier>().isDarkMode
-              ? Brightness.dark
-              : Brightness.light,
+          brightness: Theme.of(context).brightness == Brightness.light
+              ? Brightness.light
+              : Brightness.dark,
         ),
         body: SafeArea(
           child: Center(

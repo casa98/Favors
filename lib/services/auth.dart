@@ -26,10 +26,6 @@ class AuthService {
       if (user != null) {
         // Create a collection with info of the user registering right now
         await createUserCollection(user.uid, email, name);
-        // Set user name in User instance
-        await user.updateDisplayName(name);
-        // To have access to user.displayName
-        await user.reload();
       }
       return user;
     } catch (exception) {

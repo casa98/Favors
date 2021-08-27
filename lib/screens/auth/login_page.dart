@@ -75,9 +75,9 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          brightness: context.read<AppThemeNotifier>().isDarkMode
-              ? Brightness.dark
-              : Brightness.light,
+          brightness: Theme.of(context).brightness == Brightness.light
+              ? Brightness.light
+              : Brightness.dark,
         ),
         body: SafeArea(
           child: Center(

@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
       if (response.data() != null) {
         final score = response[SCORE];
         _userProvider.updateScore(score);
+        _userProvider.setName(response[USERNAME]);
         _userProvider.updatePhotoUrl(response[IMAGE] ?? '');
       }
     });
