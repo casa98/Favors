@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:do_favors/shared/strings.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -12,13 +10,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late AppThemeNotifier _appThemeNotifier;
-
-  @override
-  void didChangeDependencies() {
-    _appThemeNotifier = context.read<AppThemeNotifier>();
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +28,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     ? ListTile(
                         title: Text('Dark Mode (Match System)'),
                         trailing: CupertinoSwitch(
-                          value: _appThemeNotifier.isDarkMode,
+                          //value: _appThemeNotifier.isDarkMode,
+                          value: false,
                           //onChanged: (value) => context.read<AppThemeNotifier>().updateTheme(value),
                           onChanged: null,
                         ),

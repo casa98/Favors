@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
-import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:do_favors/shared/dialogs_mixin.dart';
 import 'package:do_favors/shared/loading_indicator_mixin.dart';
 import 'package:do_favors/screens/auth/login_controller.dart';

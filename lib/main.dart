@@ -9,7 +9,6 @@ import 'package:do_favors/services/push_notifications_service.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/theme/app_theme.dart';
 import 'package:do_favors/router/app_router.dart';
-import 'theme/app_state_notifier.dart';
 import 'shared/strings.dart';
 
 void main() async {
@@ -29,20 +28,16 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AppThemeNotifier(), lazy: false),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: Consumer<AppThemeNotifier>(builder: (_, appState, __) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          //themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          themeMode: ThemeMode.system,
-          onGenerateRoute: AppRouter.buildRootRouteFactory(),
-          initialRoute: Strings.initialRoute,
-        );
-      }),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        onGenerateRoute: AppRouter.buildRootRouteFactory(),
+        initialRoute: Strings.initialRoute,
+      ),
     );
   }
 }

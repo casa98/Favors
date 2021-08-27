@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
-import 'package:do_favors/theme/app_state_notifier.dart';
 import 'package:do_favors/screens/home/unassigned_favors_controller.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/widgets/no_items.dart';
@@ -21,13 +20,11 @@ class UnassignedFavors extends StatefulWidget {
 class _UnassignedFavorsState extends State<UnassignedFavors> {
   late final UnassignedFavorsController _unassignedFavorsController;
   late final UserProvider _userProvider;
-  late final AppThemeNotifier _apptheme;
 
   @override
   void didChangeDependencies() {
     _userProvider = context.read<UserProvider>();
     _unassignedFavorsController = UnassignedFavorsController(_userProvider);
-    _apptheme = context.read<AppThemeNotifier>();
     super.didChangeDependencies();
   }
 
