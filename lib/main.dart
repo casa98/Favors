@@ -1,33 +1,39 @@
-import 'package:do_favors/screens/active_chats/active_chats.dart';
-import 'package:do_favors/screens/home/home_page.dart';
-import 'package:do_favors/screens/incomplete_favors/incomplete_favors.dart';
-import 'package:do_favors/screens/my_favors/my_favors.dart';
-import 'package:do_favors/screens/profile/profile.dart';
-import 'package:do_favors/screens/statistics/statistics.dart';
-import 'package:do_favors/screens/favor_details/favor_detail.dart';
-import 'package:do_favors/shared/constants.dart';
-import 'package:do_favors/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'package:do_favors/provider/user_provider.dart';
+import 'package:do_favors/theme/app_theme.dart';
+import 'package:do_favors/router/app_router.dart';
+import 'shared/strings.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/': (context) => Wrapper(),
-        '/home': (context) => HomePage(UNASSIGNED_FAVORS),
-        '/profile': (context) => Profile(PROFILE),
-        '/myFavors': (context) => MyFavors(MY_FAVORS),
-        '/incompleteFavors': (context) => IncompleteFavors(INCOMPLETE_FAVORS),
-        '/activeChats': (context) => ActiveChats(ACTIVE_CHATS),
-        '/statistics': (context) => Statistics(STATISTICS),
-        '/favorDetails': (context) => FavorDetail(FAVOR_DETAILS),
-      },
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        onGenerateRoute: AppRouter.buildRootRouteFactory(),
+        initialRoute: Strings.initialRoute,
+      ),
     );
   }
 }
