@@ -17,6 +17,14 @@ class ApiService {
     );
   }
 
+  Future<void> removeDeviceToken({required String uid}) async {
+    http.post(
+      Uri.parse('$baseUrl/removeDeviceToken'),
+      headers: headers,
+      body: jsonEncode({'uid': uid}),
+    );
+  }
+
   Future<void> sendNotification({
     required String to,
     required String title,

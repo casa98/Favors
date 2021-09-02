@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:do_favors/services/push_notifications_service.dart';
 import 'package:do_favors/provider/user_provider.dart';
 import 'package:do_favors/shared/strings.dart';
 import 'package:do_favors/screens/profile/profile_controller.dart';
@@ -116,6 +117,8 @@ class _ProfileState extends State<Profile> {
                   style: TextStyle(color: Colors.redAccent[200]),
                 ),
                 onPressed: () async {
+                  PushNotificationsService.removeDeviceToken(_currentUser.id!);
+                  PushNotificationsService.stopService();
                   FirebaseAuth.instance.signOut();
                   Navigator.pop(context);
                   _profileController.clearProvider();

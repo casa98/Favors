@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:do_favors/provider/local_properties_provider.dart';
 import 'package:do_favors/services/local_notifications_service.dart';
 import 'package:do_favors/services/api_service.dart';
 
@@ -31,38 +32,28 @@ class PushNotificationsService {
     return await FirebaseMessaging.instance.getToken();
   }
 
-  static Future manageDeviceToken(String? uid) async {
-    if (uid != null) {
-      print("CurrentUser is NOT null, send data to backend");
-      // Load from preferences whether devicetoken was already uploaded to DB or not
-      final _localProperties = LocalPropertiesProvider();
-      final isDeviceTokenSaved = await _localProperties.loadTokenStatus();
-      if (!isDeviceTokenSaved) {
-        deviceToken = await getDeviceToken();
-        print('Device Token: $deviceToken');
-        _localProperties.saveStatus();
-        ApiService().uploadDeviceToken(
-          uid: uid,
-          deviceToken: deviceToken!,
-        );
-      } else {
-        print("Oh, deviceToken for CurrentUser was already saved");
-      }
-    } else {
-      print("CurrentUser is null.");
-    }
+  static uploadDeviceToken(String uid) async {
+    final deviceToken = await getDeviceToken();
+    print('Device Token: $deviceToken');
+    await ApiService().uploadDeviceToken(uid: uid, deviceToken: deviceToken);
   }
 
-  static Future initializeService() async {
-    // Request permission
-    _messaging.requestPermission();
+  static removeDeviceToken(String uid) async {
+    await ApiService().removeDeviceToken(uid: uid);
+  }
 
-    // FCM Device token
-    await manageDeviceToken(currentUser?.uid ?? null);
+  static initializeService() {
+    // Not needed on Android
+    if (Platform.isIOS) _messaging.requestPermission();
 
     // Handlers
     FirebaseMessaging.onBackgroundMessage(_onBackgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
+  }
+
+  static stopService() {
+    FirebaseMessaging.onMessage.drain();
+    FirebaseMessaging.onMessageOpenedApp.drain();
   }
 }
